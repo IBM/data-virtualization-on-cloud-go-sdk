@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package exampleservicev1_test
+package datavirtualizationv1_test
 
 import (
 	. "github.com/onsi/ginkgo"
@@ -22,7 +22,7 @@ import (
 	"testing"
 )
 
-func TestExampleServiceV1(t *testing.T) {
+func TestDataVirtualizationV1(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "ExampleServiceV1 Suite")
+	RunSpecs(t, "DataVirtualizationV1 Suite")
 }
