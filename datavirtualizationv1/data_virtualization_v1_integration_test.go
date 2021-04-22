@@ -151,7 +151,6 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 				OriginCountry: core.StringPtr("testString"),
 				Properties: postDatasourceConnectionParametersPropertiesModel,
 				AssetCategory: core.StringPtr("testString"),
-				RemoteNodes: core.StringPtr("testString"),
 			}
 
 			postDatasourceConnectionResponse, response, err := dataVirtualizationService.AddDatasourceConnection(addDatasourceConnectionOptions)
@@ -170,8 +169,8 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		It(`GrantUserToVirtualTable(grantUserToVirtualTableOptions *GrantUserToVirtualTableOptions)`, func() {
 
 			postUserPrivilegesParametersBodyItemModel := &datavirtualizationv1.PostUserPrivilegesParametersBodyItem{
-				ObjectName: core.StringPtr("EMPLOYEE"),
-				ObjectSchema: core.StringPtr("USER999"),
+				TableName: core.StringPtr("EMPLOYEE"),
+				TableSchema: core.StringPtr("USER999"),
 				Authid: core.StringPtr("PUBLIC"),
 			}
 
@@ -194,8 +193,8 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		It(`GrantRolesToVirtualizedTable(grantRolesToVirtualizedTableOptions *GrantRolesToVirtualizedTableOptions)`, func() {
 
 			postRolePrivilegesParametersBodyItemModel := &datavirtualizationv1.PostRolePrivilegesParametersBodyItem{
-				ObjectName: core.StringPtr("EMPLOYEE"),
-				ObjectSchema: core.StringPtr("USER999"),
+				TableName: core.StringPtr("EMPLOYEE"),
+				TableSchema: core.StringPtr("USER999"),
 				RoleToGrant: core.StringPtr("PUBLIC"),
 			}
 
@@ -211,21 +210,21 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`GetObjectsForRole - Get objects by role`, func() {
+	Describe(`GetTablesForRole - Get virtualized tables by role`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
-		It(`GetObjectsForRole(getObjectsForRoleOptions *GetObjectsForRoleOptions)`, func() {
+		It(`GetTablesForRole(getTablesForRoleOptions *GetTablesForRoleOptions)`, func() {
 
-			getObjectsForRoleOptions := &datavirtualizationv1.GetObjectsForRoleOptions{
+			getTablesForRoleOptions := &datavirtualizationv1.GetTablesForRoleOptions{
 				Rolename: core.StringPtr("ADMIN | STEWARD | ENGINEER | USER"),
 			}
 
-			objectsForRoleResponse, response, err := dataVirtualizationService.GetObjectsForRole(getObjectsForRoleOptions)
+			tablesForRoleResponse, response, err := dataVirtualizationService.GetTablesForRole(getTablesForRoleOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(objectsForRoleResponse).ToNot(BeNil())
+			Expect(tablesForRoleResponse).ToNot(BeNil())
 
 		})
 	})
@@ -274,8 +273,8 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 
 			revokeUserFromObjectOptions := &datavirtualizationv1.RevokeUserFromObjectOptions{
 				Authid: core.StringPtr("PUBLIC"),
-				ObjectName: core.StringPtr("EMPLOYEE"),
-				ObjectSchema: core.StringPtr("USER999"),
+				TableName: core.StringPtr("EMPLOYEE"),
+				TableSchema: core.StringPtr("USER999"),
 			}
 
 			response, err := dataVirtualizationService.RevokeUserFromObject(revokeUserFromObjectOptions)
@@ -286,19 +285,19 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`RevokeRoleFromObjectV2 - Delete role`, func() {
+	Describe(`RevokeRoleFromTableV2 - Delete role`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
-		It(`RevokeRoleFromObjectV2(revokeRoleFromObjectV2Options *RevokeRoleFromObjectV2Options)`, func() {
+		It(`RevokeRoleFromTableV2(revokeRoleFromTableV2Options *RevokeRoleFromTableV2Options)`, func() {
 
-			revokeRoleFromObjectV2Options := &datavirtualizationv1.RevokeRoleFromObjectV2Options{
+			revokeRoleFromTableV2Options := &datavirtualizationv1.RevokeRoleFromTableV2Options{
 				RoleToRevoke: core.StringPtr("DV_ENGINEER"),
-				ObjectName: core.StringPtr("EMPLOYEE"),
-				ObjectSchema: core.StringPtr("USER999"),
+				TableName: core.StringPtr("EMPLOYEE"),
+				TableSchema: core.StringPtr("USER999"),
 			}
 
-			response, err := dataVirtualizationService.RevokeRoleFromObjectV2(revokeRoleFromObjectV2Options)
+			response, err := dataVirtualizationService.RevokeRoleFromTableV2(revokeRoleFromTableV2Options)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(204))
@@ -306,7 +305,7 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`DeleteTable - Delete table or view`, func() {
+	Describe(`DeleteTable - Delete virtualized table`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
@@ -314,7 +313,7 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 
 			deleteTableOptions := &datavirtualizationv1.DeleteTableOptions{
 				SchemaName: core.StringPtr("testString"),
-				ObjectName: core.StringPtr("testString"),
+				TableName: core.StringPtr("testString"),
 			}
 
 			response, err := dataVirtualizationService.DeleteTable(deleteTableOptions)

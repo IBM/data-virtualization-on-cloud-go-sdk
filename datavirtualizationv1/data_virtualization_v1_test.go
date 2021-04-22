@@ -340,7 +340,6 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				addDatasourceConnectionOptionsModel.OriginCountry = core.StringPtr("testString")
 				addDatasourceConnectionOptionsModel.Properties = postDatasourceConnectionParametersPropertiesModel
 				addDatasourceConnectionOptionsModel.AssetCategory = core.StringPtr("testString")
-				addDatasourceConnectionOptionsModel.RemoteNodes = core.StringPtr("testString")
 				addDatasourceConnectionOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
 				result, response, operationErr := dataVirtualizationService.AddDatasourceConnection(addDatasourceConnectionOptionsModel)
@@ -454,7 +453,6 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				addDatasourceConnectionOptionsModel.OriginCountry = core.StringPtr("testString")
 				addDatasourceConnectionOptionsModel.Properties = postDatasourceConnectionParametersPropertiesModel
 				addDatasourceConnectionOptionsModel.AssetCategory = core.StringPtr("testString")
-				addDatasourceConnectionOptionsModel.RemoteNodes = core.StringPtr("testString")
 				addDatasourceConnectionOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -536,7 +534,6 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				addDatasourceConnectionOptionsModel.OriginCountry = core.StringPtr("testString")
 				addDatasourceConnectionOptionsModel.Properties = postDatasourceConnectionParametersPropertiesModel
 				addDatasourceConnectionOptionsModel.AssetCategory = core.StringPtr("testString")
-				addDatasourceConnectionOptionsModel.RemoteNodes = core.StringPtr("testString")
 				addDatasourceConnectionOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := dataVirtualizationService.SetServiceURL("")
@@ -788,8 +785,8 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 
 				// Construct an instance of the PostUserPrivilegesParametersBodyItem model
 				postUserPrivilegesParametersBodyItemModel := new(datavirtualizationv1.PostUserPrivilegesParametersBodyItem)
-				postUserPrivilegesParametersBodyItemModel.ObjectName = core.StringPtr("EMPLOYEE")
-				postUserPrivilegesParametersBodyItemModel.ObjectSchema = core.StringPtr("USER999")
+				postUserPrivilegesParametersBodyItemModel.TableName = core.StringPtr("EMPLOYEE")
+				postUserPrivilegesParametersBodyItemModel.TableSchema = core.StringPtr("USER999")
 				postUserPrivilegesParametersBodyItemModel.Authid = core.StringPtr("PUBLIC")
 
 				// Construct an instance of the GrantUserToVirtualTableOptions model
@@ -818,8 +815,8 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 
 				// Construct an instance of the PostUserPrivilegesParametersBodyItem model
 				postUserPrivilegesParametersBodyItemModel := new(datavirtualizationv1.PostUserPrivilegesParametersBodyItem)
-				postUserPrivilegesParametersBodyItemModel.ObjectName = core.StringPtr("EMPLOYEE")
-				postUserPrivilegesParametersBodyItemModel.ObjectSchema = core.StringPtr("USER999")
+				postUserPrivilegesParametersBodyItemModel.TableName = core.StringPtr("EMPLOYEE")
+				postUserPrivilegesParametersBodyItemModel.TableSchema = core.StringPtr("USER999")
 				postUserPrivilegesParametersBodyItemModel.Authid = core.StringPtr("PUBLIC")
 
 				// Construct an instance of the GrantUserToVirtualTableOptions model
@@ -853,9 +850,9 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 
 					Expect(req.URL.Query()["authid"]).To(Equal([]string{"PUBLIC"}))
 
-					Expect(req.URL.Query()["object_name"]).To(Equal([]string{"EMPLOYEE"}))
+					Expect(req.URL.Query()["table_name"]).To(Equal([]string{"EMPLOYEE"}))
 
-					Expect(req.URL.Query()["object_schema"]).To(Equal([]string{"USER999"}))
+					Expect(req.URL.Query()["table_schema"]).To(Equal([]string{"USER999"}))
 
 					res.WriteHeader(204)
 				}))
@@ -877,8 +874,8 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				// Construct an instance of the RevokeUserFromObjectOptions model
 				revokeUserFromObjectOptionsModel := new(datavirtualizationv1.RevokeUserFromObjectOptions)
 				revokeUserFromObjectOptionsModel.Authid = core.StringPtr("PUBLIC")
-				revokeUserFromObjectOptionsModel.ObjectName = core.StringPtr("EMPLOYEE")
-				revokeUserFromObjectOptionsModel.ObjectSchema = core.StringPtr("USER999")
+				revokeUserFromObjectOptionsModel.TableName = core.StringPtr("EMPLOYEE")
+				revokeUserFromObjectOptionsModel.TableSchema = core.StringPtr("USER999")
 				revokeUserFromObjectOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -903,8 +900,8 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				// Construct an instance of the RevokeUserFromObjectOptions model
 				revokeUserFromObjectOptionsModel := new(datavirtualizationv1.RevokeUserFromObjectOptions)
 				revokeUserFromObjectOptionsModel.Authid = core.StringPtr("PUBLIC")
-				revokeUserFromObjectOptionsModel.ObjectName = core.StringPtr("EMPLOYEE")
-				revokeUserFromObjectOptionsModel.ObjectSchema = core.StringPtr("USER999")
+				revokeUserFromObjectOptionsModel.TableName = core.StringPtr("EMPLOYEE")
+				revokeUserFromObjectOptionsModel.TableSchema = core.StringPtr("USER999")
 				revokeUserFromObjectOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := dataVirtualizationService.SetServiceURL("")
@@ -1072,8 +1069,8 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 
 				// Construct an instance of the PostRolePrivilegesParametersBodyItem model
 				postRolePrivilegesParametersBodyItemModel := new(datavirtualizationv1.PostRolePrivilegesParametersBodyItem)
-				postRolePrivilegesParametersBodyItemModel.ObjectName = core.StringPtr("EMPLOYEE")
-				postRolePrivilegesParametersBodyItemModel.ObjectSchema = core.StringPtr("USER999")
+				postRolePrivilegesParametersBodyItemModel.TableName = core.StringPtr("EMPLOYEE")
+				postRolePrivilegesParametersBodyItemModel.TableSchema = core.StringPtr("USER999")
 				postRolePrivilegesParametersBodyItemModel.RoleToGrant = core.StringPtr("PUBLIC")
 
 				// Construct an instance of the GrantRolesToVirtualizedTableOptions model
@@ -1102,8 +1099,8 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 
 				// Construct an instance of the PostRolePrivilegesParametersBodyItem model
 				postRolePrivilegesParametersBodyItemModel := new(datavirtualizationv1.PostRolePrivilegesParametersBodyItem)
-				postRolePrivilegesParametersBodyItemModel.ObjectName = core.StringPtr("EMPLOYEE")
-				postRolePrivilegesParametersBodyItemModel.ObjectSchema = core.StringPtr("USER999")
+				postRolePrivilegesParametersBodyItemModel.TableName = core.StringPtr("EMPLOYEE")
+				postRolePrivilegesParametersBodyItemModel.TableSchema = core.StringPtr("USER999")
 				postRolePrivilegesParametersBodyItemModel.RoleToGrant = core.StringPtr("PUBLIC")
 
 				// Construct an instance of the GrantRolesToVirtualizedTableOptions model
@@ -1124,27 +1121,27 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 		})
 	})
 
-	Describe(`RevokeRoleFromObjectV2(revokeRoleFromObjectV2Options *RevokeRoleFromObjectV2Options)`, func() {
-		revokeRoleFromObjectV2Path := "/v2/privileges/roles"
+	Describe(`RevokeRoleFromTableV2(revokeRoleFromTableV2Options *RevokeRoleFromTableV2Options)`, func() {
+		revokeRoleFromTableV2Path := "/v2/privileges/roles"
 		Context(`Using mock server endpoint`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(revokeRoleFromObjectV2Path))
+					Expect(req.URL.EscapedPath()).To(Equal(revokeRoleFromTableV2Path))
 					Expect(req.Method).To(Equal("DELETE"))
 
 					Expect(req.URL.Query()["role_to_revoke"]).To(Equal([]string{"DV_ENGINEER"}))
 
-					Expect(req.URL.Query()["object_name"]).To(Equal([]string{"EMPLOYEE"}))
+					Expect(req.URL.Query()["table_name"]).To(Equal([]string{"EMPLOYEE"}))
 
-					Expect(req.URL.Query()["object_schema"]).To(Equal([]string{"USER999"}))
+					Expect(req.URL.Query()["table_schema"]).To(Equal([]string{"USER999"}))
 
 					res.WriteHeader(204)
 				}))
 			})
-			It(`Invoke RevokeRoleFromObjectV2 successfully`, func() {
+			It(`Invoke RevokeRoleFromTableV2 successfully`, func() {
 				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1154,29 +1151,29 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				dataVirtualizationService.EnableRetries(0, 0)
 
 				// Invoke operation with nil options model (negative test)
-				response, operationErr := dataVirtualizationService.RevokeRoleFromObjectV2(nil)
+				response, operationErr := dataVirtualizationService.RevokeRoleFromTableV2(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 
-				// Construct an instance of the RevokeRoleFromObjectV2Options model
-				revokeRoleFromObjectV2OptionsModel := new(datavirtualizationv1.RevokeRoleFromObjectV2Options)
-				revokeRoleFromObjectV2OptionsModel.RoleToRevoke = core.StringPtr("DV_ENGINEER")
-				revokeRoleFromObjectV2OptionsModel.ObjectName = core.StringPtr("EMPLOYEE")
-				revokeRoleFromObjectV2OptionsModel.ObjectSchema = core.StringPtr("USER999")
-				revokeRoleFromObjectV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the RevokeRoleFromTableV2Options model
+				revokeRoleFromTableV2OptionsModel := new(datavirtualizationv1.RevokeRoleFromTableV2Options)
+				revokeRoleFromTableV2OptionsModel.RoleToRevoke = core.StringPtr("DV_ENGINEER")
+				revokeRoleFromTableV2OptionsModel.TableName = core.StringPtr("EMPLOYEE")
+				revokeRoleFromTableV2OptionsModel.TableSchema = core.StringPtr("USER999")
+				revokeRoleFromTableV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				response, operationErr = dataVirtualizationService.RevokeRoleFromObjectV2(revokeRoleFromObjectV2OptionsModel)
+				response, operationErr = dataVirtualizationService.RevokeRoleFromTableV2(revokeRoleFromTableV2OptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
 				// Disable retries and test again
 				dataVirtualizationService.DisableRetries()
-				response, operationErr = dataVirtualizationService.RevokeRoleFromObjectV2(revokeRoleFromObjectV2OptionsModel)
+				response, operationErr = dataVirtualizationService.RevokeRoleFromTableV2(revokeRoleFromTableV2OptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 			})
-			It(`Invoke RevokeRoleFromObjectV2 with error: Operation validation and request error`, func() {
+			It(`Invoke RevokeRoleFromTableV2 with error: Operation validation and request error`, func() {
 				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1184,23 +1181,23 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(dataVirtualizationService).ToNot(BeNil())
 
-				// Construct an instance of the RevokeRoleFromObjectV2Options model
-				revokeRoleFromObjectV2OptionsModel := new(datavirtualizationv1.RevokeRoleFromObjectV2Options)
-				revokeRoleFromObjectV2OptionsModel.RoleToRevoke = core.StringPtr("DV_ENGINEER")
-				revokeRoleFromObjectV2OptionsModel.ObjectName = core.StringPtr("EMPLOYEE")
-				revokeRoleFromObjectV2OptionsModel.ObjectSchema = core.StringPtr("USER999")
-				revokeRoleFromObjectV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the RevokeRoleFromTableV2Options model
+				revokeRoleFromTableV2OptionsModel := new(datavirtualizationv1.RevokeRoleFromTableV2Options)
+				revokeRoleFromTableV2OptionsModel.RoleToRevoke = core.StringPtr("DV_ENGINEER")
+				revokeRoleFromTableV2OptionsModel.TableName = core.StringPtr("EMPLOYEE")
+				revokeRoleFromTableV2OptionsModel.TableSchema = core.StringPtr("USER999")
+				revokeRoleFromTableV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := dataVirtualizationService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				response, operationErr := dataVirtualizationService.RevokeRoleFromObjectV2(revokeRoleFromObjectV2OptionsModel)
+				response, operationErr := dataVirtualizationService.RevokeRoleFromTableV2(revokeRoleFromTableV2OptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
-				// Construct a second instance of the RevokeRoleFromObjectV2Options model with no property values
-				revokeRoleFromObjectV2OptionsModelNew := new(datavirtualizationv1.RevokeRoleFromObjectV2Options)
+				// Construct a second instance of the RevokeRoleFromTableV2Options model with no property values
+				revokeRoleFromTableV2OptionsModelNew := new(datavirtualizationv1.RevokeRoleFromTableV2Options)
 				// Invoke operation with invalid model (negative test)
-				response, operationErr = dataVirtualizationService.RevokeRoleFromObjectV2(revokeRoleFromObjectV2OptionsModelNew)
+				response, operationErr = dataVirtualizationService.RevokeRoleFromTableV2(revokeRoleFromTableV2OptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 			})
@@ -1209,22 +1206,22 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 			})
 		})
 	})
-	Describe(`GetObjectsForRole(getObjectsForRoleOptions *GetObjectsForRoleOptions) - Operation response error`, func() {
-		getObjectsForRolePath := "/v1/privileges/objects/role/ADMIN%20%7C%20STEWARD%20%7C%20ENGINEER%20%7C%20USER"
+	Describe(`GetTablesForRole(getTablesForRoleOptions *GetTablesForRoleOptions) - Operation response error`, func() {
+		getTablesForRolePath := "/v2/privileges/tables/role/ADMIN%20%7C%20STEWARD%20%7C%20ENGINEER%20%7C%20USER"
 		Context(`Using mock server endpoint`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getObjectsForRolePath))
+					Expect(req.URL.EscapedPath()).To(Equal(getTablesForRolePath))
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
 					fmt.Fprintf(res, `} this is not valid json {`)
 				}))
 			})
-			It(`Invoke GetObjectsForRole with error: Operation response processing error`, func() {
+			It(`Invoke GetTablesForRole with error: Operation response processing error`, func() {
 				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1232,19 +1229,19 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(dataVirtualizationService).ToNot(BeNil())
 
-				// Construct an instance of the GetObjectsForRoleOptions model
-				getObjectsForRoleOptionsModel := new(datavirtualizationv1.GetObjectsForRoleOptions)
-				getObjectsForRoleOptionsModel.Rolename = core.StringPtr("ADMIN | STEWARD | ENGINEER | USER")
-				getObjectsForRoleOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the GetTablesForRoleOptions model
+				getTablesForRoleOptionsModel := new(datavirtualizationv1.GetTablesForRoleOptions)
+				getTablesForRoleOptionsModel.Rolename = core.StringPtr("ADMIN | STEWARD | ENGINEER | USER")
+				getTablesForRoleOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := dataVirtualizationService.GetObjectsForRole(getObjectsForRoleOptionsModel)
+				result, response, operationErr := dataVirtualizationService.GetTablesForRole(getTablesForRoleOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
 				dataVirtualizationService.EnableRetries(0, 0)
-				result, response, operationErr = dataVirtualizationService.GetObjectsForRole(getObjectsForRoleOptionsModel)
+				result, response, operationErr = dataVirtualizationService.GetTablesForRole(getTablesForRoleOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -1255,8 +1252,8 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 		})
 	})
 
-	Describe(`GetObjectsForRole(getObjectsForRoleOptions *GetObjectsForRoleOptions)`, func() {
-		getObjectsForRolePath := "/v1/privileges/objects/role/ADMIN%20%7C%20STEWARD%20%7C%20ENGINEER%20%7C%20USER"
+	Describe(`GetTablesForRole(getTablesForRoleOptions *GetTablesForRoleOptions)`, func() {
+		getTablesForRolePath := "/v2/privileges/tables/role/ADMIN%20%7C%20STEWARD%20%7C%20ENGINEER%20%7C%20USER"
 		var serverSleepTime time.Duration
 		Context(`Using mock server endpoint`, func() {
 			BeforeEach(func() {
@@ -1265,7 +1262,7 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getObjectsForRolePath))
+					Expect(req.URL.EscapedPath()).To(Equal(getTablesForRolePath))
 					Expect(req.Method).To(Equal("GET"))
 
 					// Sleep a short time to support a timeout test
@@ -1274,10 +1271,10 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"objects": [{"object_name": "ObjectName", "object_schema": "ObjectSchema", "object_type": "ObjectType"}]}`)
+					fmt.Fprintf(res, "%s", `{"objects": [{"table_name": "TableName", "table_schema": "TableSchema"}]}`)
 				}))
 			})
-			It(`Invoke GetObjectsForRole successfully`, func() {
+			It(`Invoke GetTablesForRole successfully`, func() {
 				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1287,18 +1284,18 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				dataVirtualizationService.EnableRetries(0, 0)
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := dataVirtualizationService.GetObjectsForRole(nil)
+				result, response, operationErr := dataVirtualizationService.GetTablesForRole(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
-				// Construct an instance of the GetObjectsForRoleOptions model
-				getObjectsForRoleOptionsModel := new(datavirtualizationv1.GetObjectsForRoleOptions)
-				getObjectsForRoleOptionsModel.Rolename = core.StringPtr("ADMIN | STEWARD | ENGINEER | USER")
-				getObjectsForRoleOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the GetTablesForRoleOptions model
+				getTablesForRoleOptionsModel := new(datavirtualizationv1.GetTablesForRoleOptions)
+				getTablesForRoleOptionsModel.Rolename = core.StringPtr("ADMIN | STEWARD | ENGINEER | USER")
+				getTablesForRoleOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = dataVirtualizationService.GetObjectsForRole(getObjectsForRoleOptionsModel)
+				result, response, operationErr = dataVirtualizationService.GetTablesForRole(getTablesForRoleOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -1307,14 +1304,14 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
 				serverSleepTime = 100 * time.Millisecond
-				_, _, operationErr = dataVirtualizationService.GetObjectsForRoleWithContext(ctx, getObjectsForRoleOptionsModel)
+				_, _, operationErr = dataVirtualizationService.GetTablesForRoleWithContext(ctx, getTablesForRoleOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 				serverSleepTime = time.Duration(0)
 
 				// Disable retries and test again
 				dataVirtualizationService.DisableRetries()
-				result, response, operationErr = dataVirtualizationService.GetObjectsForRole(getObjectsForRoleOptionsModel)
+				result, response, operationErr = dataVirtualizationService.GetTablesForRole(getTablesForRoleOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -1323,12 +1320,12 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
 				serverSleepTime = 100 * time.Millisecond
-				_, _, operationErr = dataVirtualizationService.GetObjectsForRoleWithContext(ctx, getObjectsForRoleOptionsModel)
+				_, _, operationErr = dataVirtualizationService.GetTablesForRoleWithContext(ctx, getTablesForRoleOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 				serverSleepTime = time.Duration(0)
 			})
-			It(`Invoke GetObjectsForRole with error: Operation validation and request error`, func() {
+			It(`Invoke GetTablesForRole with error: Operation validation and request error`, func() {
 				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1336,22 +1333,22 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(dataVirtualizationService).ToNot(BeNil())
 
-				// Construct an instance of the GetObjectsForRoleOptions model
-				getObjectsForRoleOptionsModel := new(datavirtualizationv1.GetObjectsForRoleOptions)
-				getObjectsForRoleOptionsModel.Rolename = core.StringPtr("ADMIN | STEWARD | ENGINEER | USER")
-				getObjectsForRoleOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the GetTablesForRoleOptions model
+				getTablesForRoleOptionsModel := new(datavirtualizationv1.GetTablesForRoleOptions)
+				getTablesForRoleOptionsModel.Rolename = core.StringPtr("ADMIN | STEWARD | ENGINEER | USER")
+				getTablesForRoleOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := dataVirtualizationService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := dataVirtualizationService.GetObjectsForRole(getObjectsForRoleOptionsModel)
+				result, response, operationErr := dataVirtualizationService.GetTablesForRole(getTablesForRoleOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
-				// Construct a second instance of the GetObjectsForRoleOptions model with no property values
-				getObjectsForRoleOptionsModelNew := new(datavirtualizationv1.GetObjectsForRoleOptions)
+				// Construct a second instance of the GetTablesForRoleOptions model with no property values
+				getTablesForRoleOptionsModelNew := new(datavirtualizationv1.GetTablesForRoleOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = dataVirtualizationService.GetObjectsForRole(getObjectsForRoleOptionsModelNew)
+				result, response, operationErr = dataVirtualizationService.GetTablesForRole(getTablesForRoleOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -1814,7 +1811,7 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				// Construct an instance of the DeleteTableOptions model
 				deleteTableOptionsModel := new(datavirtualizationv1.DeleteTableOptions)
 				deleteTableOptionsModel.SchemaName = core.StringPtr("testString")
-				deleteTableOptionsModel.ObjectName = core.StringPtr("testString")
+				deleteTableOptionsModel.TableName = core.StringPtr("testString")
 				deleteTableOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -1839,7 +1836,7 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				// Construct an instance of the DeleteTableOptions model
 				deleteTableOptionsModel := new(datavirtualizationv1.DeleteTableOptions)
 				deleteTableOptionsModel.SchemaName = core.StringPtr("testString")
-				deleteTableOptionsModel.ObjectName = core.StringPtr("testString")
+				deleteTableOptionsModel.TableName = core.StringPtr("testString")
 				deleteTableOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := dataVirtualizationService.SetServiceURL("")
@@ -1942,7 +1939,6 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				addDatasourceConnectionOptionsModel.SetOriginCountry("testString")
 				addDatasourceConnectionOptionsModel.SetProperties(postDatasourceConnectionParametersPropertiesModel)
 				addDatasourceConnectionOptionsModel.SetAssetCategory("testString")
-				addDatasourceConnectionOptionsModel.SetRemoteNodes("testString")
 				addDatasourceConnectionOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(addDatasourceConnectionOptionsModel).ToNot(BeNil())
 				Expect(addDatasourceConnectionOptionsModel.DatasourceType).To(Equal(core.StringPtr("testString")))
@@ -1950,7 +1946,6 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				Expect(addDatasourceConnectionOptionsModel.OriginCountry).To(Equal(core.StringPtr("testString")))
 				Expect(addDatasourceConnectionOptionsModel.Properties).To(Equal(postDatasourceConnectionParametersPropertiesModel))
 				Expect(addDatasourceConnectionOptionsModel.AssetCategory).To(Equal(core.StringPtr("testString")))
-				Expect(addDatasourceConnectionOptionsModel.RemoteNodes).To(Equal(core.StringPtr("testString")))
 				Expect(addDatasourceConnectionOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewDeleteDatasourceConnectionOptions successfully`, func() {
@@ -1969,14 +1964,14 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 			It(`Invoke NewDeleteTableOptions successfully`, func() {
 				// Construct an instance of the DeleteTableOptions model
 				schemaName := "testString"
-				objectName := "testString"
-				deleteTableOptionsModel := dataVirtualizationService.NewDeleteTableOptions(schemaName, objectName)
+				tableName := "testString"
+				deleteTableOptionsModel := dataVirtualizationService.NewDeleteTableOptions(schemaName, tableName)
 				deleteTableOptionsModel.SetSchemaName("testString")
-				deleteTableOptionsModel.SetObjectName("testString")
+				deleteTableOptionsModel.SetTableName("testString")
 				deleteTableOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(deleteTableOptionsModel).ToNot(BeNil())
 				Expect(deleteTableOptionsModel.SchemaName).To(Equal(core.StringPtr("testString")))
-				Expect(deleteTableOptionsModel.ObjectName).To(Equal(core.StringPtr("testString")))
+				Expect(deleteTableOptionsModel.TableName).To(Equal(core.StringPtr("testString")))
 				Expect(deleteTableOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewGetDatasourceConnectionsOptions successfully`, func() {
@@ -1986,25 +1981,25 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				Expect(getDatasourceConnectionsOptionsModel).ToNot(BeNil())
 				Expect(getDatasourceConnectionsOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
-			It(`Invoke NewGetObjectsForRoleOptions successfully`, func() {
-				// Construct an instance of the GetObjectsForRoleOptions model
+			It(`Invoke NewGetTablesForRoleOptions successfully`, func() {
+				// Construct an instance of the GetTablesForRoleOptions model
 				rolename := "ADMIN | STEWARD | ENGINEER | USER"
-				getObjectsForRoleOptionsModel := dataVirtualizationService.NewGetObjectsForRoleOptions(rolename)
-				getObjectsForRoleOptionsModel.SetRolename("ADMIN | STEWARD | ENGINEER | USER")
-				getObjectsForRoleOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
-				Expect(getObjectsForRoleOptionsModel).ToNot(BeNil())
-				Expect(getObjectsForRoleOptionsModel.Rolename).To(Equal(core.StringPtr("ADMIN | STEWARD | ENGINEER | USER")))
-				Expect(getObjectsForRoleOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+				getTablesForRoleOptionsModel := dataVirtualizationService.NewGetTablesForRoleOptions(rolename)
+				getTablesForRoleOptionsModel.SetRolename("ADMIN | STEWARD | ENGINEER | USER")
+				getTablesForRoleOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(getTablesForRoleOptionsModel).ToNot(BeNil())
+				Expect(getTablesForRoleOptionsModel.Rolename).To(Equal(core.StringPtr("ADMIN | STEWARD | ENGINEER | USER")))
+				Expect(getTablesForRoleOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewGrantRolesToVirtualizedTableOptions successfully`, func() {
 				// Construct an instance of the PostRolePrivilegesParametersBodyItem model
 				postRolePrivilegesParametersBodyItemModel := new(datavirtualizationv1.PostRolePrivilegesParametersBodyItem)
 				Expect(postRolePrivilegesParametersBodyItemModel).ToNot(BeNil())
-				postRolePrivilegesParametersBodyItemModel.ObjectName = core.StringPtr("EMPLOYEE")
-				postRolePrivilegesParametersBodyItemModel.ObjectSchema = core.StringPtr("USER999")
+				postRolePrivilegesParametersBodyItemModel.TableName = core.StringPtr("EMPLOYEE")
+				postRolePrivilegesParametersBodyItemModel.TableSchema = core.StringPtr("USER999")
 				postRolePrivilegesParametersBodyItemModel.RoleToGrant = core.StringPtr("PUBLIC")
-				Expect(postRolePrivilegesParametersBodyItemModel.ObjectName).To(Equal(core.StringPtr("EMPLOYEE")))
-				Expect(postRolePrivilegesParametersBodyItemModel.ObjectSchema).To(Equal(core.StringPtr("USER999")))
+				Expect(postRolePrivilegesParametersBodyItemModel.TableName).To(Equal(core.StringPtr("EMPLOYEE")))
+				Expect(postRolePrivilegesParametersBodyItemModel.TableSchema).To(Equal(core.StringPtr("USER999")))
 				Expect(postRolePrivilegesParametersBodyItemModel.RoleToGrant).To(Equal(core.StringPtr("PUBLIC")))
 
 				// Construct an instance of the GrantRolesToVirtualizedTableOptions model
@@ -2019,11 +2014,11 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				// Construct an instance of the PostUserPrivilegesParametersBodyItem model
 				postUserPrivilegesParametersBodyItemModel := new(datavirtualizationv1.PostUserPrivilegesParametersBodyItem)
 				Expect(postUserPrivilegesParametersBodyItemModel).ToNot(BeNil())
-				postUserPrivilegesParametersBodyItemModel.ObjectName = core.StringPtr("EMPLOYEE")
-				postUserPrivilegesParametersBodyItemModel.ObjectSchema = core.StringPtr("USER999")
+				postUserPrivilegesParametersBodyItemModel.TableName = core.StringPtr("EMPLOYEE")
+				postUserPrivilegesParametersBodyItemModel.TableSchema = core.StringPtr("USER999")
 				postUserPrivilegesParametersBodyItemModel.Authid = core.StringPtr("PUBLIC")
-				Expect(postUserPrivilegesParametersBodyItemModel.ObjectName).To(Equal(core.StringPtr("EMPLOYEE")))
-				Expect(postUserPrivilegesParametersBodyItemModel.ObjectSchema).To(Equal(core.StringPtr("USER999")))
+				Expect(postUserPrivilegesParametersBodyItemModel.TableName).To(Equal(core.StringPtr("EMPLOYEE")))
+				Expect(postUserPrivilegesParametersBodyItemModel.TableSchema).To(Equal(core.StringPtr("USER999")))
 				Expect(postUserPrivilegesParametersBodyItemModel.Authid).To(Equal(core.StringPtr("PUBLIC")))
 
 				// Construct an instance of the GrantUserToVirtualTableOptions model
@@ -2034,36 +2029,36 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				Expect(grantUserToVirtualTableOptionsModel.Body).To(Equal([]datavirtualizationv1.PostUserPrivilegesParametersBodyItem{*postUserPrivilegesParametersBodyItemModel}))
 				Expect(grantUserToVirtualTableOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
-			It(`Invoke NewRevokeRoleFromObjectV2Options successfully`, func() {
-				// Construct an instance of the RevokeRoleFromObjectV2Options model
+			It(`Invoke NewRevokeRoleFromTableV2Options successfully`, func() {
+				// Construct an instance of the RevokeRoleFromTableV2Options model
 				roleToRevoke := "DV_ENGINEER"
-				objectName := "EMPLOYEE"
-				objectSchema := "USER999"
-				revokeRoleFromObjectV2OptionsModel := dataVirtualizationService.NewRevokeRoleFromObjectV2Options(roleToRevoke, objectName, objectSchema)
-				revokeRoleFromObjectV2OptionsModel.SetRoleToRevoke("DV_ENGINEER")
-				revokeRoleFromObjectV2OptionsModel.SetObjectName("EMPLOYEE")
-				revokeRoleFromObjectV2OptionsModel.SetObjectSchema("USER999")
-				revokeRoleFromObjectV2OptionsModel.SetHeaders(map[string]string{"foo": "bar"})
-				Expect(revokeRoleFromObjectV2OptionsModel).ToNot(BeNil())
-				Expect(revokeRoleFromObjectV2OptionsModel.RoleToRevoke).To(Equal(core.StringPtr("DV_ENGINEER")))
-				Expect(revokeRoleFromObjectV2OptionsModel.ObjectName).To(Equal(core.StringPtr("EMPLOYEE")))
-				Expect(revokeRoleFromObjectV2OptionsModel.ObjectSchema).To(Equal(core.StringPtr("USER999")))
-				Expect(revokeRoleFromObjectV2OptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+				tableName := "EMPLOYEE"
+				tableSchema := "USER999"
+				revokeRoleFromTableV2OptionsModel := dataVirtualizationService.NewRevokeRoleFromTableV2Options(roleToRevoke, tableName, tableSchema)
+				revokeRoleFromTableV2OptionsModel.SetRoleToRevoke("DV_ENGINEER")
+				revokeRoleFromTableV2OptionsModel.SetTableName("EMPLOYEE")
+				revokeRoleFromTableV2OptionsModel.SetTableSchema("USER999")
+				revokeRoleFromTableV2OptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(revokeRoleFromTableV2OptionsModel).ToNot(BeNil())
+				Expect(revokeRoleFromTableV2OptionsModel.RoleToRevoke).To(Equal(core.StringPtr("DV_ENGINEER")))
+				Expect(revokeRoleFromTableV2OptionsModel.TableName).To(Equal(core.StringPtr("EMPLOYEE")))
+				Expect(revokeRoleFromTableV2OptionsModel.TableSchema).To(Equal(core.StringPtr("USER999")))
+				Expect(revokeRoleFromTableV2OptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewRevokeUserFromObjectOptions successfully`, func() {
 				// Construct an instance of the RevokeUserFromObjectOptions model
 				authid := "PUBLIC"
-				objectName := "EMPLOYEE"
-				objectSchema := "USER999"
-				revokeUserFromObjectOptionsModel := dataVirtualizationService.NewRevokeUserFromObjectOptions(authid, objectName, objectSchema)
+				tableName := "EMPLOYEE"
+				tableSchema := "USER999"
+				revokeUserFromObjectOptionsModel := dataVirtualizationService.NewRevokeUserFromObjectOptions(authid, tableName, tableSchema)
 				revokeUserFromObjectOptionsModel.SetAuthid("PUBLIC")
-				revokeUserFromObjectOptionsModel.SetObjectName("EMPLOYEE")
-				revokeUserFromObjectOptionsModel.SetObjectSchema("USER999")
+				revokeUserFromObjectOptionsModel.SetTableName("EMPLOYEE")
+				revokeUserFromObjectOptionsModel.SetTableSchema("USER999")
 				revokeUserFromObjectOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(revokeUserFromObjectOptionsModel).ToNot(BeNil())
 				Expect(revokeUserFromObjectOptionsModel.Authid).To(Equal(core.StringPtr("PUBLIC")))
-				Expect(revokeUserFromObjectOptionsModel.ObjectName).To(Equal(core.StringPtr("EMPLOYEE")))
-				Expect(revokeUserFromObjectOptionsModel.ObjectSchema).To(Equal(core.StringPtr("USER999")))
+				Expect(revokeUserFromObjectOptionsModel.TableName).To(Equal(core.StringPtr("EMPLOYEE")))
+				Expect(revokeUserFromObjectOptionsModel.TableSchema).To(Equal(core.StringPtr("USER999")))
 				Expect(revokeUserFromObjectOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewVirtualizeTableParameterSourceTableDefItem successfully`, func() {
