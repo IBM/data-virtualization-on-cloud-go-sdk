@@ -26,8 +26,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	common "github.com/IBM/data-virtualization/common"
 	"github.com/IBM/go-sdk-core/v4/core"
+	common "github.com/watson-developer-cloud/go-sdk/common"
 	"net/http"
 	"reflect"
 	"time"
@@ -132,14 +132,64 @@ func (dataVirtualization *DataVirtualizationV1) DisableRetries() {
 	dataVirtualization.Service.DisableRetries()
 }
 
+// GetDatasourceConnections : Get data source connections
+// Gets all data source connections that are connected to the service.
+func (dataVirtualization *DataVirtualizationV1) GetDatasourceConnections(getDatasourceConnectionsOptions *GetDatasourceConnectionsOptions) (result *DatasourceNodesResponseV2, response *core.DetailedResponse, err error) {
+	return dataVirtualization.GetDatasourceConnectionsWithContext(context.Background(), getDatasourceConnectionsOptions)
+}
+
+// GetDatasourceConnectionsWithContext is an alternate form of the GetDatasourceConnections method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) GetDatasourceConnectionsWithContext(ctx context.Context, getDatasourceConnectionsOptions *GetDatasourceConnectionsOptions) (result *DatasourceNodesResponseV2, response *core.DetailedResponse, err error) {
+	err = core.ValidateStruct(getDatasourceConnectionsOptions, "getDatasourceConnectionsOptions")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/datasource_connections`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range getDatasourceConnectionsOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "GetDatasourceConnections")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = dataVirtualization.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalDatasourceNodesResponseV2)
+	if err != nil {
+		return
+	}
+	response.Result = result
+
+	return
+}
+
 // AddDatasourceConnection : Add data source connection
 // Adds a data source connection to the Data Virtualization service.
-func (dataVirtualization *DataVirtualizationV1) AddDatasourceConnection(addDatasourceConnectionOptions *AddDatasourceConnectionOptions) (response *core.DetailedResponse, err error) {
+func (dataVirtualization *DataVirtualizationV1) AddDatasourceConnection(addDatasourceConnectionOptions *AddDatasourceConnectionOptions) (result *PostDatasourceConnectionResponse, response *core.DetailedResponse, err error) {
 	return dataVirtualization.AddDatasourceConnectionWithContext(context.Background(), addDatasourceConnectionOptions)
 }
 
 // AddDatasourceConnectionWithContext is an alternate form of the AddDatasourceConnection method which supports a Context parameter
-func (dataVirtualization *DataVirtualizationV1) AddDatasourceConnectionWithContext(ctx context.Context, addDatasourceConnectionOptions *AddDatasourceConnectionOptions) (response *core.DetailedResponse, err error) {
+func (dataVirtualization *DataVirtualizationV1) AddDatasourceConnectionWithContext(ctx context.Context, addDatasourceConnectionOptions *AddDatasourceConnectionOptions) (result *PostDatasourceConnectionResponse, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(addDatasourceConnectionOptions, "addDatasourceConnectionOptions cannot be nil")
 	if err != nil {
 		return
@@ -165,6 +215,7 @@ func (dataVirtualization *DataVirtualizationV1) AddDatasourceConnectionWithConte
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
+	builder.AddHeader("Accept", "application/json")
 	builder.AddHeader("Content-Type", "application/json")
 
 	body := make(map[string]interface{})
@@ -196,7 +247,16 @@ func (dataVirtualization *DataVirtualizationV1) AddDatasourceConnectionWithConte
 		return
 	}
 
-	response, err = dataVirtualization.Service.Request(request, nil)
+	var rawResponse map[string]json.RawMessage
+	response, err = dataVirtualization.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalPostDatasourceConnectionResponse)
+	if err != nil {
+		return
+	}
+	response.Result = result
 
 	return
 }
@@ -234,19 +294,9 @@ func (dataVirtualization *DataVirtualizationV1) DeleteDatasourceConnectionWithCo
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
-	builder.AddHeader("Content-Type", "application/json")
 
-	body := make(map[string]interface{})
-	if deleteDatasourceConnectionOptions.Cid != nil {
-		body["cid"] = deleteDatasourceConnectionOptions.Cid
-	}
-	if deleteDatasourceConnectionOptions.ConnectionID != nil {
-		body["connection_id"] = deleteDatasourceConnectionOptions.ConnectionID
-	}
-	_, err = builder.SetBodyContentJSON(body)
-	if err != nil {
-		return
-	}
+	builder.AddQuery("cid", fmt.Sprint(*deleteDatasourceConnectionOptions.Cid))
+	builder.AddQuery("connection_id", fmt.Sprint(*deleteDatasourceConnectionOptions.ConnectionID))
 
 	request, err := builder.Build()
 	if err != nil {
@@ -258,69 +308,19 @@ func (dataVirtualization *DataVirtualizationV1) DeleteDatasourceConnectionWithCo
 	return
 }
 
-// GetDatasourceNodes : Get data source nodes
-// Gets all data source nodes that are connected to the service.
-func (dataVirtualization *DataVirtualizationV1) GetDatasourceNodes(getDatasourceNodesOptions *GetDatasourceNodesOptions) (result *DatasourceNodesResponseV2, response *core.DetailedResponse, err error) {
-	return dataVirtualization.GetDatasourceNodesWithContext(context.Background(), getDatasourceNodesOptions)
-}
-
-// GetDatasourceNodesWithContext is an alternate form of the GetDatasourceNodes method which supports a Context parameter
-func (dataVirtualization *DataVirtualizationV1) GetDatasourceNodesWithContext(ctx context.Context, getDatasourceNodesOptions *GetDatasourceNodesOptions) (result *DatasourceNodesResponseV2, response *core.DetailedResponse, err error) {
-	err = core.ValidateStruct(getDatasourceNodesOptions, "getDatasourceNodesOptions")
-	if err != nil {
-		return
-	}
-
-	builder := core.NewRequestBuilder(core.GET)
-	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/datasource_nodes`, nil)
-	if err != nil {
-		return
-	}
-
-	for headerName, headerValue := range getDatasourceNodesOptions.Headers {
-		builder.AddHeader(headerName, headerValue)
-	}
-
-	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "GetDatasourceNodes")
-	for headerName, headerValue := range sdkHeaders {
-		builder.AddHeader(headerName, headerValue)
-	}
-	builder.AddHeader("Accept", "application/json")
-
-	request, err := builder.Build()
-	if err != nil {
-		return
-	}
-
-	var rawResponse map[string]json.RawMessage
-	response, err = dataVirtualization.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalDatasourceNodesResponseV2)
-	if err != nil {
-		return
-	}
-	response.Result = result
-
-	return
-}
-
-// GrantUserToObject : Grant user access
+// GrantUserToVirtualTable : Grant user access
 // Grants a user access to a specific virtualized table.
-func (dataVirtualization *DataVirtualizationV1) GrantUserToObject(grantUserToObjectOptions *GrantUserToObjectOptions) (response *core.DetailedResponse, err error) {
-	return dataVirtualization.GrantUserToObjectWithContext(context.Background(), grantUserToObjectOptions)
+func (dataVirtualization *DataVirtualizationV1) GrantUserToVirtualTable(grantUserToVirtualTableOptions *GrantUserToVirtualTableOptions) (response *core.DetailedResponse, err error) {
+	return dataVirtualization.GrantUserToVirtualTableWithContext(context.Background(), grantUserToVirtualTableOptions)
 }
 
-// GrantUserToObjectWithContext is an alternate form of the GrantUserToObject method which supports a Context parameter
-func (dataVirtualization *DataVirtualizationV1) GrantUserToObjectWithContext(ctx context.Context, grantUserToObjectOptions *GrantUserToObjectOptions) (response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(grantUserToObjectOptions, "grantUserToObjectOptions cannot be nil")
+// GrantUserToVirtualTableWithContext is an alternate form of the GrantUserToVirtualTable method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) GrantUserToVirtualTableWithContext(ctx context.Context, grantUserToVirtualTableOptions *GrantUserToVirtualTableOptions) (response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(grantUserToVirtualTableOptions, "grantUserToVirtualTableOptions cannot be nil")
 	if err != nil {
 		return
 	}
-	err = core.ValidateStruct(grantUserToObjectOptions, "grantUserToObjectOptions")
+	err = core.ValidateStruct(grantUserToVirtualTableOptions, "grantUserToVirtualTableOptions")
 	if err != nil {
 		return
 	}
@@ -333,19 +333,19 @@ func (dataVirtualization *DataVirtualizationV1) GrantUserToObjectWithContext(ctx
 		return
 	}
 
-	for headerName, headerValue := range grantUserToObjectOptions.Headers {
+	for headerName, headerValue := range grantUserToVirtualTableOptions.Headers {
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "GrantUserToObject")
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "GrantUserToVirtualTable")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
 	builder.AddHeader("Content-Type", "application/json")
 
 	body := make(map[string]interface{})
-	if grantUserToObjectOptions.Body != nil {
-		body["body"] = grantUserToObjectOptions.Body
+	if grantUserToVirtualTableOptions.Body != nil {
+		body["body"] = grantUserToVirtualTableOptions.Body
 	}
 	_, err = builder.SetBodyContentJSON(body)
 	if err != nil {
@@ -363,7 +363,7 @@ func (dataVirtualization *DataVirtualizationV1) GrantUserToObjectWithContext(ctx
 }
 
 // RevokeUserFromObject : Revoke user acccess
-// Revokes user access to the virtualized object.
+// Revokes user access to the virtualized tables.
 func (dataVirtualization *DataVirtualizationV1) RevokeUserFromObject(revokeUserFromObjectOptions *RevokeUserFromObjectOptions) (response *core.DetailedResponse, err error) {
 	return dataVirtualization.RevokeUserFromObjectWithContext(context.Background(), revokeUserFromObjectOptions)
 }
@@ -395,16 +395,10 @@ func (dataVirtualization *DataVirtualizationV1) RevokeUserFromObjectWithContext(
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
-	builder.AddHeader("Content-Type", "application/json")
 
-	body := make(map[string]interface{})
-	if revokeUserFromObjectOptions.Body != nil {
-		body["body"] = revokeUserFromObjectOptions.Body
-	}
-	_, err = builder.SetBodyContentJSON(body)
-	if err != nil {
-		return
-	}
+	builder.AddQuery("authid", fmt.Sprint(*revokeUserFromObjectOptions.Authid))
+	builder.AddQuery("object_name", fmt.Sprint(*revokeUserFromObjectOptions.ObjectName))
+	builder.AddQuery("object_schema", fmt.Sprint(*revokeUserFromObjectOptions.ObjectSchema))
 
 	request, err := builder.Build()
 	if err != nil {
@@ -417,7 +411,7 @@ func (dataVirtualization *DataVirtualizationV1) RevokeUserFromObjectWithContext(
 }
 
 // GrantRolesToVirtualizedTable : Grant user role
-// Grants a user role access to a specific virtualized object.
+// Grants a user role access to a specific virtualized tables.
 func (dataVirtualization *DataVirtualizationV1) GrantRolesToVirtualizedTable(grantRolesToVirtualizedTableOptions *GrantRolesToVirtualizedTableOptions) (response *core.DetailedResponse, err error) {
 	return dataVirtualization.GrantRolesToVirtualizedTableWithContext(context.Background(), grantRolesToVirtualizedTableOptions)
 }
@@ -449,10 +443,16 @@ func (dataVirtualization *DataVirtualizationV1) GrantRolesToVirtualizedTableWith
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
+	builder.AddHeader("Content-Type", "application/json")
 
-	builder.AddQuery("authid", fmt.Sprint(*grantRolesToVirtualizedTableOptions.Authid))
-	builder.AddQuery("object_name", fmt.Sprint(*grantRolesToVirtualizedTableOptions.ObjectName))
-	builder.AddQuery("object_schema", fmt.Sprint(*grantRolesToVirtualizedTableOptions.ObjectSchema))
+	body := make(map[string]interface{})
+	if grantRolesToVirtualizedTableOptions.Body != nil {
+		body["body"] = grantRolesToVirtualizedTableOptions.Body
+	}
+	_, err = builder.SetBodyContentJSON(body)
+	if err != nil {
+		return
+	}
 
 	request, err := builder.Build()
 	if err != nil {
@@ -465,7 +465,7 @@ func (dataVirtualization *DataVirtualizationV1) GrantRolesToVirtualizedTableWith
 }
 
 // RevokeRoleFromObjectV2 : Delete role
-// Revokes roles for a virtualized object.
+// Revokes roles for a virtualized tables.
 func (dataVirtualization *DataVirtualizationV1) RevokeRoleFromObjectV2(revokeRoleFromObjectV2Options *RevokeRoleFromObjectV2Options) (response *core.DetailedResponse, err error) {
 	return dataVirtualization.RevokeRoleFromObjectV2WithContext(context.Background(), revokeRoleFromObjectV2Options)
 }
@@ -497,16 +497,10 @@ func (dataVirtualization *DataVirtualizationV1) RevokeRoleFromObjectV2WithContex
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
-	builder.AddHeader("Content-Type", "application/json")
 
-	body := make(map[string]interface{})
-	if revokeRoleFromObjectV2Options.Body != nil {
-		body["body"] = revokeRoleFromObjectV2Options.Body
-	}
-	_, err = builder.SetBodyContentJSON(body)
-	if err != nil {
-		return
-	}
+	builder.AddQuery("role_to_revoke", fmt.Sprint(*revokeRoleFromObjectV2Options.RoleToRevoke))
+	builder.AddQuery("object_name", fmt.Sprint(*revokeRoleFromObjectV2Options.ObjectName))
+	builder.AddQuery("object_schema", fmt.Sprint(*revokeRoleFromObjectV2Options.ObjectSchema))
 
 	request, err := builder.Build()
 	if err != nil {
@@ -519,7 +513,7 @@ func (dataVirtualization *DataVirtualizationV1) RevokeRoleFromObjectV2WithContex
 }
 
 // GetObjectsForRole : Get objects by role
-// Retrieves the list of virtualized objects that have a specific role.
+// Retrieves the list of virtualized tables or views that have a specific role.
 func (dataVirtualization *DataVirtualizationV1) GetObjectsForRole(getObjectsForRoleOptions *GetObjectsForRoleOptions) (result *ObjectsForRoleResponse, response *core.DetailedResponse, err error) {
 	return dataVirtualization.GetObjectsForRoleWithContext(context.Background(), getObjectsForRoleOptions)
 }
@@ -578,12 +572,12 @@ func (dataVirtualization *DataVirtualizationV1) GetObjectsForRoleWithContext(ctx
 
 // VirtualizeTableV2 : Virtualize table
 // Transforms a given data source table into a virtualized table.
-func (dataVirtualization *DataVirtualizationV1) VirtualizeTableV2(virtualizeTableV2Options *VirtualizeTableV2Options) (result *SuccessResponse, response *core.DetailedResponse, err error) {
+func (dataVirtualization *DataVirtualizationV1) VirtualizeTableV2(virtualizeTableV2Options *VirtualizeTableV2Options) (result *VirtualizeTableResponse, response *core.DetailedResponse, err error) {
 	return dataVirtualization.VirtualizeTableV2WithContext(context.Background(), virtualizeTableV2Options)
 }
 
 // VirtualizeTableV2WithContext is an alternate form of the VirtualizeTableV2 method which supports a Context parameter
-func (dataVirtualization *DataVirtualizationV1) VirtualizeTableV2WithContext(ctx context.Context, virtualizeTableV2Options *VirtualizeTableV2Options) (result *SuccessResponse, response *core.DetailedResponse, err error) {
+func (dataVirtualization *DataVirtualizationV1) VirtualizeTableV2WithContext(ctx context.Context, virtualizeTableV2Options *VirtualizeTableV2Options) (result *VirtualizeTableResponse, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(virtualizeTableV2Options, "virtualizeTableV2Options cannot be nil")
 	if err != nil {
 		return
@@ -652,7 +646,7 @@ func (dataVirtualization *DataVirtualizationV1) VirtualizeTableV2WithContext(ctx
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSuccessResponse)
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalVirtualizeTableResponse)
 	if err != nil {
 		return
 	}
@@ -661,7 +655,7 @@ func (dataVirtualization *DataVirtualizationV1) VirtualizeTableV2WithContext(ctx
 	return
 }
 
-// DeleteTable : Delete table
+// DeleteTable : Delete table or view
 // Removes the specified table. You must specify the schema and table name.
 func (dataVirtualization *DataVirtualizationV1) DeleteTable(deleteTableOptions *DeleteTableOptions) (response *core.DetailedResponse, err error) {
 	return dataVirtualization.DeleteTableWithContext(context.Background(), deleteTableOptions)
@@ -722,7 +716,7 @@ type AddDatasourceConnectionOptions struct {
 	// The location of data source that you want to add.
 	OriginCountry *string `json:"origin_country" validate:"required"`
 
-	Properties *PostDatasourceConnectionParametersV2Properties `json:"properties" validate:"required"`
+	Properties *PostDatasourceConnectionParametersProperties `json:"properties" validate:"required"`
 
 	AssetCategory *string `json:"asset_category,omitempty"`
 
@@ -734,7 +728,7 @@ type AddDatasourceConnectionOptions struct {
 }
 
 // NewAddDatasourceConnectionOptions : Instantiate AddDatasourceConnectionOptions
-func (*DataVirtualizationV1) NewAddDatasourceConnectionOptions(datasourceType string, name string, originCountry string, properties *PostDatasourceConnectionParametersV2Properties) *AddDatasourceConnectionOptions {
+func (*DataVirtualizationV1) NewAddDatasourceConnectionOptions(datasourceType string, name string, originCountry string, properties *PostDatasourceConnectionParametersProperties) *AddDatasourceConnectionOptions {
 	return &AddDatasourceConnectionOptions{
 		DatasourceType: core.StringPtr(datasourceType),
 		Name: core.StringPtr(name),
@@ -762,7 +756,7 @@ func (options *AddDatasourceConnectionOptions) SetOriginCountry(originCountry st
 }
 
 // SetProperties : Allow user to set Properties
-func (options *AddDatasourceConnectionOptions) SetProperties(properties *PostDatasourceConnectionParametersV2Properties) *AddDatasourceConnectionOptions {
+func (options *AddDatasourceConnectionOptions) SetProperties(properties *PostDatasourceConnectionParametersProperties) *AddDatasourceConnectionOptions {
 	options.Properties = properties
 	return options
 }
@@ -950,10 +944,10 @@ func UnmarshalDatasourceNodesResponseV2(m map[string]json.RawMessage, result int
 
 // DeleteDatasourceConnectionOptions : The DeleteDatasourceConnection options.
 type DeleteDatasourceConnectionOptions struct {
-	// The identifier of the connection.
+	// Specifies the data source connection to be deleted.
 	Cid *string `json:"cid" validate:"required"`
 
-	// The name of the connection.
+	// Specifies the data source connection to be deleted.
 	ConnectionID *string `json:"connection_id" validate:"required"`
 
 	// Allows users to set headers on API requests
@@ -988,10 +982,10 @@ func (options *DeleteDatasourceConnectionOptions) SetHeaders(param map[string]st
 
 // DeleteTableOptions : The DeleteTable options.
 type DeleteTableOptions struct {
-	// The schema of table or view to be deleted.
+	// The schema of table to be deleted.
 	SchemaName *string `json:"schema_name" validate:"required"`
 
-	// The name of table or view to be deleted.
+	// The name of table to be deleted.
 	ObjectName *string `json:"object_name" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
@@ -1024,20 +1018,20 @@ func (options *DeleteTableOptions) SetHeaders(param map[string]string) *DeleteTa
 	return options
 }
 
-// GetDatasourceNodesOptions : The GetDatasourceNodes options.
-type GetDatasourceNodesOptions struct {
+// GetDatasourceConnectionsOptions : The GetDatasourceConnections options.
+type GetDatasourceConnectionsOptions struct {
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
-// NewGetDatasourceNodesOptions : Instantiate GetDatasourceNodesOptions
-func (*DataVirtualizationV1) NewGetDatasourceNodesOptions() *GetDatasourceNodesOptions {
-	return &GetDatasourceNodesOptions{}
+// NewGetDatasourceConnectionsOptions : Instantiate GetDatasourceConnectionsOptions
+func (*DataVirtualizationV1) NewGetDatasourceConnectionsOptions() *GetDatasourceConnectionsOptions {
+	return &GetDatasourceConnectionsOptions{}
 }
 
 // SetHeaders : Allow user to set Headers
-func (options *GetDatasourceNodesOptions) SetHeaders(param map[string]string) *GetDatasourceNodesOptions {
+func (options *GetDatasourceConnectionsOptions) SetHeaders(param map[string]string) *GetDatasourceConnectionsOptions {
 	options.Headers = param
 	return options
 }
@@ -1072,43 +1066,20 @@ func (options *GetObjectsForRoleOptions) SetHeaders(param map[string]string) *Ge
 
 // GrantRolesToVirtualizedTableOptions : The GrantRolesToVirtualizedTable options.
 type GrantRolesToVirtualizedTableOptions struct {
-	// Authentication ID.
-	Authid *string `json:"authid" validate:"required"`
-
-	// Object name to be deleleted.
-	ObjectName *string `json:"object_name" validate:"required"`
-
-	// Object schema name.
-	ObjectSchema *string `json:"object_schema" validate:"required"`
+	Body []PostRolePrivilegesParametersBodyItem `json:"body,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewGrantRolesToVirtualizedTableOptions : Instantiate GrantRolesToVirtualizedTableOptions
-func (*DataVirtualizationV1) NewGrantRolesToVirtualizedTableOptions(authid string, objectName string, objectSchema string) *GrantRolesToVirtualizedTableOptions {
-	return &GrantRolesToVirtualizedTableOptions{
-		Authid: core.StringPtr(authid),
-		ObjectName: core.StringPtr(objectName),
-		ObjectSchema: core.StringPtr(objectSchema),
-	}
+func (*DataVirtualizationV1) NewGrantRolesToVirtualizedTableOptions() *GrantRolesToVirtualizedTableOptions {
+	return &GrantRolesToVirtualizedTableOptions{}
 }
 
-// SetAuthid : Allow user to set Authid
-func (options *GrantRolesToVirtualizedTableOptions) SetAuthid(authid string) *GrantRolesToVirtualizedTableOptions {
-	options.Authid = core.StringPtr(authid)
-	return options
-}
-
-// SetObjectName : Allow user to set ObjectName
-func (options *GrantRolesToVirtualizedTableOptions) SetObjectName(objectName string) *GrantRolesToVirtualizedTableOptions {
-	options.ObjectName = core.StringPtr(objectName)
-	return options
-}
-
-// SetObjectSchema : Allow user to set ObjectSchema
-func (options *GrantRolesToVirtualizedTableOptions) SetObjectSchema(objectSchema string) *GrantRolesToVirtualizedTableOptions {
-	options.ObjectSchema = core.StringPtr(objectSchema)
+// SetBody : Allow user to set Body
+func (options *GrantRolesToVirtualizedTableOptions) SetBody(body []PostRolePrivilegesParametersBodyItem) *GrantRolesToVirtualizedTableOptions {
+	options.Body = body
 	return options
 }
 
@@ -1118,64 +1089,29 @@ func (options *GrantRolesToVirtualizedTableOptions) SetHeaders(param map[string]
 	return options
 }
 
-// GrantUserToObjectOptions : The GrantUserToObject options.
-type GrantUserToObjectOptions struct {
-	Body []GrantUserToObjectRequestBodyItem `json:"body" validate:"required"`
+// GrantUserToVirtualTableOptions : The GrantUserToVirtualTable options.
+type GrantUserToVirtualTableOptions struct {
+	Body []PostUserPrivilegesParametersBodyItem `json:"body,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
-// NewGrantUserToObjectOptions : Instantiate GrantUserToObjectOptions
-func (*DataVirtualizationV1) NewGrantUserToObjectOptions(body []GrantUserToObjectRequestBodyItem) *GrantUserToObjectOptions {
-	return &GrantUserToObjectOptions{
-		Body: body,
-	}
+// NewGrantUserToVirtualTableOptions : Instantiate GrantUserToVirtualTableOptions
+func (*DataVirtualizationV1) NewGrantUserToVirtualTableOptions() *GrantUserToVirtualTableOptions {
+	return &GrantUserToVirtualTableOptions{}
 }
 
 // SetBody : Allow user to set Body
-func (options *GrantUserToObjectOptions) SetBody(body []GrantUserToObjectRequestBodyItem) *GrantUserToObjectOptions {
+func (options *GrantUserToVirtualTableOptions) SetBody(body []PostUserPrivilegesParametersBodyItem) *GrantUserToVirtualTableOptions {
 	options.Body = body
 	return options
 }
 
 // SetHeaders : Allow user to set Headers
-func (options *GrantUserToObjectOptions) SetHeaders(param map[string]string) *GrantUserToObjectOptions {
+func (options *GrantUserToVirtualTableOptions) SetHeaders(param map[string]string) *GrantUserToVirtualTableOptions {
 	options.Headers = param
 	return options
-}
-
-// GrantUserToObjectRequestBodyItem : GrantUserToObjectRequestBodyItem struct
-type GrantUserToObjectRequestBodyItem struct {
-	// The name of the virtualized object.
-	ObjectName *string `json:"object_name,omitempty"`
-
-	// The schema of the virtualized object.
-	ObjectSchema *string `json:"object_schema,omitempty"`
-
-	// The identifier of the authorization, if grant access to all users, the value is PUBLIC, othervise the value is the
-	// data virtualization username.
-	Authid *string `json:"authid,omitempty"`
-}
-
-
-// UnmarshalGrantUserToObjectRequestBodyItem unmarshals an instance of GrantUserToObjectRequestBodyItem from the specified map of raw messages.
-func UnmarshalGrantUserToObjectRequestBodyItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(GrantUserToObjectRequestBodyItem)
-	err = core.UnmarshalPrimitive(m, "object_name", &obj.ObjectName)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "object_schema", &obj.ObjectSchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "authid", &obj.Authid)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
 }
 
 // ObjectsForRoleResponse : ObjectsForRoleResponse struct
@@ -1227,8 +1163,8 @@ func UnmarshalObjectsForRoleResponseObjectsItem(m map[string]json.RawMessage, re
 	return
 }
 
-// PostDatasourceConnectionParametersV2Properties : PostDatasourceConnectionParametersV2Properties struct
-type PostDatasourceConnectionParametersV2Properties struct {
+// PostDatasourceConnectionParametersProperties : PostDatasourceConnectionParametersProperties struct
+type PostDatasourceConnectionParametersProperties struct {
 	AccessToken *string `json:"access_token,omitempty"`
 
 	AccountName *string `json:"account_name,omitempty"`
@@ -1240,6 +1176,8 @@ type PostDatasourceConnectionParametersV2Properties struct {
 	ClientID *string `json:"client_id,omitempty"`
 
 	ClientSecret *string `json:"client_secret,omitempty"`
+
+	Collection *string `json:"collection,omitempty"`
 
 	Credentials *string `json:"credentials,omitempty"`
 
@@ -1265,6 +1203,8 @@ type PostDatasourceConnectionParametersV2Properties struct {
 
 	RefreshToken *string `json:"refresh_token,omitempty"`
 
+	Role *string `json:"role,omitempty"`
+
 	SapGatewayURL *string `json:"sap_gateway_url,omitempty"`
 
 	Server *string `json:"server,omitempty"`
@@ -1287,9 +1227,9 @@ type PostDatasourceConnectionParametersV2Properties struct {
 }
 
 
-// UnmarshalPostDatasourceConnectionParametersV2Properties unmarshals an instance of PostDatasourceConnectionParametersV2Properties from the specified map of raw messages.
-func UnmarshalPostDatasourceConnectionParametersV2Properties(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(PostDatasourceConnectionParametersV2Properties)
+// UnmarshalPostDatasourceConnectionParametersProperties unmarshals an instance of PostDatasourceConnectionParametersProperties from the specified map of raw messages.
+func UnmarshalPostDatasourceConnectionParametersProperties(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(PostDatasourceConnectionParametersProperties)
 	err = core.UnmarshalPrimitive(m, "access_token", &obj.AccessToken)
 	if err != nil {
 		return
@@ -1311,6 +1251,10 @@ func UnmarshalPostDatasourceConnectionParametersV2Properties(m map[string]json.R
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "client_secret", &obj.ClientSecret)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "collection", &obj.Collection)
 	if err != nil {
 		return
 	}
@@ -1362,6 +1306,10 @@ func UnmarshalPostDatasourceConnectionParametersV2Properties(m map[string]json.R
 	if err != nil {
 		return
 	}
+	err = core.UnmarshalPrimitive(m, "role", &obj.Role)
+	if err != nil {
+		return
+	}
 	err = core.UnmarshalPrimitive(m, "sap_gateway_url", &obj.SapGatewayURL)
 	if err != nil {
 		return
@@ -1406,47 +1354,48 @@ func UnmarshalPostDatasourceConnectionParametersV2Properties(m map[string]json.R
 	return
 }
 
-// RevokeRoleFromObjectV2Options : The RevokeRoleFromObjectV2 options.
-type RevokeRoleFromObjectV2Options struct {
-	Body []RevokeRoleFromObjectV2RequestBodyItem `json:"body,omitempty"`
+// PostDatasourceConnectionResponse : PostDatasourceConnectionResponse struct
+type PostDatasourceConnectionResponse struct {
+	// The type of data source that you want to add.
+	DatasourceType *string `json:"datasource_type" validate:"required"`
 
-	// Allows users to set headers on API requests
-	Headers map[string]string
+	// The name of data source.
+	Name *string `json:"name" validate:"required"`
 }
 
-// NewRevokeRoleFromObjectV2Options : Instantiate RevokeRoleFromObjectV2Options
-func (*DataVirtualizationV1) NewRevokeRoleFromObjectV2Options() *RevokeRoleFromObjectV2Options {
-	return &RevokeRoleFromObjectV2Options{}
+
+// UnmarshalPostDatasourceConnectionResponse unmarshals an instance of PostDatasourceConnectionResponse from the specified map of raw messages.
+func UnmarshalPostDatasourceConnectionResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(PostDatasourceConnectionResponse)
+	err = core.UnmarshalPrimitive(m, "datasource_type", &obj.DatasourceType)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
 }
 
-// SetBody : Allow user to set Body
-func (options *RevokeRoleFromObjectV2Options) SetBody(body []RevokeRoleFromObjectV2RequestBodyItem) *RevokeRoleFromObjectV2Options {
-	options.Body = body
-	return options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *RevokeRoleFromObjectV2Options) SetHeaders(param map[string]string) *RevokeRoleFromObjectV2Options {
-	options.Headers = param
-	return options
-}
-
-// RevokeRoleFromObjectV2RequestBodyItem : RevokeRoleFromObjectV2RequestBodyItem struct
-type RevokeRoleFromObjectV2RequestBodyItem struct {
-	// The name of the virtual object.
+// PostRolePrivilegesParametersBodyItem : PostRolePrivilegesParametersBodyItem struct
+type PostRolePrivilegesParametersBodyItem struct {
+	// The name of the virtualized table.
 	ObjectName *string `json:"object_name,omitempty"`
 
-	// The schema of the virtual object.
+	// The schema of the virtualized table.
 	ObjectSchema *string `json:"object_schema,omitempty"`
 
-	// The role to revoke from the user.
-	RoleToRevoke *string `json:"role_to_revoke,omitempty"`
+	// The identifier of the authorization, if grant access to all users, the value is PUBLIC, othervise the value is the
+	// data virtualization username.
+	RoleToGrant *string `json:"role_to_grant,omitempty"`
 }
 
 
-// UnmarshalRevokeRoleFromObjectV2RequestBodyItem unmarshals an instance of RevokeRoleFromObjectV2RequestBodyItem from the specified map of raw messages.
-func UnmarshalRevokeRoleFromObjectV2RequestBodyItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RevokeRoleFromObjectV2RequestBodyItem)
+// UnmarshalPostRolePrivilegesParametersBodyItem unmarshals an instance of PostRolePrivilegesParametersBodyItem from the specified map of raw messages.
+func UnmarshalPostRolePrivilegesParametersBodyItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(PostRolePrivilegesParametersBodyItem)
 	err = core.UnmarshalPrimitive(m, "object_name", &obj.ObjectName)
 	if err != nil {
 		return
@@ -1455,7 +1404,7 @@ func UnmarshalRevokeRoleFromObjectV2RequestBodyItem(m map[string]json.RawMessage
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "role_to_revoke", &obj.RoleToRevoke)
+	err = core.UnmarshalPrimitive(m, "role_to_grant", &obj.RoleToGrant)
 	if err != nil {
 		return
 	}
@@ -1463,49 +1412,23 @@ func UnmarshalRevokeRoleFromObjectV2RequestBodyItem(m map[string]json.RawMessage
 	return
 }
 
-// RevokeUserFromObjectOptions : The RevokeUserFromObject options.
-type RevokeUserFromObjectOptions struct {
-	Body []RevokeUserFromObjectRequestBodyItem `json:"body" validate:"required"`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// NewRevokeUserFromObjectOptions : Instantiate RevokeUserFromObjectOptions
-func (*DataVirtualizationV1) NewRevokeUserFromObjectOptions(body []RevokeUserFromObjectRequestBodyItem) *RevokeUserFromObjectOptions {
-	return &RevokeUserFromObjectOptions{
-		Body: body,
-	}
-}
-
-// SetBody : Allow user to set Body
-func (options *RevokeUserFromObjectOptions) SetBody(body []RevokeUserFromObjectRequestBodyItem) *RevokeUserFromObjectOptions {
-	options.Body = body
-	return options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *RevokeUserFromObjectOptions) SetHeaders(param map[string]string) *RevokeUserFromObjectOptions {
-	options.Headers = param
-	return options
-}
-
-// RevokeUserFromObjectRequestBodyItem : RevokeUserFromObjectRequestBodyItem struct
-type RevokeUserFromObjectRequestBodyItem struct {
-	// The name of the virtual object.
+// PostUserPrivilegesParametersBodyItem : PostUserPrivilegesParametersBodyItem struct
+type PostUserPrivilegesParametersBodyItem struct {
+	// The name of the virtualized table.
 	ObjectName *string `json:"object_name,omitempty"`
 
-	// The schema of the virtual object.
+	// The schema of the virtualized table.
 	ObjectSchema *string `json:"object_schema,omitempty"`
 
-	// The identifier of the authorization.
+	// The identifier of the authorization, if grant access to all users, the value is PUBLIC, othervise the value is the
+	// data virtualization username.
 	Authid *string `json:"authid,omitempty"`
 }
 
 
-// UnmarshalRevokeUserFromObjectRequestBodyItem unmarshals an instance of RevokeUserFromObjectRequestBodyItem from the specified map of raw messages.
-func UnmarshalRevokeUserFromObjectRequestBodyItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RevokeUserFromObjectRequestBodyItem)
+// UnmarshalPostUserPrivilegesParametersBodyItem unmarshals an instance of PostUserPrivilegesParametersBodyItem from the specified map of raw messages.
+func UnmarshalPostUserPrivilegesParametersBodyItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(PostUserPrivilegesParametersBodyItem)
 	err = core.UnmarshalPrimitive(m, "object_name", &obj.ObjectName)
 	if err != nil {
 		return
@@ -1522,12 +1445,211 @@ func UnmarshalRevokeUserFromObjectRequestBodyItem(m map[string]json.RawMessage, 
 	return
 }
 
+// RevokeRoleFromObjectV2Options : The RevokeRoleFromObjectV2 options.
+type RevokeRoleFromObjectV2Options struct {
+	// The Data Virtualization role type, the value could be DV_ADMIN, DV_ENGINEER, DV_STEWARD or DV_WORKER.
+	RoleToRevoke *string `json:"role_to_revoke" validate:"required"`
+
+	// The virtualized table's name.
+	ObjectName *string `json:"object_name" validate:"required"`
+
+	// The virtualized table's schema name.
+	ObjectSchema *string `json:"object_schema" validate:"required"`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewRevokeRoleFromObjectV2Options : Instantiate RevokeRoleFromObjectV2Options
+func (*DataVirtualizationV1) NewRevokeRoleFromObjectV2Options(roleToRevoke string, objectName string, objectSchema string) *RevokeRoleFromObjectV2Options {
+	return &RevokeRoleFromObjectV2Options{
+		RoleToRevoke: core.StringPtr(roleToRevoke),
+		ObjectName: core.StringPtr(objectName),
+		ObjectSchema: core.StringPtr(objectSchema),
+	}
+}
+
+// SetRoleToRevoke : Allow user to set RoleToRevoke
+func (options *RevokeRoleFromObjectV2Options) SetRoleToRevoke(roleToRevoke string) *RevokeRoleFromObjectV2Options {
+	options.RoleToRevoke = core.StringPtr(roleToRevoke)
+	return options
+}
+
+// SetObjectName : Allow user to set ObjectName
+func (options *RevokeRoleFromObjectV2Options) SetObjectName(objectName string) *RevokeRoleFromObjectV2Options {
+	options.ObjectName = core.StringPtr(objectName)
+	return options
+}
+
+// SetObjectSchema : Allow user to set ObjectSchema
+func (options *RevokeRoleFromObjectV2Options) SetObjectSchema(objectSchema string) *RevokeRoleFromObjectV2Options {
+	options.ObjectSchema = core.StringPtr(objectSchema)
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *RevokeRoleFromObjectV2Options) SetHeaders(param map[string]string) *RevokeRoleFromObjectV2Options {
+	options.Headers = param
+	return options
+}
+
+// RevokeUserFromObjectOptions : The RevokeUserFromObject options.
+type RevokeUserFromObjectOptions struct {
+	// The Data Virtualization user name, if the value is PUBLIC, it means revoke access privilege from all Data
+	// Virtualization users.
+	Authid *string `json:"authid" validate:"required"`
+
+	// The virtualized table's name.
+	ObjectName *string `json:"object_name" validate:"required"`
+
+	// The virtualized table's schema name.
+	ObjectSchema *string `json:"object_schema" validate:"required"`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewRevokeUserFromObjectOptions : Instantiate RevokeUserFromObjectOptions
+func (*DataVirtualizationV1) NewRevokeUserFromObjectOptions(authid string, objectName string, objectSchema string) *RevokeUserFromObjectOptions {
+	return &RevokeUserFromObjectOptions{
+		Authid: core.StringPtr(authid),
+		ObjectName: core.StringPtr(objectName),
+		ObjectSchema: core.StringPtr(objectSchema),
+	}
+}
+
+// SetAuthid : Allow user to set Authid
+func (options *RevokeUserFromObjectOptions) SetAuthid(authid string) *RevokeUserFromObjectOptions {
+	options.Authid = core.StringPtr(authid)
+	return options
+}
+
+// SetObjectName : Allow user to set ObjectName
+func (options *RevokeUserFromObjectOptions) SetObjectName(objectName string) *RevokeUserFromObjectOptions {
+	options.ObjectName = core.StringPtr(objectName)
+	return options
+}
+
+// SetObjectSchema : Allow user to set ObjectSchema
+func (options *RevokeUserFromObjectOptions) SetObjectSchema(objectSchema string) *RevokeUserFromObjectOptions {
+	options.ObjectSchema = core.StringPtr(objectSchema)
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *RevokeUserFromObjectOptions) SetHeaders(param map[string]string) *RevokeUserFromObjectOptions {
+	options.Headers = param
+	return options
+}
+
+// VirtualizeTableParameterSourceTableDefItem : VirtualizeTableParameterSourceTableDefItem struct
+type VirtualizeTableParameterSourceTableDefItem struct {
+	// The name of the column.
+	ColumnName *string `json:"column_name" validate:"required"`
+
+	// The type of the column.
+	ColumnType *string `json:"column_type" validate:"required"`
+}
+
+
+// NewVirtualizeTableParameterSourceTableDefItem : Instantiate VirtualizeTableParameterSourceTableDefItem (Generic Model Constructor)
+func (*DataVirtualizationV1) NewVirtualizeTableParameterSourceTableDefItem(columnName string, columnType string) (model *VirtualizeTableParameterSourceTableDefItem, err error) {
+	model = &VirtualizeTableParameterSourceTableDefItem{
+		ColumnName: core.StringPtr(columnName),
+		ColumnType: core.StringPtr(columnType),
+	}
+	err = core.ValidateStruct(model, "required parameters")
+	return
+}
+
+// UnmarshalVirtualizeTableParameterSourceTableDefItem unmarshals an instance of VirtualizeTableParameterSourceTableDefItem from the specified map of raw messages.
+func UnmarshalVirtualizeTableParameterSourceTableDefItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(VirtualizeTableParameterSourceTableDefItem)
+	err = core.UnmarshalPrimitive(m, "column_name", &obj.ColumnName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "column_type", &obj.ColumnType)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// VirtualizeTableParameterVirtualTableDefItem : VirtualizeTableParameterVirtualTableDefItem struct
+type VirtualizeTableParameterVirtualTableDefItem struct {
+	// The name of the column.
+	ColumnName *string `json:"column_name" validate:"required"`
+
+	// The type of the column.
+	ColumnType *string `json:"column_type" validate:"required"`
+}
+
+
+// NewVirtualizeTableParameterVirtualTableDefItem : Instantiate VirtualizeTableParameterVirtualTableDefItem (Generic Model Constructor)
+func (*DataVirtualizationV1) NewVirtualizeTableParameterVirtualTableDefItem(columnName string, columnType string) (model *VirtualizeTableParameterVirtualTableDefItem, err error) {
+	model = &VirtualizeTableParameterVirtualTableDefItem{
+		ColumnName: core.StringPtr(columnName),
+		ColumnType: core.StringPtr(columnType),
+	}
+	err = core.ValidateStruct(model, "required parameters")
+	return
+}
+
+// UnmarshalVirtualizeTableParameterVirtualTableDefItem unmarshals an instance of VirtualizeTableParameterVirtualTableDefItem from the specified map of raw messages.
+func UnmarshalVirtualizeTableParameterVirtualTableDefItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(VirtualizeTableParameterVirtualTableDefItem)
+	err = core.UnmarshalPrimitive(m, "column_name", &obj.ColumnName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "column_type", &obj.ColumnType)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// VirtualizeTableResponse : VirtualizeTableResponse struct
+type VirtualizeTableResponse struct {
+	// The name of the source table.
+	SourceName *string `json:"source_name" validate:"required"`
+
+	// The name of the table that will be virtualized.
+	VirtualName *string `json:"virtual_name" validate:"required"`
+
+	// The schema of the table that will be virtualized.
+	VirtualSchema *string `json:"virtual_schema" validate:"required"`
+}
+
+
+// UnmarshalVirtualizeTableResponse unmarshals an instance of VirtualizeTableResponse from the specified map of raw messages.
+func UnmarshalVirtualizeTableResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(VirtualizeTableResponse)
+	err = core.UnmarshalPrimitive(m, "source_name", &obj.SourceName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "virtual_name", &obj.VirtualName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "virtual_schema", &obj.VirtualSchema)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // VirtualizeTableV2Options : The VirtualizeTableV2 options.
 type VirtualizeTableV2Options struct {
 	// The name of the source table.
 	SourceName *string `json:"source_name" validate:"required"`
 
-	SourceTableDef []VirtualizeTableV2RequestSourceTableDefItem `json:"source_table_def" validate:"required"`
+	SourceTableDef []VirtualizeTableParameterSourceTableDefItem `json:"source_table_def" validate:"required"`
 
 	Sources []string `json:"sources" validate:"required"`
 
@@ -1537,7 +1659,7 @@ type VirtualizeTableV2Options struct {
 	// The schema of the table that will be virtualized.
 	VirtualSchema *string `json:"virtual_schema" validate:"required"`
 
-	VirtualTableDef []VirtualizeTableV2RequestVirtualTableDefItem `json:"virtual_table_def" validate:"required"`
+	VirtualTableDef []VirtualizeTableParameterVirtualTableDefItem `json:"virtual_table_def" validate:"required"`
 
 	// The columns that are included in the table.
 	IsIncludedColumns *string `json:"is_included_columns,omitempty"`
@@ -1550,7 +1672,7 @@ type VirtualizeTableV2Options struct {
 }
 
 // NewVirtualizeTableV2Options : Instantiate VirtualizeTableV2Options
-func (*DataVirtualizationV1) NewVirtualizeTableV2Options(sourceName string, sourceTableDef []VirtualizeTableV2RequestSourceTableDefItem, sources []string, virtualName string, virtualSchema string, virtualTableDef []VirtualizeTableV2RequestVirtualTableDefItem) *VirtualizeTableV2Options {
+func (*DataVirtualizationV1) NewVirtualizeTableV2Options(sourceName string, sourceTableDef []VirtualizeTableParameterSourceTableDefItem, sources []string, virtualName string, virtualSchema string, virtualTableDef []VirtualizeTableParameterVirtualTableDefItem) *VirtualizeTableV2Options {
 	return &VirtualizeTableV2Options{
 		SourceName: core.StringPtr(sourceName),
 		SourceTableDef: sourceTableDef,
@@ -1568,7 +1690,7 @@ func (options *VirtualizeTableV2Options) SetSourceName(sourceName string) *Virtu
 }
 
 // SetSourceTableDef : Allow user to set SourceTableDef
-func (options *VirtualizeTableV2Options) SetSourceTableDef(sourceTableDef []VirtualizeTableV2RequestSourceTableDefItem) *VirtualizeTableV2Options {
+func (options *VirtualizeTableV2Options) SetSourceTableDef(sourceTableDef []VirtualizeTableParameterSourceTableDefItem) *VirtualizeTableV2Options {
 	options.SourceTableDef = sourceTableDef
 	return options
 }
@@ -1592,7 +1714,7 @@ func (options *VirtualizeTableV2Options) SetVirtualSchema(virtualSchema string) 
 }
 
 // SetVirtualTableDef : Allow user to set VirtualTableDef
-func (options *VirtualizeTableV2Options) SetVirtualTableDef(virtualTableDef []VirtualizeTableV2RequestVirtualTableDefItem) *VirtualizeTableV2Options {
+func (options *VirtualizeTableV2Options) SetVirtualTableDef(virtualTableDef []VirtualizeTableParameterVirtualTableDefItem) *VirtualizeTableV2Options {
 	options.VirtualTableDef = virtualTableDef
 	return options
 }
@@ -1613,91 +1735,4 @@ func (options *VirtualizeTableV2Options) SetReplace(replace bool) *VirtualizeTab
 func (options *VirtualizeTableV2Options) SetHeaders(param map[string]string) *VirtualizeTableV2Options {
 	options.Headers = param
 	return options
-}
-
-// VirtualizeTableV2RequestSourceTableDefItem : VirtualizeTableV2RequestSourceTableDefItem struct
-type VirtualizeTableV2RequestSourceTableDefItem struct {
-	// The name of the column.
-	ColumnName *string `json:"column_name" validate:"required"`
-
-	// The type of the column.
-	ColumnType *string `json:"column_type" validate:"required"`
-}
-
-
-// NewVirtualizeTableV2RequestSourceTableDefItem : Instantiate VirtualizeTableV2RequestSourceTableDefItem (Generic Model Constructor)
-func (*DataVirtualizationV1) NewVirtualizeTableV2RequestSourceTableDefItem(columnName string, columnType string) (model *VirtualizeTableV2RequestSourceTableDefItem, err error) {
-	model = &VirtualizeTableV2RequestSourceTableDefItem{
-		ColumnName: core.StringPtr(columnName),
-		ColumnType: core.StringPtr(columnType),
-	}
-	err = core.ValidateStruct(model, "required parameters")
-	return
-}
-
-// UnmarshalVirtualizeTableV2RequestSourceTableDefItem unmarshals an instance of VirtualizeTableV2RequestSourceTableDefItem from the specified map of raw messages.
-func UnmarshalVirtualizeTableV2RequestSourceTableDefItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(VirtualizeTableV2RequestSourceTableDefItem)
-	err = core.UnmarshalPrimitive(m, "column_name", &obj.ColumnName)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "column_type", &obj.ColumnType)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// VirtualizeTableV2RequestVirtualTableDefItem : VirtualizeTableV2RequestVirtualTableDefItem struct
-type VirtualizeTableV2RequestVirtualTableDefItem struct {
-	// The name of the column.
-	ColumnName *string `json:"column_name" validate:"required"`
-
-	// The type of the column.
-	ColumnType *string `json:"column_type" validate:"required"`
-}
-
-
-// NewVirtualizeTableV2RequestVirtualTableDefItem : Instantiate VirtualizeTableV2RequestVirtualTableDefItem (Generic Model Constructor)
-func (*DataVirtualizationV1) NewVirtualizeTableV2RequestVirtualTableDefItem(columnName string, columnType string) (model *VirtualizeTableV2RequestVirtualTableDefItem, err error) {
-	model = &VirtualizeTableV2RequestVirtualTableDefItem{
-		ColumnName: core.StringPtr(columnName),
-		ColumnType: core.StringPtr(columnType),
-	}
-	err = core.ValidateStruct(model, "required parameters")
-	return
-}
-
-// UnmarshalVirtualizeTableV2RequestVirtualTableDefItem unmarshals an instance of VirtualizeTableV2RequestVirtualTableDefItem from the specified map of raw messages.
-func UnmarshalVirtualizeTableV2RequestVirtualTableDefItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(VirtualizeTableV2RequestVirtualTableDefItem)
-	err = core.UnmarshalPrimitive(m, "column_name", &obj.ColumnName)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "column_type", &obj.ColumnType)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// SuccessResponse : SuccessResponse struct
-type SuccessResponse struct {
-	Message *string `json:"message" validate:"required"`
-}
-
-
-// UnmarshalSuccessResponse unmarshals an instance of SuccessResponse from the specified map of raw messages.
-func UnmarshalSuccessResponse(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SuccessResponse)
-	err = core.UnmarshalPrimitive(m, "message", &obj.Message)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
 }
