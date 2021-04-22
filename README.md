@@ -40,7 +40,7 @@ The IBM Data Virtualization on Cloud Go SDK allows developers to programmaticall
 
 Service Name | Package name 
 --- | --- 
-[Example Service](https://cloud.ibm.com/apidocs/data-virtualization-on-cloud-go-sdk) | datavirtualizationv1
+[Data Virtualization](https://cloud.ibm.com/apidocs/data-virtualization-on-cloud-go-sdk) | datavirtualizationv1
 
 ## Prerequisites
 
