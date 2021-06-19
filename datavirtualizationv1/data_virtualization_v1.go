@@ -15,9 +15,8 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.19.0-be3b4618-20201113-200858
+ * IBM OpenAPI SDK Code Generator Version: 3.34.1-ad041667-20210617-195430
  */
- 
 
 // Package datavirtualizationv1 : Operations and models for the DataVirtualizationV1 service
 package datavirtualizationv1
@@ -26,11 +25,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/IBM/go-sdk-core/v4/core"
-	common "github.com/watson-developer-cloud/go-sdk/common"
 	"net/http"
 	"reflect"
 	"time"
+
+	common "github.com/IBM/data-virtualization-on-cloud-go-sdk/common"
+	"github.com/IBM/go-sdk-core/v5/core"
 )
 
 // DataVirtualizationV1 : The Data Virtualization REST API connects to your service, so you can manage your virtual
@@ -40,9 +40,6 @@ import (
 type DataVirtualizationV1 struct {
 	Service *core.BaseService
 }
-
-// DefaultServiceURL is the default URL to make service requests to.
-const DefaultServiceURL = "https://data-virtualization.cloud.ibm.com"
 
 // DefaultServiceName is the default key used to find external configuration information.
 const DefaultServiceName = "data_virtualization"
@@ -54,30 +51,42 @@ type DataVirtualizationV1Options struct {
 	Authenticator core.Authenticator
 }
 
-// NewDataVirtualizationV1 : constructs an instance of DataVirtualizationV1 with passed in options.
-func NewDataVirtualizationV1(options *DataVirtualizationV1Options) (service *DataVirtualizationV1, err error) {
+// NewDataVirtualizationV1UsingExternalConfig : constructs an instance of DataVirtualizationV1 with passed in options and external configuration.
+func NewDataVirtualizationV1UsingExternalConfig(options *DataVirtualizationV1Options) (dataVirtualization *DataVirtualizationV1, err error) {
 	if options.ServiceName == "" {
 		options.ServiceName = DefaultServiceName
 	}
 
-	serviceOptions := &core.ServiceOptions{
-		URL:           DefaultServiceURL,
-		Authenticator: options.Authenticator,
-	}
-
-	if serviceOptions.Authenticator == nil {
-		serviceOptions.Authenticator, err = core.GetAuthenticatorFromEnvironment(options.ServiceName)
+	if options.Authenticator == nil {
+		options.Authenticator, err = core.GetAuthenticatorFromEnvironment(options.ServiceName)
 		if err != nil {
 			return
 		}
 	}
 
-	baseService, err := core.NewBaseService(serviceOptions)
+	dataVirtualization, err = NewDataVirtualizationV1(options)
 	if err != nil {
 		return
 	}
 
-	err = baseService.ConfigureService(options.ServiceName)
+	err = dataVirtualization.Service.ConfigureService(options.ServiceName)
+	if err != nil {
+		return
+	}
+
+	if options.URL != "" {
+		err = dataVirtualization.Service.SetServiceURL(options.URL)
+	}
+	return
+}
+
+// NewDataVirtualizationV1 : constructs an instance of DataVirtualizationV1 with passed in options.
+func NewDataVirtualizationV1(options *DataVirtualizationV1Options) (service *DataVirtualizationV1, err error) {
+	serviceOptions := &core.ServiceOptions{
+		Authenticator: options.Authenticator,
+	}
+
+	baseService, err := core.NewBaseService(serviceOptions)
 	if err != nil {
 		return
 	}
@@ -94,6 +103,21 @@ func NewDataVirtualizationV1(options *DataVirtualizationV1Options) (service *Dat
 	}
 
 	return
+}
+
+// GetServiceURLForRegion returns the service URL to be used for the specified region
+func GetServiceURLForRegion(region string) (string, error) {
+	return "", fmt.Errorf("service does not support regional URLs")
+}
+
+// Clone makes a copy of "dataVirtualization" suitable for processing requests.
+func (dataVirtualization *DataVirtualizationV1) Clone() *DataVirtualizationV1 {
+	if core.IsNil(dataVirtualization) {
+		return nil
+	}
+	clone := *dataVirtualization
+	clone.Service = dataVirtualization.Service.Clone()
+	return &clone
 }
 
 // SetServiceURL sets the service URL
@@ -132,15 +156,15 @@ func (dataVirtualization *DataVirtualizationV1) DisableRetries() {
 	dataVirtualization.Service.DisableRetries()
 }
 
-// GetDatasourceConnections : Get data source connections
+// ListDatasourceConnections : Get data source connections
 // Gets all data source connections that are connected to the service.
-func (dataVirtualization *DataVirtualizationV1) GetDatasourceConnections(getDatasourceConnectionsOptions *GetDatasourceConnectionsOptions) (result *DatasourceNodesResponseV2, response *core.DetailedResponse, err error) {
-	return dataVirtualization.GetDatasourceConnectionsWithContext(context.Background(), getDatasourceConnectionsOptions)
+func (dataVirtualization *DataVirtualizationV1) ListDatasourceConnections(listDatasourceConnectionsOptions *ListDatasourceConnectionsOptions) (result *DatasourceConnectionsList, response *core.DetailedResponse, err error) {
+	return dataVirtualization.ListDatasourceConnectionsWithContext(context.Background(), listDatasourceConnectionsOptions)
 }
 
-// GetDatasourceConnectionsWithContext is an alternate form of the GetDatasourceConnections method which supports a Context parameter
-func (dataVirtualization *DataVirtualizationV1) GetDatasourceConnectionsWithContext(ctx context.Context, getDatasourceConnectionsOptions *GetDatasourceConnectionsOptions) (result *DatasourceNodesResponseV2, response *core.DetailedResponse, err error) {
-	err = core.ValidateStruct(getDatasourceConnectionsOptions, "getDatasourceConnectionsOptions")
+// ListDatasourceConnectionsWithContext is an alternate form of the ListDatasourceConnections method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) ListDatasourceConnectionsWithContext(ctx context.Context, listDatasourceConnectionsOptions *ListDatasourceConnectionsOptions) (result *DatasourceConnectionsList, response *core.DetailedResponse, err error) {
+	err = core.ValidateStruct(listDatasourceConnectionsOptions, "listDatasourceConnectionsOptions")
 	if err != nil {
 		return
 	}
@@ -148,16 +172,16 @@ func (dataVirtualization *DataVirtualizationV1) GetDatasourceConnectionsWithCont
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/datasource_connections`, nil)
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/datasource/connections`, nil)
 	if err != nil {
 		return
 	}
 
-	for headerName, headerValue := range getDatasourceConnectionsOptions.Headers {
+	for headerName, headerValue := range listDatasourceConnectionsOptions.Headers {
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "GetDatasourceConnections")
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "ListDatasourceConnections")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -173,23 +197,25 @@ func (dataVirtualization *DataVirtualizationV1) GetDatasourceConnectionsWithCont
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalDatasourceNodesResponseV2)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalDatasourceConnectionsList)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
 
 // AddDatasourceConnection : Add data source connection
 // Adds a data source connection to the Data Virtualization service.
-func (dataVirtualization *DataVirtualizationV1) AddDatasourceConnection(addDatasourceConnectionOptions *AddDatasourceConnectionOptions) (result *PostDatasourceConnectionResponse, response *core.DetailedResponse, err error) {
+func (dataVirtualization *DataVirtualizationV1) AddDatasourceConnection(addDatasourceConnectionOptions *AddDatasourceConnectionOptions) (result *PostDatasourceConnection, response *core.DetailedResponse, err error) {
 	return dataVirtualization.AddDatasourceConnectionWithContext(context.Background(), addDatasourceConnectionOptions)
 }
 
 // AddDatasourceConnectionWithContext is an alternate form of the AddDatasourceConnection method which supports a Context parameter
-func (dataVirtualization *DataVirtualizationV1) AddDatasourceConnectionWithContext(ctx context.Context, addDatasourceConnectionOptions *AddDatasourceConnectionOptions) (result *PostDatasourceConnectionResponse, response *core.DetailedResponse, err error) {
+func (dataVirtualization *DataVirtualizationV1) AddDatasourceConnectionWithContext(ctx context.Context, addDatasourceConnectionOptions *AddDatasourceConnectionOptions) (result *PostDatasourceConnection, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(addDatasourceConnectionOptions, "addDatasourceConnectionOptions cannot be nil")
 	if err != nil {
 		return
@@ -202,7 +228,7 @@ func (dataVirtualization *DataVirtualizationV1) AddDatasourceConnectionWithConte
 	builder := core.NewRequestBuilder(core.POST)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/datasource_connections`, nil)
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/datasource/connections`, nil)
 	if err != nil {
 		return
 	}
@@ -249,11 +275,13 @@ func (dataVirtualization *DataVirtualizationV1) AddDatasourceConnectionWithConte
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalPostDatasourceConnectionResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalPostDatasourceConnection)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -275,10 +303,14 @@ func (dataVirtualization *DataVirtualizationV1) DeleteDatasourceConnectionWithCo
 		return
 	}
 
+	pathParamsMap := map[string]string{
+		"connection_id": *deleteDatasourceConnectionOptions.ConnectionID,
+	}
+
 	builder := core.NewRequestBuilder(core.DELETE)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/datasource_connections`, nil)
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/datasource/connections/{connection_id}`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -292,8 +324,9 @@ func (dataVirtualization *DataVirtualizationV1) DeleteDatasourceConnectionWithCo
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	builder.AddQuery("cid", fmt.Sprint(*deleteDatasourceConnectionOptions.Cid))
-	builder.AddQuery("connection_id", fmt.Sprint(*deleteDatasourceConnectionOptions.ConnectionID))
+	if deleteDatasourceConnectionOptions.Cid != nil {
+		builder.AddQuery("cid", fmt.Sprint(*deleteDatasourceConnectionOptions.Cid))
+	}
 
 	request, err := builder.Build()
 	if err != nil {
@@ -341,8 +374,14 @@ func (dataVirtualization *DataVirtualizationV1) GrantUserToVirtualTableWithConte
 	builder.AddHeader("Content-Type", "application/json")
 
 	body := make(map[string]interface{})
-	if grantUserToVirtualTableOptions.Body != nil {
-		body["body"] = grantUserToVirtualTableOptions.Body
+	if grantUserToVirtualTableOptions.TableName != nil {
+		body["table_name"] = grantUserToVirtualTableOptions.TableName
+	}
+	if grantUserToVirtualTableOptions.TableSchema != nil {
+		body["table_schema"] = grantUserToVirtualTableOptions.TableSchema
+	}
+	if grantUserToVirtualTableOptions.Authid != nil {
+		body["authid"] = grantUserToVirtualTableOptions.Authid
 	}
 	_, err = builder.SetBodyContentJSON(body)
 	if err != nil {
@@ -376,10 +415,14 @@ func (dataVirtualization *DataVirtualizationV1) RevokeUserFromObjectWithContext(
 		return
 	}
 
+	pathParamsMap := map[string]string{
+		"authid": *revokeUserFromObjectOptions.Authid,
+	}
+
 	builder := core.NewRequestBuilder(core.DELETE)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/privileges/users`, nil)
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/privileges/users/{authid}`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -393,7 +436,6 @@ func (dataVirtualization *DataVirtualizationV1) RevokeUserFromObjectWithContext(
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	builder.AddQuery("authid", fmt.Sprint(*revokeUserFromObjectOptions.Authid))
 	builder.AddQuery("table_name", fmt.Sprint(*revokeUserFromObjectOptions.TableName))
 	builder.AddQuery("table_schema", fmt.Sprint(*revokeUserFromObjectOptions.TableSchema))
 
@@ -443,8 +485,14 @@ func (dataVirtualization *DataVirtualizationV1) GrantRolesToVirtualizedTableWith
 	builder.AddHeader("Content-Type", "application/json")
 
 	body := make(map[string]interface{})
-	if grantRolesToVirtualizedTableOptions.Body != nil {
-		body["body"] = grantRolesToVirtualizedTableOptions.Body
+	if grantRolesToVirtualizedTableOptions.TableName != nil {
+		body["table_name"] = grantRolesToVirtualizedTableOptions.TableName
+	}
+	if grantRolesToVirtualizedTableOptions.TableSchema != nil {
+		body["table_schema"] = grantRolesToVirtualizedTableOptions.TableSchema
+	}
+	if grantRolesToVirtualizedTableOptions.RoleName != nil {
+		body["role_name"] = grantRolesToVirtualizedTableOptions.RoleName
 	}
 	_, err = builder.SetBodyContentJSON(body)
 	if err != nil {
@@ -461,43 +509,46 @@ func (dataVirtualization *DataVirtualizationV1) GrantRolesToVirtualizedTableWith
 	return
 }
 
-// RevokeRoleFromTableV2 : Delete role
+// DvaasRevokeRoleFromTable : Delete role
 // Revokes roles for a virtualized table.
-func (dataVirtualization *DataVirtualizationV1) RevokeRoleFromTableV2(revokeRoleFromTableV2Options *RevokeRoleFromTableV2Options) (response *core.DetailedResponse, err error) {
-	return dataVirtualization.RevokeRoleFromTableV2WithContext(context.Background(), revokeRoleFromTableV2Options)
+func (dataVirtualization *DataVirtualizationV1) DvaasRevokeRoleFromTable(dvaasRevokeRoleFromTableOptions *DvaasRevokeRoleFromTableOptions) (response *core.DetailedResponse, err error) {
+	return dataVirtualization.DvaasRevokeRoleFromTableWithContext(context.Background(), dvaasRevokeRoleFromTableOptions)
 }
 
-// RevokeRoleFromTableV2WithContext is an alternate form of the RevokeRoleFromTableV2 method which supports a Context parameter
-func (dataVirtualization *DataVirtualizationV1) RevokeRoleFromTableV2WithContext(ctx context.Context, revokeRoleFromTableV2Options *RevokeRoleFromTableV2Options) (response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(revokeRoleFromTableV2Options, "revokeRoleFromTableV2Options cannot be nil")
+// DvaasRevokeRoleFromTableWithContext is an alternate form of the DvaasRevokeRoleFromTable method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) DvaasRevokeRoleFromTableWithContext(ctx context.Context, dvaasRevokeRoleFromTableOptions *DvaasRevokeRoleFromTableOptions) (response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(dvaasRevokeRoleFromTableOptions, "dvaasRevokeRoleFromTableOptions cannot be nil")
 	if err != nil {
 		return
 	}
-	err = core.ValidateStruct(revokeRoleFromTableV2Options, "revokeRoleFromTableV2Options")
+	err = core.ValidateStruct(dvaasRevokeRoleFromTableOptions, "dvaasRevokeRoleFromTableOptions")
 	if err != nil {
 		return
+	}
+
+	pathParamsMap := map[string]string{
+		"role_name": *dvaasRevokeRoleFromTableOptions.RoleName,
 	}
 
 	builder := core.NewRequestBuilder(core.DELETE)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/privileges/roles`, nil)
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/privileges/roles/{role_name}`, pathParamsMap)
 	if err != nil {
 		return
 	}
 
-	for headerName, headerValue := range revokeRoleFromTableV2Options.Headers {
+	for headerName, headerValue := range dvaasRevokeRoleFromTableOptions.Headers {
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "RevokeRoleFromTableV2")
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "DvaasRevokeRoleFromTable")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	builder.AddQuery("role_to_revoke", fmt.Sprint(*revokeRoleFromTableV2Options.RoleToRevoke))
-	builder.AddQuery("table_name", fmt.Sprint(*revokeRoleFromTableV2Options.TableName))
-	builder.AddQuery("table_schema", fmt.Sprint(*revokeRoleFromTableV2Options.TableSchema))
+	builder.AddQuery("table_name", fmt.Sprint(*dvaasRevokeRoleFromTableOptions.TableName))
+	builder.AddQuery("table_schema", fmt.Sprint(*dvaasRevokeRoleFromTableOptions.TableSchema))
 
 	request, err := builder.Build()
 	if err != nil {
@@ -509,40 +560,148 @@ func (dataVirtualization *DataVirtualizationV1) RevokeRoleFromTableV2WithContext
 	return
 }
 
-// GetTablesForRole : Get virtualized tables by role
+// ListTablesForRole : Get virtualized tables by role
 // Retrieves the list of virtualized tables that have a specific role.
-func (dataVirtualization *DataVirtualizationV1) GetTablesForRole(getTablesForRoleOptions *GetTablesForRoleOptions) (result *TablesForRoleResponse, response *core.DetailedResponse, err error) {
-	return dataVirtualization.GetTablesForRoleWithContext(context.Background(), getTablesForRoleOptions)
+func (dataVirtualization *DataVirtualizationV1) ListTablesForRole(listTablesForRoleOptions *ListTablesForRoleOptions) (result *TablesForRoleResponse, response *core.DetailedResponse, err error) {
+	return dataVirtualization.ListTablesForRoleWithContext(context.Background(), listTablesForRoleOptions)
 }
 
-// GetTablesForRoleWithContext is an alternate form of the GetTablesForRole method which supports a Context parameter
-func (dataVirtualization *DataVirtualizationV1) GetTablesForRoleWithContext(ctx context.Context, getTablesForRoleOptions *GetTablesForRoleOptions) (result *TablesForRoleResponse, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(getTablesForRoleOptions, "getTablesForRoleOptions cannot be nil")
+// ListTablesForRoleWithContext is an alternate form of the ListTablesForRole method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) ListTablesForRoleWithContext(ctx context.Context, listTablesForRoleOptions *ListTablesForRoleOptions) (result *TablesForRoleResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(listTablesForRoleOptions, "listTablesForRoleOptions cannot be nil")
 	if err != nil {
 		return
 	}
-	err = core.ValidateStruct(getTablesForRoleOptions, "getTablesForRoleOptions")
+	err = core.ValidateStruct(listTablesForRoleOptions, "listTablesForRoleOptions")
 	if err != nil {
 		return
-	}
-
-	pathParamsMap := map[string]string{
-		"rolename": *getTablesForRoleOptions.Rolename,
 	}
 
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/privileges/tables/role/{rolename}`, pathParamsMap)
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/privileges/tables`, nil)
 	if err != nil {
 		return
 	}
 
-	for headerName, headerValue := range getTablesForRoleOptions.Headers {
+	for headerName, headerValue := range listTablesForRoleOptions.Headers {
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "GetTablesForRole")
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "ListTablesForRole")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	builder.AddQuery("rolename", fmt.Sprint(*listTablesForRoleOptions.Rolename))
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = dataVirtualization.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalTablesForRoleResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
+// TurnOnPolicyV2 : Turn on or off WKC policy enforcement status
+// Turn on WKC policy enforcement status.
+func (dataVirtualization *DataVirtualizationV1) TurnOnPolicyV2(turnOnPolicyV2Options *TurnOnPolicyV2Options) (result *TurnOnPolicyV2Response, response *core.DetailedResponse, err error) {
+	return dataVirtualization.TurnOnPolicyV2WithContext(context.Background(), turnOnPolicyV2Options)
+}
+
+// TurnOnPolicyV2WithContext is an alternate form of the TurnOnPolicyV2 method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) TurnOnPolicyV2WithContext(ctx context.Context, turnOnPolicyV2Options *TurnOnPolicyV2Options) (result *TurnOnPolicyV2Response, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(turnOnPolicyV2Options, "turnOnPolicyV2Options cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(turnOnPolicyV2Options, "turnOnPolicyV2Options")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.PUT)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/security/policy/status`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range turnOnPolicyV2Options.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "TurnOnPolicyV2")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	builder.AddQuery("status", fmt.Sprint(*turnOnPolicyV2Options.Status))
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = dataVirtualization.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalTurnOnPolicyV2Response)
+		if err != nil {
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
+// CheckPolicyStatusV2 : Get WKC policy enforcement status
+// Get WKC policy enforcement status, return enabled or disabled.
+func (dataVirtualization *DataVirtualizationV1) CheckPolicyStatusV2(checkPolicyStatusV2Options *CheckPolicyStatusV2Options) (result *CheckPolicyStatusV2Response, response *core.DetailedResponse, err error) {
+	return dataVirtualization.CheckPolicyStatusV2WithContext(context.Background(), checkPolicyStatusV2Options)
+}
+
+// CheckPolicyStatusV2WithContext is an alternate form of the CheckPolicyStatusV2 method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) CheckPolicyStatusV2WithContext(ctx context.Context, checkPolicyStatusV2Options *CheckPolicyStatusV2Options) (result *CheckPolicyStatusV2Response, response *core.DetailedResponse, err error) {
+	err = core.ValidateStruct(checkPolicyStatusV2Options, "checkPolicyStatusV2Options")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/security/policy/status`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range checkPolicyStatusV2Options.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "CheckPolicyStatusV2")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -558,28 +717,30 @@ func (dataVirtualization *DataVirtualizationV1) GetTablesForRoleWithContext(ctx 
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalTablesForRoleResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalCheckPolicyStatusV2Response)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
 
-// VirtualizeTableV2 : Virtualize table
+// DvaasVirtualizeTable : Virtualize table
 // Transforms a given data source table into a virtualized table.
-func (dataVirtualization *DataVirtualizationV1) VirtualizeTableV2(virtualizeTableV2Options *VirtualizeTableV2Options) (result *VirtualizeTableResponse, response *core.DetailedResponse, err error) {
-	return dataVirtualization.VirtualizeTableV2WithContext(context.Background(), virtualizeTableV2Options)
+func (dataVirtualization *DataVirtualizationV1) DvaasVirtualizeTable(dvaasVirtualizeTableOptions *DvaasVirtualizeTableOptions) (result *VirtualizeTableResponse, response *core.DetailedResponse, err error) {
+	return dataVirtualization.DvaasVirtualizeTableWithContext(context.Background(), dvaasVirtualizeTableOptions)
 }
 
-// VirtualizeTableV2WithContext is an alternate form of the VirtualizeTableV2 method which supports a Context parameter
-func (dataVirtualization *DataVirtualizationV1) VirtualizeTableV2WithContext(ctx context.Context, virtualizeTableV2Options *VirtualizeTableV2Options) (result *VirtualizeTableResponse, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(virtualizeTableV2Options, "virtualizeTableV2Options cannot be nil")
+// DvaasVirtualizeTableWithContext is an alternate form of the DvaasVirtualizeTable method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) DvaasVirtualizeTableWithContext(ctx context.Context, dvaasVirtualizeTableOptions *DvaasVirtualizeTableOptions) (result *VirtualizeTableResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(dvaasVirtualizeTableOptions, "dvaasVirtualizeTableOptions cannot be nil")
 	if err != nil {
 		return
 	}
-	err = core.ValidateStruct(virtualizeTableV2Options, "virtualizeTableV2Options")
+	err = core.ValidateStruct(dvaasVirtualizeTableOptions, "dvaasVirtualizeTableOptions")
 	if err != nil {
 		return
 	}
@@ -587,16 +748,16 @@ func (dataVirtualization *DataVirtualizationV1) VirtualizeTableV2WithContext(ctx
 	builder := core.NewRequestBuilder(core.POST)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/virtualize/tables`, nil)
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/virtualization/tables`, nil)
 	if err != nil {
 		return
 	}
 
-	for headerName, headerValue := range virtualizeTableV2Options.Headers {
+	for headerName, headerValue := range dvaasVirtualizeTableOptions.Headers {
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "VirtualizeTableV2")
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "DvaasVirtualizeTable")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -604,29 +765,29 @@ func (dataVirtualization *DataVirtualizationV1) VirtualizeTableV2WithContext(ctx
 	builder.AddHeader("Content-Type", "application/json")
 
 	body := make(map[string]interface{})
-	if virtualizeTableV2Options.SourceName != nil {
-		body["source_name"] = virtualizeTableV2Options.SourceName
+	if dvaasVirtualizeTableOptions.SourceName != nil {
+		body["source_name"] = dvaasVirtualizeTableOptions.SourceName
 	}
-	if virtualizeTableV2Options.SourceTableDef != nil {
-		body["source_table_def"] = virtualizeTableV2Options.SourceTableDef
+	if dvaasVirtualizeTableOptions.SourceTableDef != nil {
+		body["source_table_def"] = dvaasVirtualizeTableOptions.SourceTableDef
 	}
-	if virtualizeTableV2Options.Sources != nil {
-		body["sources"] = virtualizeTableV2Options.Sources
+	if dvaasVirtualizeTableOptions.Sources != nil {
+		body["sources"] = dvaasVirtualizeTableOptions.Sources
 	}
-	if virtualizeTableV2Options.VirtualName != nil {
-		body["virtual_name"] = virtualizeTableV2Options.VirtualName
+	if dvaasVirtualizeTableOptions.VirtualName != nil {
+		body["virtual_name"] = dvaasVirtualizeTableOptions.VirtualName
 	}
-	if virtualizeTableV2Options.VirtualSchema != nil {
-		body["virtual_schema"] = virtualizeTableV2Options.VirtualSchema
+	if dvaasVirtualizeTableOptions.VirtualSchema != nil {
+		body["virtual_schema"] = dvaasVirtualizeTableOptions.VirtualSchema
 	}
-	if virtualizeTableV2Options.VirtualTableDef != nil {
-		body["virtual_table_def"] = virtualizeTableV2Options.VirtualTableDef
+	if dvaasVirtualizeTableOptions.VirtualTableDef != nil {
+		body["virtual_table_def"] = dvaasVirtualizeTableOptions.VirtualTableDef
 	}
-	if virtualizeTableV2Options.IsIncludedColumns != nil {
-		body["is_included_columns"] = virtualizeTableV2Options.IsIncludedColumns
+	if dvaasVirtualizeTableOptions.IsIncludedColumns != nil {
+		body["is_included_columns"] = dvaasVirtualizeTableOptions.IsIncludedColumns
 	}
-	if virtualizeTableV2Options.Replace != nil {
-		body["replace"] = virtualizeTableV2Options.Replace
+	if dvaasVirtualizeTableOptions.Replace != nil {
+		body["replace"] = dvaasVirtualizeTableOptions.Replace
 	}
 	_, err = builder.SetBodyContentJSON(body)
 	if err != nil {
@@ -643,11 +804,13 @@ func (dataVirtualization *DataVirtualizationV1) VirtualizeTableV2WithContext(ctx
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalVirtualizeTableResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalVirtualizeTableResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -670,13 +833,13 @@ func (dataVirtualization *DataVirtualizationV1) DeleteTableWithContext(ctx conte
 	}
 
 	pathParamsMap := map[string]string{
-		"table_name": *deleteTableOptions.TableName,
+		"virtual_name": *deleteTableOptions.VirtualName,
 	}
 
 	builder := core.NewRequestBuilder(core.DELETE)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/mydata/tables/{table_name}`, pathParamsMap)
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/virtualization/tables/{virtual_name}`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -690,7 +853,7 @@ func (dataVirtualization *DataVirtualizationV1) DeleteTableWithContext(ctx conte
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	builder.AddQuery("schema_name", fmt.Sprint(*deleteTableOptions.SchemaName))
+	builder.AddQuery("virtual_schema", fmt.Sprint(*deleteTableOptions.VirtualSchema))
 
 	request, err := builder.Build()
 	if err != nil {
@@ -702,20 +865,256 @@ func (dataVirtualization *DataVirtualizationV1) DeleteTableWithContext(ctx conte
 	return
 }
 
+// GetPrimaryCatalog : Get primary catalog ID
+// Get primary catalog ID from the table DVSYS.INSTANCE_INFO.
+func (dataVirtualization *DataVirtualizationV1) GetPrimaryCatalog(getPrimaryCatalogOptions *GetPrimaryCatalogOptions) (result *PrimaryCatalogInfo, response *core.DetailedResponse, err error) {
+	return dataVirtualization.GetPrimaryCatalogWithContext(context.Background(), getPrimaryCatalogOptions)
+}
+
+// GetPrimaryCatalogWithContext is an alternate form of the GetPrimaryCatalog method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) GetPrimaryCatalogWithContext(ctx context.Context, getPrimaryCatalogOptions *GetPrimaryCatalogOptions) (result *PrimaryCatalogInfo, response *core.DetailedResponse, err error) {
+	err = core.ValidateStruct(getPrimaryCatalogOptions, "getPrimaryCatalogOptions")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/catalog/primary`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range getPrimaryCatalogOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "GetPrimaryCatalog")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = dataVirtualization.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalPrimaryCatalogInfo)
+		if err != nil {
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
+// PostPrimaryCatalog : Add primary catalog
+// Insert primary catalog ID into table DVSYS.INSTANCE_INFO.
+func (dataVirtualization *DataVirtualizationV1) PostPrimaryCatalog(postPrimaryCatalogOptions *PostPrimaryCatalogOptions) (result *PostPrimaryCatalog, response *core.DetailedResponse, err error) {
+	return dataVirtualization.PostPrimaryCatalogWithContext(context.Background(), postPrimaryCatalogOptions)
+}
+
+// PostPrimaryCatalogWithContext is an alternate form of the PostPrimaryCatalog method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) PostPrimaryCatalogWithContext(ctx context.Context, postPrimaryCatalogOptions *PostPrimaryCatalogOptions) (result *PostPrimaryCatalog, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(postPrimaryCatalogOptions, "postPrimaryCatalogOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(postPrimaryCatalogOptions, "postPrimaryCatalogOptions")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.POST)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/catalog/primary`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range postPrimaryCatalogOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "PostPrimaryCatalog")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+	builder.AddHeader("Content-Type", "application/json")
+
+	body := make(map[string]interface{})
+	if postPrimaryCatalogOptions.GUID != nil {
+		body["guid"] = postPrimaryCatalogOptions.GUID
+	}
+	_, err = builder.SetBodyContentJSON(body)
+	if err != nil {
+		return
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = dataVirtualization.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalPostPrimaryCatalog)
+		if err != nil {
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
+// DeletePrimaryCatalog : Delete primary catalog
+// Delete primary catalog item in the DVSYS.INSTANCE_INFO table.
+func (dataVirtualization *DataVirtualizationV1) DeletePrimaryCatalog(deletePrimaryCatalogOptions *DeletePrimaryCatalogOptions) (response *core.DetailedResponse, err error) {
+	return dataVirtualization.DeletePrimaryCatalogWithContext(context.Background(), deletePrimaryCatalogOptions)
+}
+
+// DeletePrimaryCatalogWithContext is an alternate form of the DeletePrimaryCatalog method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) DeletePrimaryCatalogWithContext(ctx context.Context, deletePrimaryCatalogOptions *DeletePrimaryCatalogOptions) (response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(deletePrimaryCatalogOptions, "deletePrimaryCatalogOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(deletePrimaryCatalogOptions, "deletePrimaryCatalogOptions")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.DELETE)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/catalog/primary`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range deletePrimaryCatalogOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "DeletePrimaryCatalog")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	builder.AddQuery("guid", fmt.Sprint(*deletePrimaryCatalogOptions.GUID))
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	response, err = dataVirtualization.Service.Request(request, nil)
+
+	return
+}
+
+// PublishAssets : publish virtual table to WKC
+// publish virtual tables to WKC.
+func (dataVirtualization *DataVirtualizationV1) PublishAssets(publishAssetsOptions *PublishAssetsOptions) (result *CatalogPublishResponse, response *core.DetailedResponse, err error) {
+	return dataVirtualization.PublishAssetsWithContext(context.Background(), publishAssetsOptions)
+}
+
+// PublishAssetsWithContext is an alternate form of the PublishAssets method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) PublishAssetsWithContext(ctx context.Context, publishAssetsOptions *PublishAssetsOptions) (result *CatalogPublishResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(publishAssetsOptions, "publishAssetsOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(publishAssetsOptions, "publishAssetsOptions")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.POST)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/integration/catalog/publish`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range publishAssetsOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "PublishAssets")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+	builder.AddHeader("Content-Type", "application/json")
+
+	body := make(map[string]interface{})
+	if publishAssetsOptions.CatalogID != nil {
+		body["catalog_id"] = publishAssetsOptions.CatalogID
+	}
+	if publishAssetsOptions.AllowDuplicates != nil {
+		body["allow_duplicates"] = publishAssetsOptions.AllowDuplicates
+	}
+	if publishAssetsOptions.Assets != nil {
+		body["assets"] = publishAssetsOptions.Assets
+	}
+	_, err = builder.SetBodyContentJSON(body)
+	if err != nil {
+		return
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = dataVirtualization.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalCatalogPublishResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
 // AddDatasourceConnectionOptions : The AddDatasourceConnection options.
 type AddDatasourceConnectionOptions struct {
 	// The type of data source that you want to add.
-	DatasourceType *string `json:"datasource_type" validate:"required"`
+	DatasourceType *string `validate:"required"`
 
 	// The name of data source.
-	Name *string `json:"name" validate:"required"`
+	Name *string `validate:"required"`
 
 	// The location of data source that you want to add.
-	OriginCountry *string `json:"origin_country" validate:"required"`
+	OriginCountry *string `validate:"required"`
 
-	Properties *PostDatasourceConnectionParametersProperties `json:"properties" validate:"required"`
+	Properties *PostDatasourceConnectionParametersProperties `validate:"required"`
 
-	AssetCategory *string `json:"asset_category,omitempty"`
+	AssetCategory *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -732,33 +1131,33 @@ func (*DataVirtualizationV1) NewAddDatasourceConnectionOptions(datasourceType st
 }
 
 // SetDatasourceType : Allow user to set DatasourceType
-func (options *AddDatasourceConnectionOptions) SetDatasourceType(datasourceType string) *AddDatasourceConnectionOptions {
-	options.DatasourceType = core.StringPtr(datasourceType)
-	return options
+func (_options *AddDatasourceConnectionOptions) SetDatasourceType(datasourceType string) *AddDatasourceConnectionOptions {
+	_options.DatasourceType = core.StringPtr(datasourceType)
+	return _options
 }
 
 // SetName : Allow user to set Name
-func (options *AddDatasourceConnectionOptions) SetName(name string) *AddDatasourceConnectionOptions {
-	options.Name = core.StringPtr(name)
-	return options
+func (_options *AddDatasourceConnectionOptions) SetName(name string) *AddDatasourceConnectionOptions {
+	_options.Name = core.StringPtr(name)
+	return _options
 }
 
 // SetOriginCountry : Allow user to set OriginCountry
-func (options *AddDatasourceConnectionOptions) SetOriginCountry(originCountry string) *AddDatasourceConnectionOptions {
-	options.OriginCountry = core.StringPtr(originCountry)
-	return options
+func (_options *AddDatasourceConnectionOptions) SetOriginCountry(originCountry string) *AddDatasourceConnectionOptions {
+	_options.OriginCountry = core.StringPtr(originCountry)
+	return _options
 }
 
 // SetProperties : Allow user to set Properties
-func (options *AddDatasourceConnectionOptions) SetProperties(properties *PostDatasourceConnectionParametersProperties) *AddDatasourceConnectionOptions {
-	options.Properties = properties
-	return options
+func (_options *AddDatasourceConnectionOptions) SetProperties(properties *PostDatasourceConnectionParametersProperties) *AddDatasourceConnectionOptions {
+	_options.Properties = properties
+	return _options
 }
 
 // SetAssetCategory : Allow user to set AssetCategory
-func (options *AddDatasourceConnectionOptions) SetAssetCategory(assetCategory string) *AddDatasourceConnectionOptions {
-	options.AssetCategory = core.StringPtr(assetCategory)
-	return options
+func (_options *AddDatasourceConnectionOptions) SetAssetCategory(assetCategory string) *AddDatasourceConnectionOptions {
+	_options.AssetCategory = core.StringPtr(assetCategory)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -767,8 +1166,136 @@ func (options *AddDatasourceConnectionOptions) SetHeaders(param map[string]strin
 	return options
 }
 
-// DatasourceNodesResponseV2DatasourceNodesArrayItem : DatasourceNodesResponseV2DatasourceNodesArrayItem struct
-type DatasourceNodesResponseV2DatasourceNodesArrayItem struct {
+// CatalogPublishResponseDuplicateAssetsItem : CatalogPublishResponseDuplicateAssetsItem struct
+type CatalogPublishResponseDuplicateAssetsItem struct {
+	SchemaName *string `json:"schema_name,omitempty"`
+
+	TableName *string `json:"table_name,omitempty"`
+}
+
+// UnmarshalCatalogPublishResponseDuplicateAssetsItem unmarshals an instance of CatalogPublishResponseDuplicateAssetsItem from the specified map of raw messages.
+func UnmarshalCatalogPublishResponseDuplicateAssetsItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(CatalogPublishResponseDuplicateAssetsItem)
+	err = core.UnmarshalPrimitive(m, "schema_name", &obj.SchemaName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "table_name", &obj.TableName)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// CatalogPublishResponseFailedAssetsItem : CatalogPublishResponseFailedAssetsItem struct
+type CatalogPublishResponseFailedAssetsItem struct {
+	ErrorMsg *string `json:"error_msg,omitempty"`
+
+	SchemaName *string `json:"schema_name,omitempty"`
+
+	TableName *string `json:"table_name,omitempty"`
+}
+
+// UnmarshalCatalogPublishResponseFailedAssetsItem unmarshals an instance of CatalogPublishResponseFailedAssetsItem from the specified map of raw messages.
+func UnmarshalCatalogPublishResponseFailedAssetsItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(CatalogPublishResponseFailedAssetsItem)
+	err = core.UnmarshalPrimitive(m, "error_msg", &obj.ErrorMsg)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "schema_name", &obj.SchemaName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "table_name", &obj.TableName)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// CatalogPublishResponsePublishedAssetsItem : CatalogPublishResponsePublishedAssetsItem struct
+type CatalogPublishResponsePublishedAssetsItem struct {
+	SchemaName *string `json:"schema_name,omitempty"`
+
+	TableName *string `json:"table_name,omitempty"`
+
+	WkcAssetID *string `json:"wkc_asset_id,omitempty"`
+}
+
+// UnmarshalCatalogPublishResponsePublishedAssetsItem unmarshals an instance of CatalogPublishResponsePublishedAssetsItem from the specified map of raw messages.
+func UnmarshalCatalogPublishResponsePublishedAssetsItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(CatalogPublishResponsePublishedAssetsItem)
+	err = core.UnmarshalPrimitive(m, "schema_name", &obj.SchemaName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "table_name", &obj.TableName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "wkc_asset_id", &obj.WkcAssetID)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// CheckPolicyStatusV2Options : The CheckPolicyStatusV2 options.
+type CheckPolicyStatusV2Options struct {
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewCheckPolicyStatusV2Options : Instantiate CheckPolicyStatusV2Options
+func (*DataVirtualizationV1) NewCheckPolicyStatusV2Options() *CheckPolicyStatusV2Options {
+	return &CheckPolicyStatusV2Options{}
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *CheckPolicyStatusV2Options) SetHeaders(param map[string]string) *CheckPolicyStatusV2Options {
+	options.Headers = param
+	return options
+}
+
+// CheckPolicyStatusV2Response : CheckPolicyStatusV2Response struct
+type CheckPolicyStatusV2Response struct {
+	Status *string `json:"status" validate:"required"`
+}
+
+// UnmarshalCheckPolicyStatusV2Response unmarshals an instance of CheckPolicyStatusV2Response from the specified map of raw messages.
+func UnmarshalCheckPolicyStatusV2Response(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(CheckPolicyStatusV2Response)
+	err = core.UnmarshalPrimitive(m, "status", &obj.Status)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// DatasourceConnectionsList : DatasourceConnectionsList struct
+type DatasourceConnectionsList struct {
+	DatasourceConnections []DatasourceConnectionsListDatasourceConnectionsItem `json:"datasource_connections,omitempty"`
+}
+
+// UnmarshalDatasourceConnectionsList unmarshals an instance of DatasourceConnectionsList from the specified map of raw messages.
+func UnmarshalDatasourceConnectionsList(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(DatasourceConnectionsList)
+	err = core.UnmarshalModel(m, "datasource_connections", &obj.DatasourceConnections, UnmarshalDatasourceConnectionsListDatasourceConnectionsItem)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// DatasourceConnectionsListDatasourceConnectionsItem : DatasourceConnectionsListDatasourceConnectionsItem struct
+type DatasourceConnectionsListDatasourceConnectionsItem struct {
 	// The name of the node that a datasource connection associates.
 	NodeName *string `json:"node_name,omitempty"`
 
@@ -793,13 +1320,12 @@ type DatasourceNodesResponseV2DatasourceNodesArrayItem struct {
 	// The number of data sources.
 	Dscount *string `json:"dscount,omitempty"`
 
-	DataSources []DatasourceNodesResponseV2DatasourceNodesArrayItemDataSourcesItem `json:"data_sources,omitempty"`
+	DataSources []DatasourceConnectionsListDatasourceConnectionsItemDataSourcesItem `json:"data_sources,omitempty"`
 }
 
-
-// UnmarshalDatasourceNodesResponseV2DatasourceNodesArrayItem unmarshals an instance of DatasourceNodesResponseV2DatasourceNodesArrayItem from the specified map of raw messages.
-func UnmarshalDatasourceNodesResponseV2DatasourceNodesArrayItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(DatasourceNodesResponseV2DatasourceNodesArrayItem)
+// UnmarshalDatasourceConnectionsListDatasourceConnectionsItem unmarshals an instance of DatasourceConnectionsListDatasourceConnectionsItem from the specified map of raw messages.
+func UnmarshalDatasourceConnectionsListDatasourceConnectionsItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(DatasourceConnectionsListDatasourceConnectionsItem)
 	err = core.UnmarshalPrimitive(m, "node_name", &obj.NodeName)
 	if err != nil {
 		return
@@ -832,7 +1358,7 @@ func UnmarshalDatasourceNodesResponseV2DatasourceNodesArrayItem(m map[string]jso
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "data_sources", &obj.DataSources, UnmarshalDatasourceNodesResponseV2DatasourceNodesArrayItemDataSourcesItem)
+	err = core.UnmarshalModel(m, "data_sources", &obj.DataSources, UnmarshalDatasourceConnectionsListDatasourceConnectionsItemDataSourcesItem)
 	if err != nil {
 		return
 	}
@@ -840,13 +1366,16 @@ func UnmarshalDatasourceNodesResponseV2DatasourceNodesArrayItem(m map[string]jso
 	return
 }
 
-// DatasourceNodesResponseV2DatasourceNodesArrayItemDataSourcesItem : DatasourceNodesResponseV2DatasourceNodesArrayItemDataSourcesItem struct
-type DatasourceNodesResponseV2DatasourceNodesArrayItemDataSourcesItem struct {
-	// The identifier of the connection.
+// DatasourceConnectionsListDatasourceConnectionsItemDataSourcesItem : DatasourceConnectionsListDatasourceConnectionsItemDataSourcesItem struct
+type DatasourceConnectionsListDatasourceConnectionsItemDataSourcesItem struct {
+	// The identifier of the connection for the Data Virtualization.
 	Cid *string `json:"cid,omitempty"`
 
 	// The name of the database.
 	Dbname *string `json:"dbname,omitempty"`
+
+	// The connection identifier for the platform.
+	ConnectionID *string `json:"connection_id,omitempty"`
 
 	// The hostname or IP address of the data source.
 	Srchostname *string `json:"srchostname,omitempty"`
@@ -870,15 +1399,18 @@ type DatasourceNodesResponseV2DatasourceNodesArrayItemDataSourcesItem struct {
 	ConnectionName *string `json:"connection_name,omitempty"`
 }
 
-
-// UnmarshalDatasourceNodesResponseV2DatasourceNodesArrayItemDataSourcesItem unmarshals an instance of DatasourceNodesResponseV2DatasourceNodesArrayItemDataSourcesItem from the specified map of raw messages.
-func UnmarshalDatasourceNodesResponseV2DatasourceNodesArrayItemDataSourcesItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(DatasourceNodesResponseV2DatasourceNodesArrayItemDataSourcesItem)
+// UnmarshalDatasourceConnectionsListDatasourceConnectionsItemDataSourcesItem unmarshals an instance of DatasourceConnectionsListDatasourceConnectionsItemDataSourcesItem from the specified map of raw messages.
+func UnmarshalDatasourceConnectionsListDatasourceConnectionsItemDataSourcesItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(DatasourceConnectionsListDatasourceConnectionsItemDataSourcesItem)
 	err = core.UnmarshalPrimitive(m, "cid", &obj.Cid)
 	if err != nil {
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "dbname", &obj.Dbname)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "connection_id", &obj.ConnectionID)
 	if err != nil {
 		return
 	}
@@ -914,53 +1446,35 @@ func UnmarshalDatasourceNodesResponseV2DatasourceNodesArrayItemDataSourcesItem(m
 	return
 }
 
-// DatasourceNodesResponseV2 : DatasourceNodesResponseV2 struct
-type DatasourceNodesResponseV2 struct {
-	DatasourceNodesArray []DatasourceNodesResponseV2DatasourceNodesArrayItem `json:"datasource_nodes_array,omitempty"`
-}
-
-
-// UnmarshalDatasourceNodesResponseV2 unmarshals an instance of DatasourceNodesResponseV2 from the specified map of raw messages.
-func UnmarshalDatasourceNodesResponseV2(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(DatasourceNodesResponseV2)
-	err = core.UnmarshalModel(m, "datasource_nodes_array", &obj.DatasourceNodesArray, UnmarshalDatasourceNodesResponseV2DatasourceNodesArrayItem)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
 // DeleteDatasourceConnectionOptions : The DeleteDatasourceConnection options.
 type DeleteDatasourceConnectionOptions struct {
-	// Specifies the data source connection to be deleted.
-	Cid *string `json:"cid" validate:"required"`
+	// The connection identifier for the platform..
+	ConnectionID *string `validate:"required,ne="`
 
-	// Specifies the data source connection to be deleted.
-	ConnectionID *string `json:"connection_id" validate:"required"`
+	// The identifier of the connection for the Data Virtualization..
+	Cid *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewDeleteDatasourceConnectionOptions : Instantiate DeleteDatasourceConnectionOptions
-func (*DataVirtualizationV1) NewDeleteDatasourceConnectionOptions(cid string, connectionID string) *DeleteDatasourceConnectionOptions {
+func (*DataVirtualizationV1) NewDeleteDatasourceConnectionOptions(connectionID string) *DeleteDatasourceConnectionOptions {
 	return &DeleteDatasourceConnectionOptions{
-		Cid: core.StringPtr(cid),
 		ConnectionID: core.StringPtr(connectionID),
 	}
 }
 
-// SetCid : Allow user to set Cid
-func (options *DeleteDatasourceConnectionOptions) SetCid(cid string) *DeleteDatasourceConnectionOptions {
-	options.Cid = core.StringPtr(cid)
-	return options
+// SetConnectionID : Allow user to set ConnectionID
+func (_options *DeleteDatasourceConnectionOptions) SetConnectionID(connectionID string) *DeleteDatasourceConnectionOptions {
+	_options.ConnectionID = core.StringPtr(connectionID)
+	return _options
 }
 
-// SetConnectionID : Allow user to set ConnectionID
-func (options *DeleteDatasourceConnectionOptions) SetConnectionID(connectionID string) *DeleteDatasourceConnectionOptions {
-	options.ConnectionID = core.StringPtr(connectionID)
-	return options
+// SetCid : Allow user to set Cid
+func (_options *DeleteDatasourceConnectionOptions) SetCid(cid string) *DeleteDatasourceConnectionOptions {
+	_options.Cid = core.StringPtr(cid)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -969,36 +1483,65 @@ func (options *DeleteDatasourceConnectionOptions) SetHeaders(param map[string]st
 	return options
 }
 
+// DeletePrimaryCatalogOptions : The DeletePrimaryCatalog options.
+type DeletePrimaryCatalogOptions struct {
+	// The Data Virtualization user name, if the value is PUBLIC, it means revoke access privilege from all Data
+	// Virtualization users.
+	GUID *string `validate:"required"`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewDeletePrimaryCatalogOptions : Instantiate DeletePrimaryCatalogOptions
+func (*DataVirtualizationV1) NewDeletePrimaryCatalogOptions(guid string) *DeletePrimaryCatalogOptions {
+	return &DeletePrimaryCatalogOptions{
+		GUID: core.StringPtr(guid),
+	}
+}
+
+// SetGUID : Allow user to set GUID
+func (_options *DeletePrimaryCatalogOptions) SetGUID(guid string) *DeletePrimaryCatalogOptions {
+	_options.GUID = core.StringPtr(guid)
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *DeletePrimaryCatalogOptions) SetHeaders(param map[string]string) *DeletePrimaryCatalogOptions {
+	options.Headers = param
+	return options
+}
+
 // DeleteTableOptions : The DeleteTable options.
 type DeleteTableOptions struct {
 	// The schema of virtualized table to be deleted.
-	SchemaName *string `json:"schema_name" validate:"required"`
+	VirtualSchema *string `validate:"required"`
 
 	// The name of virtualized table to be deleted.
-	TableName *string `json:"table_name" validate:"required,ne="`
+	VirtualName *string `validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewDeleteTableOptions : Instantiate DeleteTableOptions
-func (*DataVirtualizationV1) NewDeleteTableOptions(schemaName string, tableName string) *DeleteTableOptions {
+func (*DataVirtualizationV1) NewDeleteTableOptions(virtualSchema string, virtualName string) *DeleteTableOptions {
 	return &DeleteTableOptions{
-		SchemaName: core.StringPtr(schemaName),
-		TableName: core.StringPtr(tableName),
+		VirtualSchema: core.StringPtr(virtualSchema),
+		VirtualName: core.StringPtr(virtualName),
 	}
 }
 
-// SetSchemaName : Allow user to set SchemaName
-func (options *DeleteTableOptions) SetSchemaName(schemaName string) *DeleteTableOptions {
-	options.SchemaName = core.StringPtr(schemaName)
-	return options
+// SetVirtualSchema : Allow user to set VirtualSchema
+func (_options *DeleteTableOptions) SetVirtualSchema(virtualSchema string) *DeleteTableOptions {
+	_options.VirtualSchema = core.StringPtr(virtualSchema)
+	return _options
 }
 
-// SetTableName : Allow user to set TableName
-func (options *DeleteTableOptions) SetTableName(tableName string) *DeleteTableOptions {
-	options.TableName = core.StringPtr(tableName)
-	return options
+// SetVirtualName : Allow user to set VirtualName
+func (_options *DeleteTableOptions) SetVirtualName(virtualName string) *DeleteTableOptions {
+	_options.VirtualName = core.StringPtr(virtualName)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -1007,69 +1550,206 @@ func (options *DeleteTableOptions) SetHeaders(param map[string]string) *DeleteTa
 	return options
 }
 
-// GetDatasourceConnectionsOptions : The GetDatasourceConnections options.
-type GetDatasourceConnectionsOptions struct {
+// DvaasRevokeRoleFromTableOptions : The DvaasRevokeRoleFromTable options.
+type DvaasRevokeRoleFromTableOptions struct {
+	// The Data Virtualization role type. Values can be DV_ADMIN, DV_ENGINEER, DV_STEWARD, or DV_WORKER, which correspond
+	// to MANAGER, ENGINEER, STEWARD, and USER roles in the user interface.
+	RoleName *string `validate:"required,ne="`
+
+	// The virtualized table's name.
+	TableName *string `validate:"required"`
+
+	// The virtualized table's schema name.
+	TableSchema *string `validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
-// NewGetDatasourceConnectionsOptions : Instantiate GetDatasourceConnectionsOptions
-func (*DataVirtualizationV1) NewGetDatasourceConnectionsOptions() *GetDatasourceConnectionsOptions {
-	return &GetDatasourceConnectionsOptions{}
+// NewDvaasRevokeRoleFromTableOptions : Instantiate DvaasRevokeRoleFromTableOptions
+func (*DataVirtualizationV1) NewDvaasRevokeRoleFromTableOptions(roleName string, tableName string, tableSchema string) *DvaasRevokeRoleFromTableOptions {
+	return &DvaasRevokeRoleFromTableOptions{
+		RoleName: core.StringPtr(roleName),
+		TableName: core.StringPtr(tableName),
+		TableSchema: core.StringPtr(tableSchema),
+	}
+}
+
+// SetRoleName : Allow user to set RoleName
+func (_options *DvaasRevokeRoleFromTableOptions) SetRoleName(roleName string) *DvaasRevokeRoleFromTableOptions {
+	_options.RoleName = core.StringPtr(roleName)
+	return _options
+}
+
+// SetTableName : Allow user to set TableName
+func (_options *DvaasRevokeRoleFromTableOptions) SetTableName(tableName string) *DvaasRevokeRoleFromTableOptions {
+	_options.TableName = core.StringPtr(tableName)
+	return _options
+}
+
+// SetTableSchema : Allow user to set TableSchema
+func (_options *DvaasRevokeRoleFromTableOptions) SetTableSchema(tableSchema string) *DvaasRevokeRoleFromTableOptions {
+	_options.TableSchema = core.StringPtr(tableSchema)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
-func (options *GetDatasourceConnectionsOptions) SetHeaders(param map[string]string) *GetDatasourceConnectionsOptions {
+func (options *DvaasRevokeRoleFromTableOptions) SetHeaders(param map[string]string) *DvaasRevokeRoleFromTableOptions {
 	options.Headers = param
 	return options
 }
 
-// GetTablesForRoleOptions : The GetTablesForRole options.
-type GetTablesForRoleOptions struct {
-	// Data Virtualization has four roles: ADMIN, STEWARD, ENGINEER and USER The value of rolename should be one of them.
-	Rolename *string `json:"rolename" validate:"required,ne="`
+// DvaasVirtualizeTableOptions : The DvaasVirtualizeTable options.
+type DvaasVirtualizeTableOptions struct {
+	// The name of the source table.
+	SourceName *string `validate:"required"`
+
+	SourceTableDef []VirtualizeTableParameterSourceTableDefItem `validate:"required"`
+
+	Sources []string `validate:"required"`
+
+	// The name of the table that will be virtualized.
+	VirtualName *string `validate:"required"`
+
+	// The schema of the table that will be virtualized.
+	VirtualSchema *string `validate:"required"`
+
+	VirtualTableDef []VirtualizeTableParameterVirtualTableDefItem `validate:"required"`
+
+	// The columns that are included in the source table.
+	IsIncludedColumns *string
+
+	// Determines whether to replace columns in the virtualized table.
+	Replace *bool
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
-// NewGetTablesForRoleOptions : Instantiate GetTablesForRoleOptions
-func (*DataVirtualizationV1) NewGetTablesForRoleOptions(rolename string) *GetTablesForRoleOptions {
-	return &GetTablesForRoleOptions{
-		Rolename: core.StringPtr(rolename),
+// NewDvaasVirtualizeTableOptions : Instantiate DvaasVirtualizeTableOptions
+func (*DataVirtualizationV1) NewDvaasVirtualizeTableOptions(sourceName string, sourceTableDef []VirtualizeTableParameterSourceTableDefItem, sources []string, virtualName string, virtualSchema string, virtualTableDef []VirtualizeTableParameterVirtualTableDefItem) *DvaasVirtualizeTableOptions {
+	return &DvaasVirtualizeTableOptions{
+		SourceName: core.StringPtr(sourceName),
+		SourceTableDef: sourceTableDef,
+		Sources: sources,
+		VirtualName: core.StringPtr(virtualName),
+		VirtualSchema: core.StringPtr(virtualSchema),
+		VirtualTableDef: virtualTableDef,
 	}
 }
 
-// SetRolename : Allow user to set Rolename
-func (options *GetTablesForRoleOptions) SetRolename(rolename string) *GetTablesForRoleOptions {
-	options.Rolename = core.StringPtr(rolename)
-	return options
+// SetSourceName : Allow user to set SourceName
+func (_options *DvaasVirtualizeTableOptions) SetSourceName(sourceName string) *DvaasVirtualizeTableOptions {
+	_options.SourceName = core.StringPtr(sourceName)
+	return _options
+}
+
+// SetSourceTableDef : Allow user to set SourceTableDef
+func (_options *DvaasVirtualizeTableOptions) SetSourceTableDef(sourceTableDef []VirtualizeTableParameterSourceTableDefItem) *DvaasVirtualizeTableOptions {
+	_options.SourceTableDef = sourceTableDef
+	return _options
+}
+
+// SetSources : Allow user to set Sources
+func (_options *DvaasVirtualizeTableOptions) SetSources(sources []string) *DvaasVirtualizeTableOptions {
+	_options.Sources = sources
+	return _options
+}
+
+// SetVirtualName : Allow user to set VirtualName
+func (_options *DvaasVirtualizeTableOptions) SetVirtualName(virtualName string) *DvaasVirtualizeTableOptions {
+	_options.VirtualName = core.StringPtr(virtualName)
+	return _options
+}
+
+// SetVirtualSchema : Allow user to set VirtualSchema
+func (_options *DvaasVirtualizeTableOptions) SetVirtualSchema(virtualSchema string) *DvaasVirtualizeTableOptions {
+	_options.VirtualSchema = core.StringPtr(virtualSchema)
+	return _options
+}
+
+// SetVirtualTableDef : Allow user to set VirtualTableDef
+func (_options *DvaasVirtualizeTableOptions) SetVirtualTableDef(virtualTableDef []VirtualizeTableParameterVirtualTableDefItem) *DvaasVirtualizeTableOptions {
+	_options.VirtualTableDef = virtualTableDef
+	return _options
+}
+
+// SetIsIncludedColumns : Allow user to set IsIncludedColumns
+func (_options *DvaasVirtualizeTableOptions) SetIsIncludedColumns(isIncludedColumns string) *DvaasVirtualizeTableOptions {
+	_options.IsIncludedColumns = core.StringPtr(isIncludedColumns)
+	return _options
+}
+
+// SetReplace : Allow user to set Replace
+func (_options *DvaasVirtualizeTableOptions) SetReplace(replace bool) *DvaasVirtualizeTableOptions {
+	_options.Replace = core.BoolPtr(replace)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
-func (options *GetTablesForRoleOptions) SetHeaders(param map[string]string) *GetTablesForRoleOptions {
+func (options *DvaasVirtualizeTableOptions) SetHeaders(param map[string]string) *DvaasVirtualizeTableOptions {
+	options.Headers = param
+	return options
+}
+
+// GetPrimaryCatalogOptions : The GetPrimaryCatalog options.
+type GetPrimaryCatalogOptions struct {
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewGetPrimaryCatalogOptions : Instantiate GetPrimaryCatalogOptions
+func (*DataVirtualizationV1) NewGetPrimaryCatalogOptions() *GetPrimaryCatalogOptions {
+	return &GetPrimaryCatalogOptions{}
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *GetPrimaryCatalogOptions) SetHeaders(param map[string]string) *GetPrimaryCatalogOptions {
 	options.Headers = param
 	return options
 }
 
 // GrantRolesToVirtualizedTableOptions : The GrantRolesToVirtualizedTable options.
 type GrantRolesToVirtualizedTableOptions struct {
-	Body []PostRolePrivilegesParametersBodyItem `json:"body,omitempty"`
+	// The name of the virtualized table.
+	TableName *string `validate:"required"`
+
+	// The schema of the virtualized table.
+	TableSchema *string `validate:"required"`
+
+	// The identifier of the authorization, if grant access to all users, the value is PUBLIC, othervise the value is the
+	// data virtualization username.
+	RoleName *string
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewGrantRolesToVirtualizedTableOptions : Instantiate GrantRolesToVirtualizedTableOptions
-func (*DataVirtualizationV1) NewGrantRolesToVirtualizedTableOptions() *GrantRolesToVirtualizedTableOptions {
-	return &GrantRolesToVirtualizedTableOptions{}
+func (*DataVirtualizationV1) NewGrantRolesToVirtualizedTableOptions(tableName string, tableSchema string) *GrantRolesToVirtualizedTableOptions {
+	return &GrantRolesToVirtualizedTableOptions{
+		TableName: core.StringPtr(tableName),
+		TableSchema: core.StringPtr(tableSchema),
+	}
 }
 
-// SetBody : Allow user to set Body
-func (options *GrantRolesToVirtualizedTableOptions) SetBody(body []PostRolePrivilegesParametersBodyItem) *GrantRolesToVirtualizedTableOptions {
-	options.Body = body
-	return options
+// SetTableName : Allow user to set TableName
+func (_options *GrantRolesToVirtualizedTableOptions) SetTableName(tableName string) *GrantRolesToVirtualizedTableOptions {
+	_options.TableName = core.StringPtr(tableName)
+	return _options
+}
+
+// SetTableSchema : Allow user to set TableSchema
+func (_options *GrantRolesToVirtualizedTableOptions) SetTableSchema(tableSchema string) *GrantRolesToVirtualizedTableOptions {
+	_options.TableSchema = core.StringPtr(tableSchema)
+	return _options
+}
+
+// SetRoleName : Allow user to set RoleName
+func (_options *GrantRolesToVirtualizedTableOptions) SetRoleName(roleName string) *GrantRolesToVirtualizedTableOptions {
+	_options.RoleName = core.StringPtr(roleName)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -1080,21 +1760,45 @@ func (options *GrantRolesToVirtualizedTableOptions) SetHeaders(param map[string]
 
 // GrantUserToVirtualTableOptions : The GrantUserToVirtualTable options.
 type GrantUserToVirtualTableOptions struct {
-	Body []PostUserPrivilegesParametersBodyItem `json:"body,omitempty"`
+	// The name of the virtualized table.
+	TableName *string `validate:"required"`
+
+	// The schema of the virtualized table.
+	TableSchema *string `validate:"required"`
+
+	// The identifier of the authorization, if grant access to all users, the value is PUBLIC, othervise the value is the
+	// data virtualization username.
+	Authid *string `validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewGrantUserToVirtualTableOptions : Instantiate GrantUserToVirtualTableOptions
-func (*DataVirtualizationV1) NewGrantUserToVirtualTableOptions() *GrantUserToVirtualTableOptions {
-	return &GrantUserToVirtualTableOptions{}
+func (*DataVirtualizationV1) NewGrantUserToVirtualTableOptions(tableName string, tableSchema string, authid string) *GrantUserToVirtualTableOptions {
+	return &GrantUserToVirtualTableOptions{
+		TableName: core.StringPtr(tableName),
+		TableSchema: core.StringPtr(tableSchema),
+		Authid: core.StringPtr(authid),
+	}
 }
 
-// SetBody : Allow user to set Body
-func (options *GrantUserToVirtualTableOptions) SetBody(body []PostUserPrivilegesParametersBodyItem) *GrantUserToVirtualTableOptions {
-	options.Body = body
-	return options
+// SetTableName : Allow user to set TableName
+func (_options *GrantUserToVirtualTableOptions) SetTableName(tableName string) *GrantUserToVirtualTableOptions {
+	_options.TableName = core.StringPtr(tableName)
+	return _options
+}
+
+// SetTableSchema : Allow user to set TableSchema
+func (_options *GrantUserToVirtualTableOptions) SetTableSchema(tableSchema string) *GrantUserToVirtualTableOptions {
+	_options.TableSchema = core.StringPtr(tableSchema)
+	return _options
+}
+
+// SetAuthid : Allow user to set Authid
+func (_options *GrantUserToVirtualTableOptions) SetAuthid(authid string) *GrantUserToVirtualTableOptions {
+	_options.Authid = core.StringPtr(authid)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -1103,13 +1807,90 @@ func (options *GrantUserToVirtualTableOptions) SetHeaders(param map[string]strin
 	return options
 }
 
+// ListDatasourceConnectionsOptions : The ListDatasourceConnections options.
+type ListDatasourceConnectionsOptions struct {
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewListDatasourceConnectionsOptions : Instantiate ListDatasourceConnectionsOptions
+func (*DataVirtualizationV1) NewListDatasourceConnectionsOptions() *ListDatasourceConnectionsOptions {
+	return &ListDatasourceConnectionsOptions{}
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *ListDatasourceConnectionsOptions) SetHeaders(param map[string]string) *ListDatasourceConnectionsOptions {
+	options.Headers = param
+	return options
+}
+
+// ListTablesForRoleOptions : The ListTablesForRole options.
+type ListTablesForRoleOptions struct {
+	// Data Virtualization has four roles: MANAGER, STEWARD, ENGINEER and USER The value of rolename should be one of them.
+	Rolename *string `validate:"required"`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewListTablesForRoleOptions : Instantiate ListTablesForRoleOptions
+func (*DataVirtualizationV1) NewListTablesForRoleOptions(rolename string) *ListTablesForRoleOptions {
+	return &ListTablesForRoleOptions{
+		Rolename: core.StringPtr(rolename),
+	}
+}
+
+// SetRolename : Allow user to set Rolename
+func (_options *ListTablesForRoleOptions) SetRolename(rolename string) *ListTablesForRoleOptions {
+	_options.Rolename = core.StringPtr(rolename)
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *ListTablesForRoleOptions) SetHeaders(param map[string]string) *ListTablesForRoleOptions {
+	options.Headers = param
+	return options
+}
+
+// PostDatasourceConnection : PostDatasourceConnection struct
+type PostDatasourceConnection struct {
+	// The identifier of data source connection.
+	ConnectionID *string `json:"connection_id" validate:"required"`
+
+	// The type of data source that you want to add.
+	DatasourceType *string `json:"datasource_type" validate:"required"`
+
+	// The name of data source.
+	Name *string `json:"name" validate:"required"`
+}
+
+// UnmarshalPostDatasourceConnection unmarshals an instance of PostDatasourceConnection from the specified map of raw messages.
+func UnmarshalPostDatasourceConnection(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(PostDatasourceConnection)
+	err = core.UnmarshalPrimitive(m, "connection_id", &obj.ConnectionID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "datasource_type", &obj.DatasourceType)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // PostDatasourceConnectionParametersProperties : PostDatasourceConnectionParametersProperties struct
 type PostDatasourceConnectionParametersProperties struct {
 	AccessToken *string `json:"access_token,omitempty"`
 
 	AccountName *string `json:"account_name,omitempty"`
 
-	ApiKey *string `json:"api_key,omitempty"`
+	APIKey *string `json:"api_key,omitempty"`
 
 	AuthType *string `json:"auth_type,omitempty"`
 
@@ -1125,7 +1906,7 @@ type PostDatasourceConnectionParametersProperties struct {
 
 	Host *string `json:"host,omitempty"`
 
-	HttpPath *string `json:"http_path,omitempty"`
+	HTTPPath *string `json:"http_path,omitempty"`
 
 	JarUris *string `json:"jar_uris,omitempty"`
 
@@ -1166,7 +1947,6 @@ type PostDatasourceConnectionParametersProperties struct {
 	Warehouse *string `json:"warehouse,omitempty"`
 }
 
-
 // UnmarshalPostDatasourceConnectionParametersProperties unmarshals an instance of PostDatasourceConnectionParametersProperties from the specified map of raw messages.
 func UnmarshalPostDatasourceConnectionParametersProperties(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(PostDatasourceConnectionParametersProperties)
@@ -1178,7 +1958,7 @@ func UnmarshalPostDatasourceConnectionParametersProperties(m map[string]json.Raw
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "api_key", &obj.ApiKey)
+	err = core.UnmarshalPrimitive(m, "api_key", &obj.APIKey)
 	if err != nil {
 		return
 	}
@@ -1210,7 +1990,7 @@ func UnmarshalPostDatasourceConnectionParametersProperties(m map[string]json.Raw
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "http_path", &obj.HttpPath)
+	err = core.UnmarshalPrimitive(m, "http_path", &obj.HTTPPath)
 	if err != nil {
 		return
 	}
@@ -1294,20 +2074,106 @@ func UnmarshalPostDatasourceConnectionParametersProperties(m map[string]json.Raw
 	return
 }
 
-// PostDatasourceConnectionResponse : PostDatasourceConnectionResponse struct
-type PostDatasourceConnectionResponse struct {
-	// The type of data source that you want to add.
-	DatasourceType *string `json:"datasource_type" validate:"required"`
+// PostPrimaryCatalogOptions : The PostPrimaryCatalog options.
+type PostPrimaryCatalogOptions struct {
+	GUID *string `validate:"required"`
 
-	// The name of data source.
-	Name *string `json:"name" validate:"required"`
+	// Allows users to set headers on API requests
+	Headers map[string]string
 }
 
+// NewPostPrimaryCatalogOptions : Instantiate PostPrimaryCatalogOptions
+func (*DataVirtualizationV1) NewPostPrimaryCatalogOptions(guid string) *PostPrimaryCatalogOptions {
+	return &PostPrimaryCatalogOptions{
+		GUID: core.StringPtr(guid),
+	}
+}
 
-// UnmarshalPostDatasourceConnectionResponse unmarshals an instance of PostDatasourceConnectionResponse from the specified map of raw messages.
-func UnmarshalPostDatasourceConnectionResponse(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(PostDatasourceConnectionResponse)
-	err = core.UnmarshalPrimitive(m, "datasource_type", &obj.DatasourceType)
+// SetGUID : Allow user to set GUID
+func (_options *PostPrimaryCatalogOptions) SetGUID(guid string) *PostPrimaryCatalogOptions {
+	_options.GUID = core.StringPtr(guid)
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *PostPrimaryCatalogOptions) SetHeaders(param map[string]string) *PostPrimaryCatalogOptions {
+	options.Headers = param
+	return options
+}
+
+// PostPrimaryCatalogParametersAssetsItem : PostPrimaryCatalogParametersAssetsItem struct
+type PostPrimaryCatalogParametersAssetsItem struct {
+	Schema *string `json:"schema" validate:"required"`
+
+	Table *string `json:"table" validate:"required"`
+}
+
+// NewPostPrimaryCatalogParametersAssetsItem : Instantiate PostPrimaryCatalogParametersAssetsItem (Generic Model Constructor)
+func (*DataVirtualizationV1) NewPostPrimaryCatalogParametersAssetsItem(schema string, table string) (_model *PostPrimaryCatalogParametersAssetsItem, err error) {
+	_model = &PostPrimaryCatalogParametersAssetsItem{
+		Schema: core.StringPtr(schema),
+		Table: core.StringPtr(table),
+	}
+	err = core.ValidateStruct(_model, "required parameters")
+	return
+}
+
+// UnmarshalPostPrimaryCatalogParametersAssetsItem unmarshals an instance of PostPrimaryCatalogParametersAssetsItem from the specified map of raw messages.
+func UnmarshalPostPrimaryCatalogParametersAssetsItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(PostPrimaryCatalogParametersAssetsItem)
+	err = core.UnmarshalPrimitive(m, "schema", &obj.Schema)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "table", &obj.Table)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// PrimaryCatalogInfoEntity : PrimaryCatalogInfoEntity struct
+type PrimaryCatalogInfoEntity struct {
+	AutoProfiling *bool `json:"auto_profiling,omitempty"`
+
+	BssAccountID *string `json:"bss_account_id,omitempty"`
+
+	CapacityLimit *int64 `json:"capacity_limit,omitempty"`
+
+	Description *string `json:"description,omitempty"`
+
+	Generator *string `json:"generator,omitempty"`
+
+	IsGoverned *bool `json:"is_governed,omitempty"`
+
+	Name *string `json:"name,omitempty"`
+}
+
+// UnmarshalPrimaryCatalogInfoEntity unmarshals an instance of PrimaryCatalogInfoEntity from the specified map of raw messages.
+func UnmarshalPrimaryCatalogInfoEntity(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(PrimaryCatalogInfoEntity)
+	err = core.UnmarshalPrimitive(m, "auto_profiling", &obj.AutoProfiling)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "bss_account_id", &obj.BssAccountID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "capacity_limit", &obj.CapacityLimit)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "description", &obj.Description)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "generator", &obj.Generator)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "is_governed", &obj.IsGoverned)
 	if err != nil {
 		return
 	}
@@ -1319,32 +2185,33 @@ func UnmarshalPostDatasourceConnectionResponse(m map[string]json.RawMessage, res
 	return
 }
 
-// PostRolePrivilegesParametersBodyItem : PostRolePrivilegesParametersBodyItem struct
-type PostRolePrivilegesParametersBodyItem struct {
-	// The name of the virtualized table.
-	TableName *string `json:"table_name,omitempty"`
+// PrimaryCatalogInfoMetadata : PrimaryCatalogInfoMetadata struct
+type PrimaryCatalogInfoMetadata struct {
+	CreateTime *string `json:"create_time,omitempty"`
 
-	// The schema of the virtualized table.
-	TableSchema *string `json:"table_schema,omitempty"`
+	CreatorID *string `json:"creator_id,omitempty"`
 
-	// The identifier of the authorization, if grant access to all users, the value is PUBLIC, othervise the value is the
-	// data virtualization username.
-	RoleToGrant *string `json:"role_to_grant,omitempty"`
+	GUID *string `json:"guid,omitempty"`
+
+	URL *string `json:"url,omitempty"`
 }
 
-
-// UnmarshalPostRolePrivilegesParametersBodyItem unmarshals an instance of PostRolePrivilegesParametersBodyItem from the specified map of raw messages.
-func UnmarshalPostRolePrivilegesParametersBodyItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(PostRolePrivilegesParametersBodyItem)
-	err = core.UnmarshalPrimitive(m, "table_name", &obj.TableName)
+// UnmarshalPrimaryCatalogInfoMetadata unmarshals an instance of PrimaryCatalogInfoMetadata from the specified map of raw messages.
+func UnmarshalPrimaryCatalogInfoMetadata(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(PrimaryCatalogInfoMetadata)
+	err = core.UnmarshalPrimitive(m, "create_time", &obj.CreateTime)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "table_schema", &obj.TableSchema)
+	err = core.UnmarshalPrimitive(m, "creator_id", &obj.CreatorID)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "role_to_grant", &obj.RoleToGrant)
+	err = core.UnmarshalPrimitive(m, "guid", &obj.GUID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "url", &obj.URL)
 	if err != nil {
 		return
 	}
@@ -1352,83 +2219,48 @@ func UnmarshalPostRolePrivilegesParametersBodyItem(m map[string]json.RawMessage,
 	return
 }
 
-// PostUserPrivilegesParametersBodyItem : PostUserPrivilegesParametersBodyItem struct
-type PostUserPrivilegesParametersBodyItem struct {
-	// The name of the virtualized table.
-	TableName *string `json:"table_name,omitempty"`
+// PublishAssetsOptions : The PublishAssets options.
+type PublishAssetsOptions struct {
+	CatalogID *string `validate:"required"`
 
-	// The schema of the virtualized table.
-	TableSchema *string `json:"table_schema,omitempty"`
+	// The type of data source that you want to add.
+	AllowDuplicates *bool `validate:"required"`
 
-	// The identifier of the authorization, if grant access to all users, the value is PUBLIC, othervise the value is the
-	// data virtualization username.
-	Authid *string `json:"authid,omitempty"`
-}
-
-
-// UnmarshalPostUserPrivilegesParametersBodyItem unmarshals an instance of PostUserPrivilegesParametersBodyItem from the specified map of raw messages.
-func UnmarshalPostUserPrivilegesParametersBodyItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(PostUserPrivilegesParametersBodyItem)
-	err = core.UnmarshalPrimitive(m, "table_name", &obj.TableName)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "table_schema", &obj.TableSchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "authid", &obj.Authid)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RevokeRoleFromTableV2Options : The RevokeRoleFromTableV2 options.
-type RevokeRoleFromTableV2Options struct {
-	// The Data Virtualization role type, the value could be DV_ADMIN, DV_ENGINEER, DV_STEWARD or DV_WORKER.
-	RoleToRevoke *string `json:"role_to_revoke" validate:"required"`
-
-	// The virtualized table's name.
-	TableName *string `json:"table_name" validate:"required"`
-
-	// The virtualized table's schema name.
-	TableSchema *string `json:"table_schema" validate:"required"`
+	Assets []PostPrimaryCatalogParametersAssetsItem `validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
-// NewRevokeRoleFromTableV2Options : Instantiate RevokeRoleFromTableV2Options
-func (*DataVirtualizationV1) NewRevokeRoleFromTableV2Options(roleToRevoke string, tableName string, tableSchema string) *RevokeRoleFromTableV2Options {
-	return &RevokeRoleFromTableV2Options{
-		RoleToRevoke: core.StringPtr(roleToRevoke),
-		TableName: core.StringPtr(tableName),
-		TableSchema: core.StringPtr(tableSchema),
+// NewPublishAssetsOptions : Instantiate PublishAssetsOptions
+func (*DataVirtualizationV1) NewPublishAssetsOptions(catalogID string, allowDuplicates bool, assets []PostPrimaryCatalogParametersAssetsItem) *PublishAssetsOptions {
+	return &PublishAssetsOptions{
+		CatalogID: core.StringPtr(catalogID),
+		AllowDuplicates: core.BoolPtr(allowDuplicates),
+		Assets: assets,
 	}
 }
 
-// SetRoleToRevoke : Allow user to set RoleToRevoke
-func (options *RevokeRoleFromTableV2Options) SetRoleToRevoke(roleToRevoke string) *RevokeRoleFromTableV2Options {
-	options.RoleToRevoke = core.StringPtr(roleToRevoke)
-	return options
+// SetCatalogID : Allow user to set CatalogID
+func (_options *PublishAssetsOptions) SetCatalogID(catalogID string) *PublishAssetsOptions {
+	_options.CatalogID = core.StringPtr(catalogID)
+	return _options
 }
 
-// SetTableName : Allow user to set TableName
-func (options *RevokeRoleFromTableV2Options) SetTableName(tableName string) *RevokeRoleFromTableV2Options {
-	options.TableName = core.StringPtr(tableName)
-	return options
+// SetAllowDuplicates : Allow user to set AllowDuplicates
+func (_options *PublishAssetsOptions) SetAllowDuplicates(allowDuplicates bool) *PublishAssetsOptions {
+	_options.AllowDuplicates = core.BoolPtr(allowDuplicates)
+	return _options
 }
 
-// SetTableSchema : Allow user to set TableSchema
-func (options *RevokeRoleFromTableV2Options) SetTableSchema(tableSchema string) *RevokeRoleFromTableV2Options {
-	options.TableSchema = core.StringPtr(tableSchema)
-	return options
+// SetAssets : Allow user to set Assets
+func (_options *PublishAssetsOptions) SetAssets(assets []PostPrimaryCatalogParametersAssetsItem) *PublishAssetsOptions {
+	_options.Assets = assets
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
-func (options *RevokeRoleFromTableV2Options) SetHeaders(param map[string]string) *RevokeRoleFromTableV2Options {
+func (options *PublishAssetsOptions) SetHeaders(param map[string]string) *PublishAssetsOptions {
 	options.Headers = param
 	return options
 }
@@ -1437,13 +2269,13 @@ func (options *RevokeRoleFromTableV2Options) SetHeaders(param map[string]string)
 type RevokeUserFromObjectOptions struct {
 	// The Data Virtualization user name, if the value is PUBLIC, it means revoke access privilege from all Data
 	// Virtualization users.
-	Authid *string `json:"authid" validate:"required"`
+	Authid *string `validate:"required,ne="`
 
 	// The virtualized table's name.
-	TableName *string `json:"table_name" validate:"required"`
+	TableName *string `validate:"required"`
 
 	// The virtualized table's schema name.
-	TableSchema *string `json:"table_schema" validate:"required"`
+	TableSchema *string `validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -1459,21 +2291,21 @@ func (*DataVirtualizationV1) NewRevokeUserFromObjectOptions(authid string, table
 }
 
 // SetAuthid : Allow user to set Authid
-func (options *RevokeUserFromObjectOptions) SetAuthid(authid string) *RevokeUserFromObjectOptions {
-	options.Authid = core.StringPtr(authid)
-	return options
+func (_options *RevokeUserFromObjectOptions) SetAuthid(authid string) *RevokeUserFromObjectOptions {
+	_options.Authid = core.StringPtr(authid)
+	return _options
 }
 
 // SetTableName : Allow user to set TableName
-func (options *RevokeUserFromObjectOptions) SetTableName(tableName string) *RevokeUserFromObjectOptions {
-	options.TableName = core.StringPtr(tableName)
-	return options
+func (_options *RevokeUserFromObjectOptions) SetTableName(tableName string) *RevokeUserFromObjectOptions {
+	_options.TableName = core.StringPtr(tableName)
+	return _options
 }
 
 // SetTableSchema : Allow user to set TableSchema
-func (options *RevokeUserFromObjectOptions) SetTableSchema(tableSchema string) *RevokeUserFromObjectOptions {
-	options.TableSchema = core.StringPtr(tableSchema)
-	return options
+func (_options *RevokeUserFromObjectOptions) SetTableSchema(tableSchema string) *RevokeUserFromObjectOptions {
+	_options.TableSchema = core.StringPtr(tableSchema)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -1486,7 +2318,6 @@ func (options *RevokeUserFromObjectOptions) SetHeaders(param map[string]string) 
 type TablesForRoleResponse struct {
 	Objects []TablesForRoleResponseObjectsItem `json:"objects,omitempty"`
 }
-
 
 // UnmarshalTablesForRoleResponse unmarshals an instance of TablesForRoleResponse from the specified map of raw messages.
 func UnmarshalTablesForRoleResponse(m map[string]json.RawMessage, result interface{}) (err error) {
@@ -1508,7 +2339,6 @@ type TablesForRoleResponseObjectsItem struct {
 	TableSchema *string `json:"table_schema,omitempty"`
 }
 
-
 // UnmarshalTablesForRoleResponseObjectsItem unmarshals an instance of TablesForRoleResponseObjectsItem from the specified map of raw messages.
 func UnmarshalTablesForRoleResponseObjectsItem(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(TablesForRoleResponseObjectsItem)
@@ -1517,6 +2347,50 @@ func UnmarshalTablesForRoleResponseObjectsItem(m map[string]json.RawMessage, res
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "table_schema", &obj.TableSchema)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// TurnOnPolicyV2Options : The TurnOnPolicyV2 options.
+type TurnOnPolicyV2Options struct {
+	// Set the status of WKC policy.
+	Status *string `validate:"required"`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewTurnOnPolicyV2Options : Instantiate TurnOnPolicyV2Options
+func (*DataVirtualizationV1) NewTurnOnPolicyV2Options(status string) *TurnOnPolicyV2Options {
+	return &TurnOnPolicyV2Options{
+		Status: core.StringPtr(status),
+	}
+}
+
+// SetStatus : Allow user to set Status
+func (_options *TurnOnPolicyV2Options) SetStatus(status string) *TurnOnPolicyV2Options {
+	_options.Status = core.StringPtr(status)
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *TurnOnPolicyV2Options) SetHeaders(param map[string]string) *TurnOnPolicyV2Options {
+	options.Headers = param
+	return options
+}
+
+// TurnOnPolicyV2Response : TurnOnPolicyV2Response struct
+type TurnOnPolicyV2Response struct {
+	Status *string `json:"status" validate:"required"`
+}
+
+// UnmarshalTurnOnPolicyV2Response unmarshals an instance of TurnOnPolicyV2Response from the specified map of raw messages.
+func UnmarshalTurnOnPolicyV2Response(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(TurnOnPolicyV2Response)
+	err = core.UnmarshalPrimitive(m, "status", &obj.Status)
 	if err != nil {
 		return
 	}
@@ -1533,14 +2407,13 @@ type VirtualizeTableParameterSourceTableDefItem struct {
 	ColumnType *string `json:"column_type" validate:"required"`
 }
 
-
 // NewVirtualizeTableParameterSourceTableDefItem : Instantiate VirtualizeTableParameterSourceTableDefItem (Generic Model Constructor)
-func (*DataVirtualizationV1) NewVirtualizeTableParameterSourceTableDefItem(columnName string, columnType string) (model *VirtualizeTableParameterSourceTableDefItem, err error) {
-	model = &VirtualizeTableParameterSourceTableDefItem{
+func (*DataVirtualizationV1) NewVirtualizeTableParameterSourceTableDefItem(columnName string, columnType string) (_model *VirtualizeTableParameterSourceTableDefItem, err error) {
+	_model = &VirtualizeTableParameterSourceTableDefItem{
 		ColumnName: core.StringPtr(columnName),
 		ColumnType: core.StringPtr(columnType),
 	}
-	err = core.ValidateStruct(model, "required parameters")
+	err = core.ValidateStruct(_model, "required parameters")
 	return
 }
 
@@ -1568,14 +2441,13 @@ type VirtualizeTableParameterVirtualTableDefItem struct {
 	ColumnType *string `json:"column_type" validate:"required"`
 }
 
-
 // NewVirtualizeTableParameterVirtualTableDefItem : Instantiate VirtualizeTableParameterVirtualTableDefItem (Generic Model Constructor)
-func (*DataVirtualizationV1) NewVirtualizeTableParameterVirtualTableDefItem(columnName string, columnType string) (model *VirtualizeTableParameterVirtualTableDefItem, err error) {
-	model = &VirtualizeTableParameterVirtualTableDefItem{
+func (*DataVirtualizationV1) NewVirtualizeTableParameterVirtualTableDefItem(columnName string, columnType string) (_model *VirtualizeTableParameterVirtualTableDefItem, err error) {
+	_model = &VirtualizeTableParameterVirtualTableDefItem{
 		ColumnName: core.StringPtr(columnName),
 		ColumnType: core.StringPtr(columnType),
 	}
-	err = core.ValidateStruct(model, "required parameters")
+	err = core.ValidateStruct(_model, "required parameters")
 	return
 }
 
@@ -1596,29 +2468,21 @@ func UnmarshalVirtualizeTableParameterVirtualTableDefItem(m map[string]json.RawM
 
 // VirtualizeTableResponse : VirtualizeTableResponse struct
 type VirtualizeTableResponse struct {
-	// The name of the source table.
-	SourceName *string `json:"source_name" validate:"required"`
+	// The name of the table that is virtualized.
+	TableName *string `json:"table_name" validate:"required"`
 
-	// The name of the table that will be virtualized.
-	VirtualName *string `json:"virtual_name" validate:"required"`
-
-	// The schema of the table that will be virtualized.
-	VirtualSchema *string `json:"virtual_schema" validate:"required"`
+	// The schema of the table that is virtualized.
+	SchemaName *string `json:"schema_name" validate:"required"`
 }
-
 
 // UnmarshalVirtualizeTableResponse unmarshals an instance of VirtualizeTableResponse from the specified map of raw messages.
 func UnmarshalVirtualizeTableResponse(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(VirtualizeTableResponse)
-	err = core.UnmarshalPrimitive(m, "source_name", &obj.SourceName)
+	err = core.UnmarshalPrimitive(m, "table_name", &obj.TableName)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "virtual_name", &obj.VirtualName)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "virtual_schema", &obj.VirtualSchema)
+	err = core.UnmarshalPrimitive(m, "schema_name", &obj.SchemaName)
 	if err != nil {
 		return
 	}
@@ -1626,95 +2490,86 @@ func UnmarshalVirtualizeTableResponse(m map[string]json.RawMessage, result inter
 	return
 }
 
-// VirtualizeTableV2Options : The VirtualizeTableV2 options.
-type VirtualizeTableV2Options struct {
-	// The name of the source table.
-	SourceName *string `json:"source_name" validate:"required"`
+// CatalogPublishResponse : CatalogPublishResponse struct
+type CatalogPublishResponse struct {
+	DuplicateAssets []CatalogPublishResponseDuplicateAssetsItem `json:"duplicate_assets,omitempty"`
 
-	SourceTableDef []VirtualizeTableParameterSourceTableDefItem `json:"source_table_def" validate:"required"`
+	FailedAssets []CatalogPublishResponseFailedAssetsItem `json:"failed_assets,omitempty"`
 
-	Sources []string `json:"sources" validate:"required"`
-
-	// The name of the table that will be virtualized.
-	VirtualName *string `json:"virtual_name" validate:"required"`
-
-	// The schema of the table that will be virtualized.
-	VirtualSchema *string `json:"virtual_schema" validate:"required"`
-
-	VirtualTableDef []VirtualizeTableParameterVirtualTableDefItem `json:"virtual_table_def" validate:"required"`
-
-	// The columns that are included in the source table.
-	IsIncludedColumns *string `json:"is_included_columns,omitempty"`
-
-	// Determines whether to replace columns in the virtualized table.
-	Replace *bool `json:"replace,omitempty"`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
+	PublishedAssets []CatalogPublishResponsePublishedAssetsItem `json:"published_assets,omitempty"`
 }
 
-// NewVirtualizeTableV2Options : Instantiate VirtualizeTableV2Options
-func (*DataVirtualizationV1) NewVirtualizeTableV2Options(sourceName string, sourceTableDef []VirtualizeTableParameterSourceTableDefItem, sources []string, virtualName string, virtualSchema string, virtualTableDef []VirtualizeTableParameterVirtualTableDefItem) *VirtualizeTableV2Options {
-	return &VirtualizeTableV2Options{
-		SourceName: core.StringPtr(sourceName),
-		SourceTableDef: sourceTableDef,
-		Sources: sources,
-		VirtualName: core.StringPtr(virtualName),
-		VirtualSchema: core.StringPtr(virtualSchema),
-		VirtualTableDef: virtualTableDef,
+// UnmarshalCatalogPublishResponse unmarshals an instance of CatalogPublishResponse from the specified map of raw messages.
+func UnmarshalCatalogPublishResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(CatalogPublishResponse)
+	err = core.UnmarshalModel(m, "duplicate_assets", &obj.DuplicateAssets, UnmarshalCatalogPublishResponseDuplicateAssetsItem)
+	if err != nil {
+		return
 	}
+	err = core.UnmarshalModel(m, "failed_assets", &obj.FailedAssets, UnmarshalCatalogPublishResponseFailedAssetsItem)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "published_assets", &obj.PublishedAssets, UnmarshalCatalogPublishResponsePublishedAssetsItem)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
 }
 
-// SetSourceName : Allow user to set SourceName
-func (options *VirtualizeTableV2Options) SetSourceName(sourceName string) *VirtualizeTableV2Options {
-	options.SourceName = core.StringPtr(sourceName)
-	return options
+// PostPrimaryCatalog : PostPrimaryCatalog struct
+type PostPrimaryCatalog struct {
+	GUID *string `json:"guid" validate:"required"`
+
+	Name *string `json:"name" validate:"required"`
+
+	Description *string `json:"description" validate:"required"`
 }
 
-// SetSourceTableDef : Allow user to set SourceTableDef
-func (options *VirtualizeTableV2Options) SetSourceTableDef(sourceTableDef []VirtualizeTableParameterSourceTableDefItem) *VirtualizeTableV2Options {
-	options.SourceTableDef = sourceTableDef
-	return options
+// UnmarshalPostPrimaryCatalog unmarshals an instance of PostPrimaryCatalog from the specified map of raw messages.
+func UnmarshalPostPrimaryCatalog(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(PostPrimaryCatalog)
+	err = core.UnmarshalPrimitive(m, "guid", &obj.GUID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "description", &obj.Description)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
 }
 
-// SetSources : Allow user to set Sources
-func (options *VirtualizeTableV2Options) SetSources(sources []string) *VirtualizeTableV2Options {
-	options.Sources = sources
-	return options
+// PrimaryCatalogInfo : PrimaryCatalogInfo struct
+type PrimaryCatalogInfo struct {
+	Entity *PrimaryCatalogInfoEntity `json:"entity,omitempty"`
+
+	Href *string `json:"href,omitempty"`
+
+	Metadata *PrimaryCatalogInfoMetadata `json:"metadata,omitempty"`
 }
 
-// SetVirtualName : Allow user to set VirtualName
-func (options *VirtualizeTableV2Options) SetVirtualName(virtualName string) *VirtualizeTableV2Options {
-	options.VirtualName = core.StringPtr(virtualName)
-	return options
-}
-
-// SetVirtualSchema : Allow user to set VirtualSchema
-func (options *VirtualizeTableV2Options) SetVirtualSchema(virtualSchema string) *VirtualizeTableV2Options {
-	options.VirtualSchema = core.StringPtr(virtualSchema)
-	return options
-}
-
-// SetVirtualTableDef : Allow user to set VirtualTableDef
-func (options *VirtualizeTableV2Options) SetVirtualTableDef(virtualTableDef []VirtualizeTableParameterVirtualTableDefItem) *VirtualizeTableV2Options {
-	options.VirtualTableDef = virtualTableDef
-	return options
-}
-
-// SetIsIncludedColumns : Allow user to set IsIncludedColumns
-func (options *VirtualizeTableV2Options) SetIsIncludedColumns(isIncludedColumns string) *VirtualizeTableV2Options {
-	options.IsIncludedColumns = core.StringPtr(isIncludedColumns)
-	return options
-}
-
-// SetReplace : Allow user to set Replace
-func (options *VirtualizeTableV2Options) SetReplace(replace bool) *VirtualizeTableV2Options {
-	options.Replace = core.BoolPtr(replace)
-	return options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *VirtualizeTableV2Options) SetHeaders(param map[string]string) *VirtualizeTableV2Options {
-	options.Headers = param
-	return options
+// UnmarshalPrimaryCatalogInfo unmarshals an instance of PrimaryCatalogInfo from the specified map of raw messages.
+func UnmarshalPrimaryCatalogInfo(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(PrimaryCatalogInfo)
+	err = core.UnmarshalModel(m, "entity", &obj.Entity, UnmarshalPrimaryCatalogInfoEntity)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "href", &obj.Href)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "metadata", &obj.Metadata, UnmarshalPrimaryCatalogInfoMetadata)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
 }
