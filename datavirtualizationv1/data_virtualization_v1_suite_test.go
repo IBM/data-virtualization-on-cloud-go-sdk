@@ -17,9 +17,10 @@
 package datavirtualizationv1_test
 
 import (
+	"testing"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"testing"
 )
 
 func TestDataVirtualizationV1(t *testing.T) {

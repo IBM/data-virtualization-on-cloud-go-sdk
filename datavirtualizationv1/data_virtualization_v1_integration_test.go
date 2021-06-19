@@ -20,11 +20,12 @@ package datavirtualizationv1_test
 
 import (
 	"fmt"
-	"github.com/IBM/go-sdk-core/v4/core"
+	"os"
+
+	"github.com/IBM/data-virtualization-on-cloud-go-sdk/datavirtualizationv1"
+	"github.com/IBM/go-sdk-core/v5/core"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/watson-developer-cloud/go-sdk/datavirtualizationv1"
-	"os"
 )
 
 /**
@@ -80,7 +81,7 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 
 			dataVirtualizationServiceOptions := &datavirtualizationv1.DataVirtualizationV1Options{}
 
-			dataVirtualizationService, err = datavirtualizationv1.NewDataVirtualizationV1(dataVirtualizationServiceOptions)
+			dataVirtualizationService, err = datavirtualizationv1.NewDataVirtualizationV1UsingExternalConfig(dataVirtualizationServiceOptions)
 
 			Expect(err).To(BeNil())
 			Expect(dataVirtualizationService).ToNot(BeNil())
@@ -88,20 +89,20 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`GetDatasourceConnections - Get data source connections`, func() {
+	Describe(`ListDatasourceConnections - Get data source connections`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
-		It(`GetDatasourceConnections(getDatasourceConnectionsOptions *GetDatasourceConnectionsOptions)`, func() {
+		It(`ListDatasourceConnections(listDatasourceConnectionsOptions *ListDatasourceConnectionsOptions)`, func() {
 
-			getDatasourceConnectionsOptions := &datavirtualizationv1.GetDatasourceConnectionsOptions{
+			listDatasourceConnectionsOptions := &datavirtualizationv1.ListDatasourceConnectionsOptions{
 			}
 
-			datasourceNodesResponseV2, response, err := dataVirtualizationService.GetDatasourceConnections(getDatasourceConnectionsOptions)
+			datasourceConnectionsList, response, err := dataVirtualizationService.ListDatasourceConnections(listDatasourceConnectionsOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(datasourceNodesResponseV2).ToNot(BeNil())
+			Expect(datasourceConnectionsList).ToNot(BeNil())
 
 		})
 	})
@@ -115,20 +116,20 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			postDatasourceConnectionParametersPropertiesModel := &datavirtualizationv1.PostDatasourceConnectionParametersProperties{
 				AccessToken: core.StringPtr("testString"),
 				AccountName: core.StringPtr("testString"),
-				ApiKey: core.StringPtr("testString"),
+				APIKey: core.StringPtr("testString"),
 				AuthType: core.StringPtr("testString"),
 				ClientID: core.StringPtr("testString"),
 				ClientSecret: core.StringPtr("testString"),
 				Collection: core.StringPtr("testString"),
 				Credentials: core.StringPtr("testString"),
-				Database: core.StringPtr("testString"),
-				Host: core.StringPtr("testString"),
-				HttpPath: core.StringPtr("testString"),
+				Database: core.StringPtr("TPCDS"),
+				Host: core.StringPtr("192.168.0.1"),
+				HTTPPath: core.StringPtr("testString"),
 				JarUris: core.StringPtr("testString"),
 				JdbcDriver: core.StringPtr("testString"),
 				JdbcURL: core.StringPtr("testString"),
-				Password: core.StringPtr("testString"),
-				Port: core.StringPtr("testString"),
+				Password: core.StringPtr("password"),
+				Port: core.StringPtr("50000"),
 				ProjectID: core.StringPtr("testString"),
 				Properties: core.StringPtr("testString"),
 				RefreshToken: core.StringPtr("testString"),
@@ -137,27 +138,27 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 				Server: core.StringPtr("testString"),
 				ServiceName: core.StringPtr("testString"),
 				Sid: core.StringPtr("testString"),
-				Ssl: core.StringPtr("testString"),
+				Ssl: core.StringPtr("false"),
 				SslCertificate: core.StringPtr("testString"),
 				SslCertificateHost: core.StringPtr("testString"),
 				SslCertificateValidation: core.StringPtr("testString"),
-				Username: core.StringPtr("testString"),
+				Username: core.StringPtr("db2inst1"),
 				Warehouse: core.StringPtr("testString"),
 			}
 
 			addDatasourceConnectionOptions := &datavirtualizationv1.AddDatasourceConnectionOptions{
-				DatasourceType: core.StringPtr("testString"),
-				Name: core.StringPtr("testString"),
-				OriginCountry: core.StringPtr("testString"),
+				DatasourceType: core.StringPtr("DB2"),
+				Name: core.StringPtr("DB2"),
+				OriginCountry: core.StringPtr("us"),
 				Properties: postDatasourceConnectionParametersPropertiesModel,
 				AssetCategory: core.StringPtr("testString"),
 			}
 
-			postDatasourceConnectionResponse, response, err := dataVirtualizationService.AddDatasourceConnection(addDatasourceConnectionOptions)
+			postDatasourceConnection, response, err := dataVirtualizationService.AddDatasourceConnection(addDatasourceConnectionOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(201))
-			Expect(postDatasourceConnectionResponse).ToNot(BeNil())
+			Expect(postDatasourceConnection).ToNot(BeNil())
 
 		})
 	})
@@ -168,14 +169,10 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		})
 		It(`GrantUserToVirtualTable(grantUserToVirtualTableOptions *GrantUserToVirtualTableOptions)`, func() {
 
-			postUserPrivilegesParametersBodyItemModel := &datavirtualizationv1.PostUserPrivilegesParametersBodyItem{
-				TableName: core.StringPtr("EMPLOYEE"),
-				TableSchema: core.StringPtr("USER999"),
-				Authid: core.StringPtr("PUBLIC"),
-			}
-
 			grantUserToVirtualTableOptions := &datavirtualizationv1.GrantUserToVirtualTableOptions{
-				Body: []datavirtualizationv1.PostUserPrivilegesParametersBodyItem{*postUserPrivilegesParametersBodyItemModel},
+				TableName: core.StringPtr("EMPLOYEE"),
+				TableSchema: core.StringPtr("dv_ibmid_060000s4y5"),
+				Authid: core.StringPtr("PUBLIC"),
 			}
 
 			response, err := dataVirtualizationService.GrantUserToVirtualTable(grantUserToVirtualTableOptions)
@@ -192,14 +189,10 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		})
 		It(`GrantRolesToVirtualizedTable(grantRolesToVirtualizedTableOptions *GrantRolesToVirtualizedTableOptions)`, func() {
 
-			postRolePrivilegesParametersBodyItemModel := &datavirtualizationv1.PostRolePrivilegesParametersBodyItem{
-				TableName: core.StringPtr("EMPLOYEE"),
-				TableSchema: core.StringPtr("USER999"),
-				RoleToGrant: core.StringPtr("PUBLIC"),
-			}
-
 			grantRolesToVirtualizedTableOptions := &datavirtualizationv1.GrantRolesToVirtualizedTableOptions{
-				Body: []datavirtualizationv1.PostRolePrivilegesParametersBodyItem{*postRolePrivilegesParametersBodyItemModel},
+				TableName: core.StringPtr("EMPLOYEE"),
+				TableSchema: core.StringPtr("dv_ibmid_060000s4y5"),
+				RoleName: core.StringPtr("PUBLIC"),
 			}
 
 			response, err := dataVirtualizationService.GrantRolesToVirtualizedTable(grantRolesToVirtualizedTableOptions)
@@ -210,17 +203,17 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`GetTablesForRole - Get virtualized tables by role`, func() {
+	Describe(`ListTablesForRole - Get virtualized tables by role`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
-		It(`GetTablesForRole(getTablesForRoleOptions *GetTablesForRoleOptions)`, func() {
+		It(`ListTablesForRole(listTablesForRoleOptions *ListTablesForRoleOptions)`, func() {
 
-			getTablesForRoleOptions := &datavirtualizationv1.GetTablesForRoleOptions{
-				Rolename: core.StringPtr("ADMIN | STEWARD | ENGINEER | USER"),
+			listTablesForRoleOptions := &datavirtualizationv1.ListTablesForRoleOptions{
+				Rolename: core.StringPtr("MANAGER | STEWARD | ENGINEER | USER"),
 			}
 
-			tablesForRoleResponse, response, err := dataVirtualizationService.GetTablesForRole(getTablesForRoleOptions)
+			tablesForRoleResponse, response, err := dataVirtualizationService.ListTablesForRole(listTablesForRoleOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
@@ -229,11 +222,48 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`VirtualizeTableV2 - Virtualize table`, func() {
+	Describe(`TurnOnPolicyV2 - Turn on or off WKC policy enforcement status`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
-		It(`VirtualizeTableV2(virtualizeTableV2Options *VirtualizeTableV2Options)`, func() {
+		It(`TurnOnPolicyV2(turnOnPolicyV2Options *TurnOnPolicyV2Options)`, func() {
+
+			turnOnPolicyV2Options := &datavirtualizationv1.TurnOnPolicyV2Options{
+				Status: core.StringPtr("enabled"),
+			}
+
+			turnOnPolicyV2Response, response, err := dataVirtualizationService.TurnOnPolicyV2(turnOnPolicyV2Options)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(turnOnPolicyV2Response).ToNot(BeNil())
+
+		})
+	})
+
+	Describe(`CheckPolicyStatusV2 - Get WKC policy enforcement status`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`CheckPolicyStatusV2(checkPolicyStatusV2Options *CheckPolicyStatusV2Options)`, func() {
+
+			checkPolicyStatusV2Options := &datavirtualizationv1.CheckPolicyStatusV2Options{
+			}
+
+			checkPolicyStatusV2Response, response, err := dataVirtualizationService.CheckPolicyStatusV2(checkPolicyStatusV2Options)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(checkPolicyStatusV2Response).ToNot(BeNil())
+
+		})
+	})
+
+	Describe(`DvaasVirtualizeTable - Virtualize table`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`DvaasVirtualizeTable(dvaasVirtualizeTableOptions *DvaasVirtualizeTableOptions)`, func() {
 
 			virtualizeTableParameterSourceTableDefItemModel := &datavirtualizationv1.VirtualizeTableParameterSourceTableDefItem{
 				ColumnName: core.StringPtr("Column1"),
@@ -245,22 +275,85 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 				ColumnType: core.StringPtr("INTEGER"),
 			}
 
-			virtualizeTableV2Options := &datavirtualizationv1.VirtualizeTableV2Options{
+			dvaasVirtualizeTableOptions := &datavirtualizationv1.DvaasVirtualizeTableOptions{
 				SourceName: core.StringPtr("Tab1"),
 				SourceTableDef: []datavirtualizationv1.VirtualizeTableParameterSourceTableDefItem{*virtualizeTableParameterSourceTableDefItemModel},
 				Sources: []string{`DB210001:"Hjq1"`},
 				VirtualName: core.StringPtr("Tab1"),
-				VirtualSchema: core.StringPtr("USER999"),
+				VirtualSchema: core.StringPtr("dv_ibmid_060000s4y5"),
 				VirtualTableDef: []datavirtualizationv1.VirtualizeTableParameterVirtualTableDefItem{*virtualizeTableParameterVirtualTableDefItemModel},
 				IsIncludedColumns: core.StringPtr("Y, Y, N"),
 				Replace: core.BoolPtr(false),
 			}
 
-			virtualizeTableResponse, response, err := dataVirtualizationService.VirtualizeTableV2(virtualizeTableV2Options)
+			virtualizeTableResponse, response, err := dataVirtualizationService.DvaasVirtualizeTable(dvaasVirtualizeTableOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(201))
 			Expect(virtualizeTableResponse).ToNot(BeNil())
+
+		})
+	})
+
+	Describe(`GetPrimaryCatalog - Get primary catalog ID`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`GetPrimaryCatalog(getPrimaryCatalogOptions *GetPrimaryCatalogOptions)`, func() {
+
+			getPrimaryCatalogOptions := &datavirtualizationv1.GetPrimaryCatalogOptions{
+			}
+
+			primaryCatalogInfo, response, err := dataVirtualizationService.GetPrimaryCatalog(getPrimaryCatalogOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(primaryCatalogInfo).ToNot(BeNil())
+
+		})
+	})
+
+	Describe(`PostPrimaryCatalog - Add primary catalog`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`PostPrimaryCatalog(postPrimaryCatalogOptions *PostPrimaryCatalogOptions)`, func() {
+
+			postPrimaryCatalogOptions := &datavirtualizationv1.PostPrimaryCatalogOptions{
+				GUID: core.StringPtr("d77fc432-9b1a-4938-a2a5-9f37e08041f6"),
+			}
+
+			postPrimaryCatalog, response, err := dataVirtualizationService.PostPrimaryCatalog(postPrimaryCatalogOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(201))
+			Expect(postPrimaryCatalog).ToNot(BeNil())
+
+		})
+	})
+
+	Describe(`PublishAssets - publish virtual table to WKC`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`PublishAssets(publishAssetsOptions *PublishAssetsOptions)`, func() {
+
+			postPrimaryCatalogParametersAssetsItemModel := &datavirtualizationv1.PostPrimaryCatalogParametersAssetsItem{
+				Schema: core.StringPtr("db2inst1"),
+				Table: core.StringPtr("EMPLOYEE"),
+			}
+
+			publishAssetsOptions := &datavirtualizationv1.PublishAssetsOptions{
+				CatalogID: core.StringPtr("2b6b9fc5-626c-47a9-a836-56b76c0bc826"),
+				AllowDuplicates: core.BoolPtr(false),
+				Assets: []datavirtualizationv1.PostPrimaryCatalogParametersAssetsItem{*postPrimaryCatalogParametersAssetsItemModel},
+			}
+
+			catalogPublishResponse, response, err := dataVirtualizationService.PublishAssets(publishAssetsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(catalogPublishResponse).ToNot(BeNil())
 
 		})
 	})
@@ -274,7 +367,7 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			revokeUserFromObjectOptions := &datavirtualizationv1.RevokeUserFromObjectOptions{
 				Authid: core.StringPtr("PUBLIC"),
 				TableName: core.StringPtr("EMPLOYEE"),
-				TableSchema: core.StringPtr("USER999"),
+				TableSchema: core.StringPtr("dv_ibmid_060000s4y5"),
 			}
 
 			response, err := dataVirtualizationService.RevokeUserFromObject(revokeUserFromObjectOptions)
@@ -285,19 +378,19 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`RevokeRoleFromTableV2 - Delete role`, func() {
+	Describe(`DvaasRevokeRoleFromTable - Delete role`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
-		It(`RevokeRoleFromTableV2(revokeRoleFromTableV2Options *RevokeRoleFromTableV2Options)`, func() {
+		It(`DvaasRevokeRoleFromTable(dvaasRevokeRoleFromTableOptions *DvaasRevokeRoleFromTableOptions)`, func() {
 
-			revokeRoleFromTableV2Options := &datavirtualizationv1.RevokeRoleFromTableV2Options{
-				RoleToRevoke: core.StringPtr("DV_ENGINEER"),
+			dvaasRevokeRoleFromTableOptions := &datavirtualizationv1.DvaasRevokeRoleFromTableOptions{
+				RoleName: core.StringPtr("DV_ENGINEER"),
 				TableName: core.StringPtr("EMPLOYEE"),
-				TableSchema: core.StringPtr("USER999"),
+				TableSchema: core.StringPtr("dv_ibmid_060000s4y5"),
 			}
 
-			response, err := dataVirtualizationService.RevokeRoleFromTableV2(revokeRoleFromTableV2Options)
+			response, err := dataVirtualizationService.DvaasRevokeRoleFromTable(dvaasRevokeRoleFromTableOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(204))
@@ -312,11 +405,29 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		It(`DeleteTable(deleteTableOptions *DeleteTableOptions)`, func() {
 
 			deleteTableOptions := &datavirtualizationv1.DeleteTableOptions{
-				SchemaName: core.StringPtr("testString"),
-				TableName: core.StringPtr("testString"),
+				VirtualSchema: core.StringPtr("testString"),
+				VirtualName: core.StringPtr("testString"),
 			}
 
 			response, err := dataVirtualizationService.DeleteTable(deleteTableOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(204))
+
+		})
+	})
+
+	Describe(`DeletePrimaryCatalog - Delete primary catalog`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`DeletePrimaryCatalog(deletePrimaryCatalogOptions *DeletePrimaryCatalogOptions)`, func() {
+
+			deletePrimaryCatalogOptions := &datavirtualizationv1.DeletePrimaryCatalogOptions{
+				GUID: core.StringPtr("d77fc432-9b1a-4938-a2a5-9f37e08041f6"),
+			}
+
+			response, err := dataVirtualizationService.DeletePrimaryCatalog(deletePrimaryCatalogOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(204))
@@ -331,8 +442,8 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		It(`DeleteDatasourceConnection(deleteDatasourceConnectionOptions *DeleteDatasourceConnectionOptions)`, func() {
 
 			deleteDatasourceConnectionOptions := &datavirtualizationv1.DeleteDatasourceConnectionOptions{
-				Cid: core.StringPtr("DB210013"),
 				ConnectionID: core.StringPtr("75e4d01b-7417-4abc-b267-8ffb393fb970"),
+				Cid: core.StringPtr("DB210013"),
 			}
 
 			response, err := dataVirtualizationService.DeleteDatasourceConnection(deleteDatasourceConnectionOptions)
