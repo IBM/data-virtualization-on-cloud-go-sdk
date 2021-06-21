@@ -1,8 +1,8 @@
 [![Build Status](https://travis.ibm.com/CloudEngineering/go-sdk-template.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://travis.ibm.com/CloudEngineering/go-sdk-template.svg?token=eW5FVD71iyte6tTby8gr&branch=main)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-# IBM Cloud MySDK Go SDK Version 0.0.1
-Go client library to interact with the various [IBM Cloud MySDK Service APIs](https://cloud.ibm.com/apidocs/data-virtualization-on-cloud).
+# IBM Cloud MySDK Go SDK Version 0.0.0
+Go client library to interact with the various [IBM Data Virtualization on Cloud APIs](https://cloud.ibm.com/apidocs/data-virtualization-on-cloud).
 
 Disclaimer: this SDK is being released initially as a **pre-release** version.
 Changes might occur which impact applications that use this SDK.
@@ -40,7 +40,7 @@ The IBM Data Virtualization on Cloud Go SDK allows developers to programmaticall
 
 Service Name | Package name 
 --- | --- 
-[Data Virtualization](https://cloud.ibm.com/apidocs/data-virtualization-on-cloud-go-sdk) | datavirtualizationv1
+[Data Virtualization](https://cloud.ibm.com/apidocs/data-virtualization-on-cloud) | datavirtualizationv1
 
 ## Prerequisites
 
