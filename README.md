@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/github/IBM/data-virtualization-on-cloud-go-sdk)](https://travis-ci.com/github/IBM/data-virtualization-on-cloud-go-sdk)
+[![Build Status](https://travis-ci.com/github/IBM/data-virtualization-on-cloud-go-sdk.svg?branch=main)](https://travis-ci.com/github/IBM/data-virtualization-on-cloud-go-sdk)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 # IBM Cloud MySDK Go SDK Version 0.0.0
