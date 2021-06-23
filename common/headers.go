@@ -22,7 +22,7 @@ import (
 )
 
 const (
-	sdkName = "data-virtualization-on-cloud-sdk"
+	sdkName = "data-virtualization-on-cloud-go-sdk"
 	headerNameUserAgent = "User-Agent"
 )
 
