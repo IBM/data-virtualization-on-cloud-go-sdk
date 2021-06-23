@@ -67,7 +67,7 @@ Next, run `go build` or `go mod tidy` to download and install the new dependenci
 `go.mod` file.  
 
 In the example above, the `datavirtualizationv1` part of the import path is the package name
-associated with the Data Virtualization Service service.
+associated with the Data Virtualization service.
 See the service table above to find the approprate package name for the services used by your application.
 
 ### `go get` command  
