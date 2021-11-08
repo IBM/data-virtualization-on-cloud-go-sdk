@@ -15,7 +15,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.34.1-ad041667-20210617-195430
+ * IBM OpenAPI SDK Code Generator Version: 3.41.1-790c0dfc-20211021-231519
  */
 
 // Package datavirtualizationv1 : Operations and models for the DataVirtualizationV1 service
@@ -36,7 +36,7 @@ import (
 // DataVirtualizationV1 : The Data Virtualization REST API connects to your service, so you can manage your virtual
 // data, data sources, and user roles.
 //
-// Version: 1.6.0
+// API Version: 1.6.0
 type DataVirtualizationV1 struct {
 	Service *core.BaseService
 }
@@ -338,6 +338,60 @@ func (dataVirtualization *DataVirtualizationV1) DeleteDatasourceConnectionWithCo
 	return
 }
 
+// GetObjectStoreConnectionsV2 : Gets object store connection details
+func (dataVirtualization *DataVirtualizationV1) GetObjectStoreConnectionsV2(getObjectStoreConnectionsV2Options *GetObjectStoreConnectionsV2Options) (result *ObjStoreConnectionResponseV2, response *core.DetailedResponse, err error) {
+	return dataVirtualization.GetObjectStoreConnectionsV2WithContext(context.Background(), getObjectStoreConnectionsV2Options)
+}
+
+// GetObjectStoreConnectionsV2WithContext is an alternate form of the GetObjectStoreConnectionsV2 method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) GetObjectStoreConnectionsV2WithContext(ctx context.Context, getObjectStoreConnectionsV2Options *GetObjectStoreConnectionsV2Options) (result *ObjStoreConnectionResponseV2, response *core.DetailedResponse, err error) {
+	err = core.ValidateStruct(getObjectStoreConnectionsV2Options, "getObjectStoreConnectionsV2Options")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/datasource/objectstore_connections`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range getObjectStoreConnectionsV2Options.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "GetObjectStoreConnectionsV2")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+	if getObjectStoreConnectionsV2Options.JwtAuthUserPayload != nil {
+		builder.AddHeader("jwt-auth-user-payload", fmt.Sprint(*getObjectStoreConnectionsV2Options.JwtAuthUserPayload))
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = dataVirtualization.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalObjStoreConnectionResponseV2)
+		if err != nil {
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
 // GrantUserToVirtualTable : Grant user access
 // Grants a user access to a specific virtualized table.
 func (dataVirtualization *DataVirtualizationV1) GrantUserToVirtualTable(grantUserToVirtualTableOptions *GrantUserToVirtualTableOptions) (response *core.DetailedResponse, err error) {
@@ -618,8 +672,8 @@ func (dataVirtualization *DataVirtualizationV1) ListTablesForRoleWithContext(ctx
 	return
 }
 
-// TurnOnPolicyV2 : Turn on or off WKC policy enforcement status
-// Turn on WKC policy enforcement status.
+// TurnOnPolicyV2 : Turn policy enforcement status on or off
+// Turns policy enforcement status on or off.
 func (dataVirtualization *DataVirtualizationV1) TurnOnPolicyV2(turnOnPolicyV2Options *TurnOnPolicyV2Options) (result *TurnOnPolicyV2Response, response *core.DetailedResponse, err error) {
 	return dataVirtualization.TurnOnPolicyV2WithContext(context.Background(), turnOnPolicyV2Options)
 }
@@ -676,8 +730,8 @@ func (dataVirtualization *DataVirtualizationV1) TurnOnPolicyV2WithContext(ctx co
 	return
 }
 
-// CheckPolicyStatusV2 : Get WKC policy enforcement status
-// Get WKC policy enforcement status, return enabled or disabled.
+// CheckPolicyStatusV2 : Get policy enforcement status
+// Get policy enforcement status, return enabled or disabled.
 func (dataVirtualization *DataVirtualizationV1) CheckPolicyStatusV2(checkPolicyStatusV2Options *CheckPolicyStatusV2Options) (result *CheckPolicyStatusV2Response, response *core.DetailedResponse, err error) {
 	return dataVirtualization.CheckPolicyStatusV2WithContext(context.Background(), checkPolicyStatusV2Options)
 }
@@ -865,8 +919,92 @@ func (dataVirtualization *DataVirtualizationV1) DeleteTableWithContext(ctx conte
 	return
 }
 
+// VirtualizeCosV2 : Create a remote table for the ORC or Parquet file on a cloud object store (COS)
+// Create a remote table for the ORC or Parquet file on a cloud object store (COS).
+func (dataVirtualization *DataVirtualizationV1) VirtualizeCosV2(virtualizeCosV2Options *VirtualizeCosV2Options) (result *SuccessResponse, response *core.DetailedResponse, err error) {
+	return dataVirtualization.VirtualizeCosV2WithContext(context.Background(), virtualizeCosV2Options)
+}
+
+// VirtualizeCosV2WithContext is an alternate form of the VirtualizeCosV2 method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) VirtualizeCosV2WithContext(ctx context.Context, virtualizeCosV2Options *VirtualizeCosV2Options) (result *SuccessResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(virtualizeCosV2Options, "virtualizeCosV2Options cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(virtualizeCosV2Options, "virtualizeCosV2Options")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.POST)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v2/virtualization/cloud_object_storages`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range virtualizeCosV2Options.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "VirtualizeCosV2")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+	builder.AddHeader("Content-Type", "application/json")
+	if virtualizeCosV2Options.JwtAuthUserPayload != nil {
+		builder.AddHeader("jwt-auth-user-payload", fmt.Sprint(*virtualizeCosV2Options.JwtAuthUserPayload))
+	}
+
+	body := make(map[string]interface{})
+	if virtualizeCosV2Options.URL != nil {
+		body["url"] = virtualizeCosV2Options.URL
+	}
+	if virtualizeCosV2Options.VirtualName != nil {
+		body["virtual_name"] = virtualizeCosV2Options.VirtualName
+	}
+	if virtualizeCosV2Options.VirtualSchema != nil {
+		body["virtual_schema"] = virtualizeCosV2Options.VirtualSchema
+	}
+	if virtualizeCosV2Options.VirtualTableDef != nil {
+		body["virtual_table_def"] = virtualizeCosV2Options.VirtualTableDef
+	}
+	if virtualizeCosV2Options.IsReplace != nil {
+		body["is_replace"] = virtualizeCosV2Options.IsReplace
+	}
+	if virtualizeCosV2Options.Options != nil {
+		body["options"] = virtualizeCosV2Options.Options
+	}
+	_, err = builder.SetBodyContentJSON(body)
+	if err != nil {
+		return
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = dataVirtualization.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSuccessResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
 // GetPrimaryCatalog : Get primary catalog ID
-// Get primary catalog ID from the table DVSYS.INSTANCE_INFO.
+// Gets the primary catalog ID from the DVSYS.INSTANCE_INFO table.
 func (dataVirtualization *DataVirtualizationV1) GetPrimaryCatalog(getPrimaryCatalogOptions *GetPrimaryCatalogOptions) (result *PrimaryCatalogInfo, response *core.DetailedResponse, err error) {
 	return dataVirtualization.GetPrimaryCatalogWithContext(context.Background(), getPrimaryCatalogOptions)
 }
@@ -918,7 +1056,7 @@ func (dataVirtualization *DataVirtualizationV1) GetPrimaryCatalogWithContext(ctx
 }
 
 // PostPrimaryCatalog : Add primary catalog
-// Insert primary catalog ID into table DVSYS.INSTANCE_INFO.
+// Inserts primary catalog ID into table DVSYS.INSTANCE_INFO.
 func (dataVirtualization *DataVirtualizationV1) PostPrimaryCatalog(postPrimaryCatalogOptions *PostPrimaryCatalogOptions) (result *PostPrimaryCatalog, response *core.DetailedResponse, err error) {
 	return dataVirtualization.PostPrimaryCatalogWithContext(context.Background(), postPrimaryCatalogOptions)
 }
@@ -1029,8 +1167,8 @@ func (dataVirtualization *DataVirtualizationV1) DeletePrimaryCatalogWithContext(
 	return
 }
 
-// PublishAssets : publish virtual table to WKC
-// publish virtual tables to WKC.
+// PublishAssets : Publish virtual tables to a catalog
+// Publishes virtual tables to a catalog.
 func (dataVirtualization *DataVirtualizationV1) PublishAssets(publishAssetsOptions *PublishAssetsOptions) (result *CatalogPublishResponse, response *core.DetailedResponse, err error) {
 	return dataVirtualization.PublishAssetsWithContext(context.Background(), publishAssetsOptions)
 }
@@ -1101,20 +1239,184 @@ func (dataVirtualization *DataVirtualizationV1) PublishAssetsWithContext(ctx con
 	return
 }
 
+// GetCachesList : List caches
+// List all active, inactive and deleted caches in Data Virtualization.
+func (dataVirtualization *DataVirtualizationV1) GetCachesList(getCachesListOptions *GetCachesListOptions) (result *CacheListResponse, response *core.DetailedResponse, err error) {
+	return dataVirtualization.GetCachesListWithContext(context.Background(), getCachesListOptions)
+}
+
+// GetCachesListWithContext is an alternate form of the GetCachesList method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) GetCachesListWithContext(ctx context.Context, getCachesListOptions *GetCachesListOptions) (result *CacheListResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateStruct(getCachesListOptions, "getCachesListOptions")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v1/caching/caches`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range getCachesListOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "GetCachesList")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = dataVirtualization.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalCacheListResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
+// GetCache : List a cache
+// List a specific cache in Data Virtualization.
+func (dataVirtualization *DataVirtualizationV1) GetCache(getCacheOptions *GetCacheOptions) (result *CacheResponse, response *core.DetailedResponse, err error) {
+	return dataVirtualization.GetCacheWithContext(context.Background(), getCacheOptions)
+}
+
+// GetCacheWithContext is an alternate form of the GetCache method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) GetCacheWithContext(ctx context.Context, getCacheOptions *GetCacheOptions) (result *CacheResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(getCacheOptions, "getCacheOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(getCacheOptions, "getCacheOptions")
+	if err != nil {
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"id": *getCacheOptions.ID,
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v1/caching/caches/{id}`, pathParamsMap)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range getCacheOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "GetCache")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = dataVirtualization.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalCacheResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
+// GetCacheStorageDetail : Fetch the cache storage
+// Fetch the total cache storage and used capacities for active and inactive caches in Data Virtualization.
+func (dataVirtualization *DataVirtualizationV1) GetCacheStorageDetail(getCacheStorageDetailOptions *GetCacheStorageDetailOptions) (result *StorageDetails, response *core.DetailedResponse, err error) {
+	return dataVirtualization.GetCacheStorageDetailWithContext(context.Background(), getCacheStorageDetailOptions)
+}
+
+// GetCacheStorageDetailWithContext is an alternate form of the GetCacheStorageDetail method which supports a Context parameter
+func (dataVirtualization *DataVirtualizationV1) GetCacheStorageDetailWithContext(ctx context.Context, getCacheStorageDetailOptions *GetCacheStorageDetailOptions) (result *StorageDetails, response *core.DetailedResponse, err error) {
+	err = core.ValidateStruct(getCacheStorageDetailOptions, "getCacheStorageDetailOptions")
+	if err != nil {
+		return
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = dataVirtualization.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(dataVirtualization.Service.Options.URL, `/v1/caching/storage`, nil)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range getCacheStorageDetailOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("data_virtualization", "V1", "GetCacheStorageDetail")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = dataVirtualization.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalStorageDetails)
+		if err != nil {
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
 // AddDatasourceConnectionOptions : The AddDatasourceConnection options.
 type AddDatasourceConnectionOptions struct {
 	// The type of data source that you want to add.
-	DatasourceType *string `validate:"required"`
+	DatasourceType *string `json:"datasource_type" validate:"required"`
 
 	// The name of data source.
-	Name *string `validate:"required"`
+	Name *string `json:"name" validate:"required"`
 
 	// The location of data source that you want to add.
-	OriginCountry *string `validate:"required"`
+	OriginCountry *string `json:"origin_country" validate:"required"`
 
-	Properties *PostDatasourceConnectionParametersProperties `validate:"required"`
+	Properties *PostDatasourceConnectionParametersProperties `json:"properties" validate:"required"`
 
-	AssetCategory *string
+	AssetCategory *string `json:"asset_category,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -1164,6 +1466,296 @@ func (_options *AddDatasourceConnectionOptions) SetAssetCategory(assetCategory s
 func (options *AddDatasourceConnectionOptions) SetHeaders(param map[string]string) *AddDatasourceConnectionOptions {
 	options.Headers = param
 	return options
+}
+
+// CacheListResponse : CacheListResponse struct
+type CacheListResponse struct {
+	Caches []CacheListResponseCachesItem `json:"caches,omitempty"`
+}
+
+// UnmarshalCacheListResponse unmarshals an instance of CacheListResponse from the specified map of raw messages.
+func UnmarshalCacheListResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(CacheListResponse)
+	err = core.UnmarshalModel(m, "caches", &obj.Caches, UnmarshalCacheListResponseCachesItem)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// CacheListResponseCachesItem : CacheListResponseCachesItem struct
+type CacheListResponseCachesItem struct {
+	// The name of this cache.
+	Name *string `json:"name,omitempty"`
+
+	// The unique ID of this cache.
+	ID *string `json:"id,omitempty"`
+
+	// The query that defines this cache.
+	Query *string `json:"query,omitempty"`
+
+	// Owner ID of this cache.
+	OwnerID *string `json:"owner_id,omitempty"`
+
+	// Type of the cache - User-defined (U), Recommended (R).
+	Type *string `json:"type,omitempty"`
+
+	// Database timestamp at the time of cache creation.
+	CreatedTimestamp *string `json:"created_timestamp,omitempty"`
+
+	// Database timestamp when this cache was last modified (state change).
+	LastModifiedTimestamp *string `json:"last_modified_timestamp,omitempty"`
+
+	// Database timestamp when this cache was last refreshed.
+	LastRefreshTimestamp *string `json:"last_refresh_timestamp,omitempty"`
+
+	// Database timestamp when this cache was last used.
+	LastUsedTimestamp *string `json:"last_used_timestamp,omitempty"`
+
+	// State of this cache - one of
+	// Enabled,Disabled,Deleted,Failed,Populating,Activating,Enabling,Disabling,Refreshing,Deleting.
+	State *string `json:"state,omitempty"`
+
+	// Size of this cache (in KB).
+	Size *int64 `json:"size,omitempty"`
+
+	// Cardinality (number of rows) of this cache.
+	Cardinality *int64 `json:"cardinality,omitempty"`
+
+	// Time taken to refresh this cache most recently (in milliseconds).
+	TimeTakenForRefresh *int64 `json:"time_taken_for_refresh,omitempty"`
+
+	// Number of times this cache has been refreshed since creation.
+	RefreshCount *int64 `json:"refresh_count,omitempty"`
+
+	// Hit Count of the cache (number of times this cache was used).
+	HitCount *int64 `json:"hit_count,omitempty"`
+
+	// Encoded cron-style representation of the cache refresh schedule.
+	RefreshSchedule *string `json:"refresh_schedule,omitempty"`
+
+	// Human-readable description of the cache refresh schedule.
+	RefreshScheduleDesc *string `json:"refresh_schedule_desc,omitempty"`
+
+	// Status message indicating the most recent error/issue with the cache, if any.
+	StatusMsg *string `json:"status_msg,omitempty"`
+}
+
+// UnmarshalCacheListResponseCachesItem unmarshals an instance of CacheListResponseCachesItem from the specified map of raw messages.
+func UnmarshalCacheListResponseCachesItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(CacheListResponseCachesItem)
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "query", &obj.Query)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "owner_id", &obj.OwnerID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "created_timestamp", &obj.CreatedTimestamp)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "last_modified_timestamp", &obj.LastModifiedTimestamp)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "last_refresh_timestamp", &obj.LastRefreshTimestamp)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "last_used_timestamp", &obj.LastUsedTimestamp)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "state", &obj.State)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "size", &obj.Size)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "cardinality", &obj.Cardinality)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "time_taken_for_refresh", &obj.TimeTakenForRefresh)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "refresh_count", &obj.RefreshCount)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "hit_count", &obj.HitCount)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "refresh_schedule", &obj.RefreshSchedule)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "refresh_schedule_desc", &obj.RefreshScheduleDesc)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "status_msg", &obj.StatusMsg)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// CacheResponse : CacheResponse struct
+type CacheResponse struct {
+	// The name of this cache.
+	Name *string `json:"name,omitempty"`
+
+	// The unique ID of this cache.
+	ID *string `json:"id,omitempty"`
+
+	// The query that defines this cache.
+	Query *string `json:"query,omitempty"`
+
+	// Owner ID of this cache.
+	OwnerID *string `json:"owner_id,omitempty"`
+
+	// Type of the cache - User-defined (U), Recommended (R).
+	Type *string `json:"type,omitempty"`
+
+	// Database timestamp at the time of cache creation.
+	CreatedTimestamp *string `json:"created_timestamp,omitempty"`
+
+	// Database timestamp when this cache was last modified (state change).
+	LastModifiedTimestamp *string `json:"last_modified_timestamp,omitempty"`
+
+	// Database timestamp when this cache was last refreshed.
+	LastRefreshTimestamp *string `json:"last_refresh_timestamp,omitempty"`
+
+	// Database timestamp when this cache was last used.
+	LastUsedTimestamp *string `json:"last_used_timestamp,omitempty"`
+
+	// State of this cache - one of
+	// Enabled,Disabled,Deleted,Failed,Populating,Activating,Enabling,Disabling,Refreshing,Deleting.
+	State *string `json:"state,omitempty"`
+
+	// Size of this cache (in KB).
+	Size *int64 `json:"size,omitempty"`
+
+	// Cardinality (number of rows) of this cache.
+	Cardinality *int64 `json:"cardinality,omitempty"`
+
+	// Time taken to refresh this cache most recently (in milliseconds).
+	TimeTakenForRefresh *int64 `json:"time_taken_for_refresh,omitempty"`
+
+	// Number of times this cache has been refreshed since creation.
+	RefreshCount *int64 `json:"refresh_count,omitempty"`
+
+	// Hit Count of the cache (number of times this cache was used).
+	HitCount *int64 `json:"hit_count,omitempty"`
+
+	// Encoded cron-style representation of the cache refresh schedule.
+	RefreshSchedule *string `json:"refresh_schedule,omitempty"`
+
+	// Human-readable description of the cache refresh schedule.
+	RefreshScheduleDesc *string `json:"refresh_schedule_desc,omitempty"`
+
+	// Status message indicating the most recent error/issue with the cache, if any.
+	StatusMsg *string `json:"status_msg,omitempty"`
+}
+
+// UnmarshalCacheResponse unmarshals an instance of CacheResponse from the specified map of raw messages.
+func UnmarshalCacheResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(CacheResponse)
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "query", &obj.Query)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "owner_id", &obj.OwnerID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "created_timestamp", &obj.CreatedTimestamp)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "last_modified_timestamp", &obj.LastModifiedTimestamp)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "last_refresh_timestamp", &obj.LastRefreshTimestamp)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "last_used_timestamp", &obj.LastUsedTimestamp)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "state", &obj.State)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "size", &obj.Size)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "cardinality", &obj.Cardinality)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "time_taken_for_refresh", &obj.TimeTakenForRefresh)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "refresh_count", &obj.RefreshCount)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "hit_count", &obj.HitCount)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "refresh_schedule", &obj.RefreshSchedule)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "refresh_schedule_desc", &obj.RefreshScheduleDesc)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "status_msg", &obj.StatusMsg)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
 }
 
 // CatalogPublishResponseDuplicateAssetsItem : CatalogPublishResponseDuplicateAssetsItem struct
@@ -1449,10 +2041,10 @@ func UnmarshalDatasourceConnectionsListDatasourceConnectionsItemDataSourcesItem(
 // DeleteDatasourceConnectionOptions : The DeleteDatasourceConnection options.
 type DeleteDatasourceConnectionOptions struct {
 	// The connection identifier for the platform..
-	ConnectionID *string `validate:"required,ne="`
+	ConnectionID *string `json:"connection_id" validate:"required,ne="`
 
 	// The identifier of the connection for the Data Virtualization..
-	Cid *string
+	Cid *string `json:"cid,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -1487,7 +2079,7 @@ func (options *DeleteDatasourceConnectionOptions) SetHeaders(param map[string]st
 type DeletePrimaryCatalogOptions struct {
 	// The Data Virtualization user name, if the value is PUBLIC, it means revoke access privilege from all Data
 	// Virtualization users.
-	GUID *string `validate:"required"`
+	GUID *string `json:"guid" validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -1515,10 +2107,10 @@ func (options *DeletePrimaryCatalogOptions) SetHeaders(param map[string]string) 
 // DeleteTableOptions : The DeleteTable options.
 type DeleteTableOptions struct {
 	// The schema of virtualized table to be deleted.
-	VirtualSchema *string `validate:"required"`
+	VirtualSchema *string `json:"virtual_schema" validate:"required"`
 
 	// The name of virtualized table to be deleted.
-	VirtualName *string `validate:"required,ne="`
+	VirtualName *string `json:"virtual_name" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -1554,13 +2146,13 @@ func (options *DeleteTableOptions) SetHeaders(param map[string]string) *DeleteTa
 type DvaasRevokeRoleFromTableOptions struct {
 	// The Data Virtualization role type. Values can be DV_ADMIN, DV_ENGINEER, DV_STEWARD, or DV_WORKER, which correspond
 	// to MANAGER, ENGINEER, STEWARD, and USER roles in the user interface.
-	RoleName *string `validate:"required,ne="`
+	RoleName *string `json:"role_name" validate:"required,ne="`
 
 	// The virtualized table's name.
-	TableName *string `validate:"required"`
+	TableName *string `json:"table_name" validate:"required"`
 
 	// The virtualized table's schema name.
-	TableSchema *string `validate:"required"`
+	TableSchema *string `json:"table_schema" validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -1602,25 +2194,25 @@ func (options *DvaasRevokeRoleFromTableOptions) SetHeaders(param map[string]stri
 // DvaasVirtualizeTableOptions : The DvaasVirtualizeTable options.
 type DvaasVirtualizeTableOptions struct {
 	// The name of the source table.
-	SourceName *string `validate:"required"`
+	SourceName *string `json:"source_name" validate:"required"`
 
-	SourceTableDef []VirtualizeTableParameterSourceTableDefItem `validate:"required"`
+	SourceTableDef []VirtualizeTableParameterSourceTableDefItem `json:"source_table_def" validate:"required"`
 
-	Sources []string `validate:"required"`
+	Sources []string `json:"sources" validate:"required"`
 
 	// The name of the table that will be virtualized.
-	VirtualName *string `validate:"required"`
+	VirtualName *string `json:"virtual_name" validate:"required"`
 
 	// The schema of the table that will be virtualized.
-	VirtualSchema *string `validate:"required"`
+	VirtualSchema *string `json:"virtual_schema" validate:"required"`
 
-	VirtualTableDef []VirtualizeTableParameterVirtualTableDefItem `validate:"required"`
+	VirtualTableDef []VirtualizeTableParameterVirtualTableDefItem `json:"virtual_table_def" validate:"required"`
 
 	// The columns that are included in the source table.
-	IsIncludedColumns *string
+	IsIncludedColumns *string `json:"is_included_columns,omitempty"`
 
 	// Determines whether to replace columns in the virtualized table.
-	Replace *bool
+	Replace *bool `json:"replace,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -1692,6 +2284,96 @@ func (options *DvaasVirtualizeTableOptions) SetHeaders(param map[string]string) 
 	return options
 }
 
+// GetCacheOptions : The GetCache options.
+type GetCacheOptions struct {
+	// The ID of the cache to be listed.
+	ID *string `json:"id" validate:"required,ne="`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewGetCacheOptions : Instantiate GetCacheOptions
+func (*DataVirtualizationV1) NewGetCacheOptions(id string) *GetCacheOptions {
+	return &GetCacheOptions{
+		ID: core.StringPtr(id),
+	}
+}
+
+// SetID : Allow user to set ID
+func (_options *GetCacheOptions) SetID(id string) *GetCacheOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *GetCacheOptions) SetHeaders(param map[string]string) *GetCacheOptions {
+	options.Headers = param
+	return options
+}
+
+// GetCacheStorageDetailOptions : The GetCacheStorageDetail options.
+type GetCacheStorageDetailOptions struct {
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewGetCacheStorageDetailOptions : Instantiate GetCacheStorageDetailOptions
+func (*DataVirtualizationV1) NewGetCacheStorageDetailOptions() *GetCacheStorageDetailOptions {
+	return &GetCacheStorageDetailOptions{}
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *GetCacheStorageDetailOptions) SetHeaders(param map[string]string) *GetCacheStorageDetailOptions {
+	options.Headers = param
+	return options
+}
+
+// GetCachesListOptions : The GetCachesList options.
+type GetCachesListOptions struct {
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewGetCachesListOptions : Instantiate GetCachesListOptions
+func (*DataVirtualizationV1) NewGetCachesListOptions() *GetCachesListOptions {
+	return &GetCachesListOptions{}
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *GetCachesListOptions) SetHeaders(param map[string]string) *GetCachesListOptions {
+	options.Headers = param
+	return options
+}
+
+// GetObjectStoreConnectionsV2Options : The GetObjectStoreConnectionsV2 options.
+type GetObjectStoreConnectionsV2Options struct {
+	// Supplied by proxy.  Do NOT add your own value.
+	JwtAuthUserPayload *string `json:"jwt-auth-user-payload,omitempty"`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewGetObjectStoreConnectionsV2Options : Instantiate GetObjectStoreConnectionsV2Options
+func (*DataVirtualizationV1) NewGetObjectStoreConnectionsV2Options() *GetObjectStoreConnectionsV2Options {
+	return &GetObjectStoreConnectionsV2Options{}
+}
+
+// SetJwtAuthUserPayload : Allow user to set JwtAuthUserPayload
+func (_options *GetObjectStoreConnectionsV2Options) SetJwtAuthUserPayload(jwtAuthUserPayload string) *GetObjectStoreConnectionsV2Options {
+	_options.JwtAuthUserPayload = core.StringPtr(jwtAuthUserPayload)
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *GetObjectStoreConnectionsV2Options) SetHeaders(param map[string]string) *GetObjectStoreConnectionsV2Options {
+	options.Headers = param
+	return options
+}
+
 // GetPrimaryCatalogOptions : The GetPrimaryCatalog options.
 type GetPrimaryCatalogOptions struct {
 
@@ -1713,14 +2395,14 @@ func (options *GetPrimaryCatalogOptions) SetHeaders(param map[string]string) *Ge
 // GrantRolesToVirtualizedTableOptions : The GrantRolesToVirtualizedTable options.
 type GrantRolesToVirtualizedTableOptions struct {
 	// The name of the virtualized table.
-	TableName *string `validate:"required"`
+	TableName *string `json:"table_name" validate:"required"`
 
 	// The schema of the virtualized table.
-	TableSchema *string `validate:"required"`
+	TableSchema *string `json:"table_schema" validate:"required"`
 
 	// The identifier of the authorization, if grant access to all users, the value is PUBLIC, othervise the value is the
 	// data virtualization username.
-	RoleName *string
+	RoleName *string `json:"role_name,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -1761,14 +2443,14 @@ func (options *GrantRolesToVirtualizedTableOptions) SetHeaders(param map[string]
 // GrantUserToVirtualTableOptions : The GrantUserToVirtualTable options.
 type GrantUserToVirtualTableOptions struct {
 	// The name of the virtualized table.
-	TableName *string `validate:"required"`
+	TableName *string `json:"table_name" validate:"required"`
 
 	// The schema of the virtualized table.
-	TableSchema *string `validate:"required"`
+	TableSchema *string `json:"table_schema" validate:"required"`
 
 	// The identifier of the authorization, if grant access to all users, the value is PUBLIC, othervise the value is the
 	// data virtualization username.
-	Authid *string `validate:"required"`
+	Authid *string `json:"authid" validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -1828,7 +2510,7 @@ func (options *ListDatasourceConnectionsOptions) SetHeaders(param map[string]str
 // ListTablesForRoleOptions : The ListTablesForRole options.
 type ListTablesForRoleOptions struct {
 	// Data Virtualization has four roles: MANAGER, STEWARD, ENGINEER and USER The value of rolename should be one of them.
-	Rolename *string `validate:"required"`
+	Rolename *string `json:"rolename" validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -1851,6 +2533,58 @@ func (_options *ListTablesForRoleOptions) SetRolename(rolename string) *ListTabl
 func (options *ListTablesForRoleOptions) SetHeaders(param map[string]string) *ListTablesForRoleOptions {
 	options.Headers = param
 	return options
+}
+
+// ObjStoreConnectionResponseV2CosConnectionsItem : ObjStoreConnectionResponseV2CosConnectionsItem struct
+type ObjStoreConnectionResponseV2CosConnectionsItem struct {
+	BucketName *string `json:"bucket_name,omitempty"`
+
+	Ccid *string `json:"ccid,omitempty"`
+
+	Cid *string `json:"cid,omitempty"`
+
+	Endpoint *string `json:"endpoint,omitempty"`
+
+	Removed *bool `json:"removed,omitempty"`
+
+	ServiceType *string `json:"service_type,omitempty"`
+
+	Status *string `json:"status,omitempty"`
+}
+
+// UnmarshalObjStoreConnectionResponseV2CosConnectionsItem unmarshals an instance of ObjStoreConnectionResponseV2CosConnectionsItem from the specified map of raw messages.
+func UnmarshalObjStoreConnectionResponseV2CosConnectionsItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ObjStoreConnectionResponseV2CosConnectionsItem)
+	err = core.UnmarshalPrimitive(m, "bucket_name", &obj.BucketName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "ccid", &obj.Ccid)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "cid", &obj.Cid)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "endpoint", &obj.Endpoint)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "removed", &obj.Removed)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "service_type", &obj.ServiceType)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "status", &obj.Status)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
 }
 
 // PostDatasourceConnection : PostDatasourceConnection struct
@@ -2076,7 +2810,7 @@ func UnmarshalPostDatasourceConnectionParametersProperties(m map[string]json.Raw
 
 // PostPrimaryCatalogOptions : The PostPrimaryCatalog options.
 type PostPrimaryCatalogOptions struct {
-	GUID *string `validate:"required"`
+	GUID *string `json:"guid" validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -2221,12 +2955,12 @@ func UnmarshalPrimaryCatalogInfoMetadata(m map[string]json.RawMessage, result in
 
 // PublishAssetsOptions : The PublishAssets options.
 type PublishAssetsOptions struct {
-	CatalogID *string `validate:"required"`
+	CatalogID *string `json:"catalog_id" validate:"required"`
 
 	// The type of data source that you want to add.
-	AllowDuplicates *bool `validate:"required"`
+	AllowDuplicates *bool `json:"allow_duplicates" validate:"required"`
 
-	Assets []PostPrimaryCatalogParametersAssetsItem `validate:"required"`
+	Assets []PostPrimaryCatalogParametersAssetsItem `json:"assets" validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -2269,13 +3003,13 @@ func (options *PublishAssetsOptions) SetHeaders(param map[string]string) *Publis
 type RevokeUserFromObjectOptions struct {
 	// The Data Virtualization user name, if the value is PUBLIC, it means revoke access privilege from all Data
 	// Virtualization users.
-	Authid *string `validate:"required,ne="`
+	Authid *string `json:"authid" validate:"required,ne="`
 
 	// The virtualized table's name.
-	TableName *string `validate:"required"`
+	TableName *string `json:"table_name" validate:"required"`
 
 	// The virtualized table's schema name.
-	TableSchema *string `validate:"required"`
+	TableSchema *string `json:"table_schema" validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -2312,6 +3046,85 @@ func (_options *RevokeUserFromObjectOptions) SetTableSchema(tableSchema string) 
 func (options *RevokeUserFromObjectOptions) SetHeaders(param map[string]string) *RevokeUserFromObjectOptions {
 	options.Headers = param
 	return options
+}
+
+// StorageDetails : StorageDetails struct
+type StorageDetails struct {
+	// Total cache storage size.
+	TotalSize *string `json:"total_size,omitempty"`
+
+	// Storage details of active caches.
+	Enabled *StorageDetailsEnabled `json:"enabled,omitempty"`
+
+	// Storage details of inactive caches.
+	Disabled *StorageDetailsDisabled `json:"disabled,omitempty"`
+}
+
+// UnmarshalStorageDetails unmarshals an instance of StorageDetails from the specified map of raw messages.
+func UnmarshalStorageDetails(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(StorageDetails)
+	err = core.UnmarshalPrimitive(m, "total_size", &obj.TotalSize)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "enabled", &obj.Enabled, UnmarshalStorageDetailsEnabled)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "disabled", &obj.Disabled, UnmarshalStorageDetailsDisabled)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// StorageDetailsDisabled : Storage details of inactive caches.
+type StorageDetailsDisabled struct {
+	// Total size of all inactive caches (in KB).
+	Size *int64 `json:"size,omitempty"`
+
+	// Number of inactive caches.
+	Count *int64 `json:"count,omitempty"`
+}
+
+// UnmarshalStorageDetailsDisabled unmarshals an instance of StorageDetailsDisabled from the specified map of raw messages.
+func UnmarshalStorageDetailsDisabled(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(StorageDetailsDisabled)
+	err = core.UnmarshalPrimitive(m, "size", &obj.Size)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "count", &obj.Count)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// StorageDetailsEnabled : Storage details of active caches.
+type StorageDetailsEnabled struct {
+	// Total size of all active caches (in KB).
+	Size *int64 `json:"size,omitempty"`
+
+	// Number of active caches.
+	Count *int64 `json:"count,omitempty"`
+}
+
+// UnmarshalStorageDetailsEnabled unmarshals an instance of StorageDetailsEnabled from the specified map of raw messages.
+func UnmarshalStorageDetailsEnabled(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(StorageDetailsEnabled)
+	err = core.UnmarshalPrimitive(m, "size", &obj.Size)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "count", &obj.Count)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
 }
 
 // TablesForRoleResponse : TablesForRoleResponse struct
@@ -2356,8 +3169,8 @@ func UnmarshalTablesForRoleResponseObjectsItem(m map[string]json.RawMessage, res
 
 // TurnOnPolicyV2Options : The TurnOnPolicyV2 options.
 type TurnOnPolicyV2Options struct {
-	// Set the status of WKC policy.
-	Status *string `validate:"required"`
+	// Set the status of policy enforcement.
+	Status *string `json:"status" validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -2391,6 +3204,122 @@ type TurnOnPolicyV2Response struct {
 func UnmarshalTurnOnPolicyV2Response(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(TurnOnPolicyV2Response)
 	err = core.UnmarshalPrimitive(m, "status", &obj.Status)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// VirtualizeCosV2Options : The VirtualizeCosV2 options.
+type VirtualizeCosV2Options struct {
+	// the file path with bucket name.
+	URL *string `json:"url" validate:"required"`
+
+	// the virtual table name.
+	VirtualName *string `json:"virtual_name" validate:"required"`
+
+	// the virtual table schema.
+	VirtualSchema *string `json:"virtual_schema" validate:"required"`
+
+	VirtualTableDef []VirtualizeCosV2RequestVirtualTableDefItem `json:"virtual_table_def" validate:"required"`
+
+	// if repalce the existing one when create the virtual table.
+	IsReplace *bool `json:"is_replace,omitempty"`
+
+	// the options used to virtualize file.
+	Options *string `json:"options,omitempty"`
+
+	// Supplied by proxy.  Do NOT add your own value.
+	JwtAuthUserPayload *string `json:"jwt-auth-user-payload,omitempty"`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewVirtualizeCosV2Options : Instantiate VirtualizeCosV2Options
+func (*DataVirtualizationV1) NewVirtualizeCosV2Options(url string, virtualName string, virtualSchema string, virtualTableDef []VirtualizeCosV2RequestVirtualTableDefItem) *VirtualizeCosV2Options {
+	return &VirtualizeCosV2Options{
+		URL: core.StringPtr(url),
+		VirtualName: core.StringPtr(virtualName),
+		VirtualSchema: core.StringPtr(virtualSchema),
+		VirtualTableDef: virtualTableDef,
+	}
+}
+
+// SetURL : Allow user to set URL
+func (_options *VirtualizeCosV2Options) SetURL(url string) *VirtualizeCosV2Options {
+	_options.URL = core.StringPtr(url)
+	return _options
+}
+
+// SetVirtualName : Allow user to set VirtualName
+func (_options *VirtualizeCosV2Options) SetVirtualName(virtualName string) *VirtualizeCosV2Options {
+	_options.VirtualName = core.StringPtr(virtualName)
+	return _options
+}
+
+// SetVirtualSchema : Allow user to set VirtualSchema
+func (_options *VirtualizeCosV2Options) SetVirtualSchema(virtualSchema string) *VirtualizeCosV2Options {
+	_options.VirtualSchema = core.StringPtr(virtualSchema)
+	return _options
+}
+
+// SetVirtualTableDef : Allow user to set VirtualTableDef
+func (_options *VirtualizeCosV2Options) SetVirtualTableDef(virtualTableDef []VirtualizeCosV2RequestVirtualTableDefItem) *VirtualizeCosV2Options {
+	_options.VirtualTableDef = virtualTableDef
+	return _options
+}
+
+// SetIsReplace : Allow user to set IsReplace
+func (_options *VirtualizeCosV2Options) SetIsReplace(isReplace bool) *VirtualizeCosV2Options {
+	_options.IsReplace = core.BoolPtr(isReplace)
+	return _options
+}
+
+// SetOptions : Allow user to set Options
+func (_options *VirtualizeCosV2Options) SetOptions(options string) *VirtualizeCosV2Options {
+	_options.Options = core.StringPtr(options)
+	return _options
+}
+
+// SetJwtAuthUserPayload : Allow user to set JwtAuthUserPayload
+func (_options *VirtualizeCosV2Options) SetJwtAuthUserPayload(jwtAuthUserPayload string) *VirtualizeCosV2Options {
+	_options.JwtAuthUserPayload = core.StringPtr(jwtAuthUserPayload)
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *VirtualizeCosV2Options) SetHeaders(param map[string]string) *VirtualizeCosV2Options {
+	options.Headers = param
+	return options
+}
+
+// VirtualizeCosV2RequestVirtualTableDefItem : VirtualizeCosV2RequestVirtualTableDefItem struct
+type VirtualizeCosV2RequestVirtualTableDefItem struct {
+	ColumnName *string `json:"column_name" validate:"required"`
+
+	ColumnType *string `json:"column_type" validate:"required"`
+}
+
+// NewVirtualizeCosV2RequestVirtualTableDefItem : Instantiate VirtualizeCosV2RequestVirtualTableDefItem (Generic Model Constructor)
+func (*DataVirtualizationV1) NewVirtualizeCosV2RequestVirtualTableDefItem(columnName string, columnType string) (_model *VirtualizeCosV2RequestVirtualTableDefItem, err error) {
+	_model = &VirtualizeCosV2RequestVirtualTableDefItem{
+		ColumnName: core.StringPtr(columnName),
+		ColumnType: core.StringPtr(columnType),
+	}
+	err = core.ValidateStruct(_model, "required parameters")
+	return
+}
+
+// UnmarshalVirtualizeCosV2RequestVirtualTableDefItem unmarshals an instance of VirtualizeCosV2RequestVirtualTableDefItem from the specified map of raw messages.
+func UnmarshalVirtualizeCosV2RequestVirtualTableDefItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(VirtualizeCosV2RequestVirtualTableDefItem)
+	err = core.UnmarshalPrimitive(m, "column_name", &obj.ColumnName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "column_type", &obj.ColumnType)
 	if err != nil {
 		return
 	}
@@ -2518,6 +3447,22 @@ func UnmarshalCatalogPublishResponse(m map[string]json.RawMessage, result interf
 	return
 }
 
+// ObjStoreConnectionResponseV2 : ObjStoreConnectionResponseV2 struct
+type ObjStoreConnectionResponseV2 struct {
+	CosConnections []ObjStoreConnectionResponseV2CosConnectionsItem `json:"cos_connections,omitempty"`
+}
+
+// UnmarshalObjStoreConnectionResponseV2 unmarshals an instance of ObjStoreConnectionResponseV2 from the specified map of raw messages.
+func UnmarshalObjStoreConnectionResponseV2(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ObjStoreConnectionResponseV2)
+	err = core.UnmarshalModel(m, "cos_connections", &obj.CosConnections, UnmarshalObjStoreConnectionResponseV2CosConnectionsItem)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // PostPrimaryCatalog : PostPrimaryCatalog struct
 type PostPrimaryCatalog struct {
 	GUID *string `json:"guid" validate:"required"`
@@ -2567,6 +3512,22 @@ func UnmarshalPrimaryCatalogInfo(m map[string]json.RawMessage, result interface{
 		return
 	}
 	err = core.UnmarshalModel(m, "metadata", &obj.Metadata, UnmarshalPrimaryCatalogInfoMetadata)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// SuccessResponse : SuccessResponse struct
+type SuccessResponse struct {
+	Message *string `json:"message" validate:"required"`
+}
+
+// UnmarshalSuccessResponse unmarshals an instance of SuccessResponse from the specified map of raw messages.
+func UnmarshalSuccessResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(SuccessResponse)
+	err = core.UnmarshalPrimitive(m, "message", &obj.Message)
 	if err != nil {
 		return
 	}

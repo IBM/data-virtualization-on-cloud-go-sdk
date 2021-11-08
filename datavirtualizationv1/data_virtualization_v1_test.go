@@ -864,6 +864,217 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 			})
 		})
 	})
+	Describe(`GetObjectStoreConnectionsV2(getObjectStoreConnectionsV2Options *GetObjectStoreConnectionsV2Options) - Operation response error`, func() {
+		getObjectStoreConnectionsV2Path := "/v2/datasource/objectstore_connections"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(getObjectStoreConnectionsV2Path))
+					Expect(req.Method).To(Equal("GET"))
+					Expect(req.Header["Jwt-Auth-User-Payload"]).ToNot(BeNil())
+					Expect(req.Header["Jwt-Auth-User-Payload"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, `} this is not valid json {`)
+				}))
+			})
+			It(`Invoke GetObjectStoreConnectionsV2 with error: Operation response processing error`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the GetObjectStoreConnectionsV2Options model
+				getObjectStoreConnectionsV2OptionsModel := new(datavirtualizationv1.GetObjectStoreConnectionsV2Options)
+				getObjectStoreConnectionsV2OptionsModel.JwtAuthUserPayload = core.StringPtr("testString")
+				getObjectStoreConnectionsV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Expect response parsing to fail since we are receiving a text/plain response
+				result, response, operationErr := dataVirtualizationService.GetObjectStoreConnectionsV2(getObjectStoreConnectionsV2OptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+
+				// Enable retries and test again
+				dataVirtualizationService.EnableRetries(0, 0)
+				result, response, operationErr = dataVirtualizationService.GetObjectStoreConnectionsV2(getObjectStoreConnectionsV2OptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`GetObjectStoreConnectionsV2(getObjectStoreConnectionsV2Options *GetObjectStoreConnectionsV2Options)`, func() {
+		getObjectStoreConnectionsV2Path := "/v2/datasource/objectstore_connections"
+		Context(`Using mock server endpoint with timeout`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(getObjectStoreConnectionsV2Path))
+					Expect(req.Method).To(Equal("GET"))
+
+					Expect(req.Header["Jwt-Auth-User-Payload"]).ToNot(BeNil())
+					Expect(req.Header["Jwt-Auth-User-Payload"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
+					// Sleep a short time to support a timeout test
+					time.Sleep(100 * time.Millisecond)
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"cos_connections": [{"bucket_name": "newbigsqlbucket", "ccid": "c28e0248-82ad-4aca-a658-90a626769fba", "cid": "CEPH10000", "endpoint": "http://jobs-m-2.fyre.ibm.com", "removed": false, "service_type": "CEPH", "status": "VALID"}]}`)
+				}))
+			})
+			It(`Invoke GetObjectStoreConnectionsV2 successfully with retries`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+				dataVirtualizationService.EnableRetries(0, 0)
+
+				// Construct an instance of the GetObjectStoreConnectionsV2Options model
+				getObjectStoreConnectionsV2OptionsModel := new(datavirtualizationv1.GetObjectStoreConnectionsV2Options)
+				getObjectStoreConnectionsV2OptionsModel.JwtAuthUserPayload = core.StringPtr("testString")
+				getObjectStoreConnectionsV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with a Context to test a timeout error
+				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc()
+				_, _, operationErr := dataVirtualizationService.GetObjectStoreConnectionsV2WithContext(ctx, getObjectStoreConnectionsV2OptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+
+				// Disable retries and test again
+				dataVirtualizationService.DisableRetries()
+				result, response, operationErr := dataVirtualizationService.GetObjectStoreConnectionsV2(getObjectStoreConnectionsV2OptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+				// Re-test the timeout error with retries disabled
+				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc2()
+				_, _, operationErr = dataVirtualizationService.GetObjectStoreConnectionsV2WithContext(ctx, getObjectStoreConnectionsV2OptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(getObjectStoreConnectionsV2Path))
+					Expect(req.Method).To(Equal("GET"))
+
+					Expect(req.Header["Jwt-Auth-User-Payload"]).ToNot(BeNil())
+					Expect(req.Header["Jwt-Auth-User-Payload"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"cos_connections": [{"bucket_name": "newbigsqlbucket", "ccid": "c28e0248-82ad-4aca-a658-90a626769fba", "cid": "CEPH10000", "endpoint": "http://jobs-m-2.fyre.ibm.com", "removed": false, "service_type": "CEPH", "status": "VALID"}]}`)
+				}))
+			})
+			It(`Invoke GetObjectStoreConnectionsV2 successfully`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Invoke operation with nil options model (negative test)
+				result, response, operationErr := dataVirtualizationService.GetObjectStoreConnectionsV2(nil)
+				Expect(operationErr).NotTo(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+
+				// Construct an instance of the GetObjectStoreConnectionsV2Options model
+				getObjectStoreConnectionsV2OptionsModel := new(datavirtualizationv1.GetObjectStoreConnectionsV2Options)
+				getObjectStoreConnectionsV2OptionsModel.JwtAuthUserPayload = core.StringPtr("testString")
+				getObjectStoreConnectionsV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with valid options model (positive test)
+				result, response, operationErr = dataVirtualizationService.GetObjectStoreConnectionsV2(getObjectStoreConnectionsV2OptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+			})
+			It(`Invoke GetObjectStoreConnectionsV2 with error: Operation request error`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the GetObjectStoreConnectionsV2Options model
+				getObjectStoreConnectionsV2OptionsModel := new(datavirtualizationv1.GetObjectStoreConnectionsV2Options)
+				getObjectStoreConnectionsV2OptionsModel.JwtAuthUserPayload = core.StringPtr("testString")
+				getObjectStoreConnectionsV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Invoke operation with empty URL (negative test)
+				err := dataVirtualizationService.SetServiceURL("")
+				Expect(err).To(BeNil())
+				result, response, operationErr := dataVirtualizationService.GetObjectStoreConnectionsV2(getObjectStoreConnectionsV2OptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke GetObjectStoreConnectionsV2 successfully`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the GetObjectStoreConnectionsV2Options model
+				getObjectStoreConnectionsV2OptionsModel := new(datavirtualizationv1.GetObjectStoreConnectionsV2Options)
+				getObjectStoreConnectionsV2OptionsModel.JwtAuthUserPayload = core.StringPtr("testString")
+				getObjectStoreConnectionsV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := dataVirtualizationService.GetObjectStoreConnectionsV2(getObjectStoreConnectionsV2OptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
 	Describe(`GrantUserToVirtualTable(grantUserToVirtualTableOptions *GrantUserToVirtualTableOptions)`, func() {
 		grantUserToVirtualTablePath := "/v2/privileges/users"
 		Context(`Using mock server endpoint`, func() {
@@ -2218,6 +2429,311 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 			})
 		})
 	})
+	Describe(`VirtualizeCosV2(virtualizeCosV2Options *VirtualizeCosV2Options) - Operation response error`, func() {
+		virtualizeCosV2Path := "/v2/virtualization/cloud_object_storages"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(virtualizeCosV2Path))
+					Expect(req.Method).To(Equal("POST"))
+					Expect(req.Header["Jwt-Auth-User-Payload"]).ToNot(BeNil())
+					Expect(req.Header["Jwt-Auth-User-Payload"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, `} this is not valid json {`)
+				}))
+			})
+			It(`Invoke VirtualizeCosV2 with error: Operation response processing error`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the VirtualizeCosV2RequestVirtualTableDefItem model
+				virtualizeCosV2RequestVirtualTableDefItemModel := new(datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem)
+				virtualizeCosV2RequestVirtualTableDefItemModel.ColumnName = core.StringPtr("Column_1")
+				virtualizeCosV2RequestVirtualTableDefItemModel.ColumnType = core.StringPtr("INTEGER")
+
+				// Construct an instance of the VirtualizeCosV2Options model
+				virtualizeCosV2OptionsModel := new(datavirtualizationv1.VirtualizeCosV2Options)
+				virtualizeCosV2OptionsModel.URL = core.StringPtr("s3a://testBucket/home/data.csv")
+				virtualizeCosV2OptionsModel.VirtualName = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.VirtualSchema = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.VirtualTableDef = []datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem{*virtualizeCosV2RequestVirtualTableDefItemModel}
+				virtualizeCosV2OptionsModel.IsReplace = core.BoolPtr(false)
+				virtualizeCosV2OptionsModel.Options = core.StringPtr("INCPARTS=true")
+				virtualizeCosV2OptionsModel.JwtAuthUserPayload = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Expect response parsing to fail since we are receiving a text/plain response
+				result, response, operationErr := dataVirtualizationService.VirtualizeCosV2(virtualizeCosV2OptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+
+				// Enable retries and test again
+				dataVirtualizationService.EnableRetries(0, 0)
+				result, response, operationErr = dataVirtualizationService.VirtualizeCosV2(virtualizeCosV2OptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`VirtualizeCosV2(virtualizeCosV2Options *VirtualizeCosV2Options)`, func() {
+		virtualizeCosV2Path := "/v2/virtualization/cloud_object_storages"
+		Context(`Using mock server endpoint with timeout`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(virtualizeCosV2Path))
+					Expect(req.Method).To(Equal("POST"))
+
+					// For gzip-disabled operation, verify Content-Encoding is not set.
+					Expect(req.Header.Get("Content-Encoding")).To(BeEmpty())
+
+					// If there is a body, then make sure we can read it
+					bodyBuf := new(bytes.Buffer)
+					if req.Header.Get("Content-Encoding") == "gzip" {
+						body, err := core.NewGzipDecompressionReader(req.Body)
+						Expect(err).To(BeNil())
+						_, err = bodyBuf.ReadFrom(body)
+						Expect(err).To(BeNil())
+					} else {
+						_, err := bodyBuf.ReadFrom(req.Body)
+						Expect(err).To(BeNil())
+					}
+					fmt.Fprintf(GinkgoWriter, "  Request body: %s", bodyBuf.String())
+
+					Expect(req.Header["Jwt-Auth-User-Payload"]).ToNot(BeNil())
+					Expect(req.Header["Jwt-Auth-User-Payload"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
+					// Sleep a short time to support a timeout test
+					time.Sleep(100 * time.Millisecond)
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"message": "Message"}`)
+				}))
+			})
+			It(`Invoke VirtualizeCosV2 successfully with retries`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+				dataVirtualizationService.EnableRetries(0, 0)
+
+				// Construct an instance of the VirtualizeCosV2RequestVirtualTableDefItem model
+				virtualizeCosV2RequestVirtualTableDefItemModel := new(datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem)
+				virtualizeCosV2RequestVirtualTableDefItemModel.ColumnName = core.StringPtr("Column_1")
+				virtualizeCosV2RequestVirtualTableDefItemModel.ColumnType = core.StringPtr("INTEGER")
+
+				// Construct an instance of the VirtualizeCosV2Options model
+				virtualizeCosV2OptionsModel := new(datavirtualizationv1.VirtualizeCosV2Options)
+				virtualizeCosV2OptionsModel.URL = core.StringPtr("s3a://testBucket/home/data.csv")
+				virtualizeCosV2OptionsModel.VirtualName = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.VirtualSchema = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.VirtualTableDef = []datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem{*virtualizeCosV2RequestVirtualTableDefItemModel}
+				virtualizeCosV2OptionsModel.IsReplace = core.BoolPtr(false)
+				virtualizeCosV2OptionsModel.Options = core.StringPtr("INCPARTS=true")
+				virtualizeCosV2OptionsModel.JwtAuthUserPayload = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with a Context to test a timeout error
+				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc()
+				_, _, operationErr := dataVirtualizationService.VirtualizeCosV2WithContext(ctx, virtualizeCosV2OptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+
+				// Disable retries and test again
+				dataVirtualizationService.DisableRetries()
+				result, response, operationErr := dataVirtualizationService.VirtualizeCosV2(virtualizeCosV2OptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+				// Re-test the timeout error with retries disabled
+				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc2()
+				_, _, operationErr = dataVirtualizationService.VirtualizeCosV2WithContext(ctx, virtualizeCosV2OptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(virtualizeCosV2Path))
+					Expect(req.Method).To(Equal("POST"))
+
+					// For gzip-disabled operation, verify Content-Encoding is not set.
+					Expect(req.Header.Get("Content-Encoding")).To(BeEmpty())
+
+					// If there is a body, then make sure we can read it
+					bodyBuf := new(bytes.Buffer)
+					if req.Header.Get("Content-Encoding") == "gzip" {
+						body, err := core.NewGzipDecompressionReader(req.Body)
+						Expect(err).To(BeNil())
+						_, err = bodyBuf.ReadFrom(body)
+						Expect(err).To(BeNil())
+					} else {
+						_, err := bodyBuf.ReadFrom(req.Body)
+						Expect(err).To(BeNil())
+					}
+					fmt.Fprintf(GinkgoWriter, "  Request body: %s", bodyBuf.String())
+
+					Expect(req.Header["Jwt-Auth-User-Payload"]).ToNot(BeNil())
+					Expect(req.Header["Jwt-Auth-User-Payload"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"message": "Message"}`)
+				}))
+			})
+			It(`Invoke VirtualizeCosV2 successfully`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Invoke operation with nil options model (negative test)
+				result, response, operationErr := dataVirtualizationService.VirtualizeCosV2(nil)
+				Expect(operationErr).NotTo(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+
+				// Construct an instance of the VirtualizeCosV2RequestVirtualTableDefItem model
+				virtualizeCosV2RequestVirtualTableDefItemModel := new(datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem)
+				virtualizeCosV2RequestVirtualTableDefItemModel.ColumnName = core.StringPtr("Column_1")
+				virtualizeCosV2RequestVirtualTableDefItemModel.ColumnType = core.StringPtr("INTEGER")
+
+				// Construct an instance of the VirtualizeCosV2Options model
+				virtualizeCosV2OptionsModel := new(datavirtualizationv1.VirtualizeCosV2Options)
+				virtualizeCosV2OptionsModel.URL = core.StringPtr("s3a://testBucket/home/data.csv")
+				virtualizeCosV2OptionsModel.VirtualName = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.VirtualSchema = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.VirtualTableDef = []datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem{*virtualizeCosV2RequestVirtualTableDefItemModel}
+				virtualizeCosV2OptionsModel.IsReplace = core.BoolPtr(false)
+				virtualizeCosV2OptionsModel.Options = core.StringPtr("INCPARTS=true")
+				virtualizeCosV2OptionsModel.JwtAuthUserPayload = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with valid options model (positive test)
+				result, response, operationErr = dataVirtualizationService.VirtualizeCosV2(virtualizeCosV2OptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+			})
+			It(`Invoke VirtualizeCosV2 with error: Operation validation and request error`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the VirtualizeCosV2RequestVirtualTableDefItem model
+				virtualizeCosV2RequestVirtualTableDefItemModel := new(datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem)
+				virtualizeCosV2RequestVirtualTableDefItemModel.ColumnName = core.StringPtr("Column_1")
+				virtualizeCosV2RequestVirtualTableDefItemModel.ColumnType = core.StringPtr("INTEGER")
+
+				// Construct an instance of the VirtualizeCosV2Options model
+				virtualizeCosV2OptionsModel := new(datavirtualizationv1.VirtualizeCosV2Options)
+				virtualizeCosV2OptionsModel.URL = core.StringPtr("s3a://testBucket/home/data.csv")
+				virtualizeCosV2OptionsModel.VirtualName = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.VirtualSchema = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.VirtualTableDef = []datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem{*virtualizeCosV2RequestVirtualTableDefItemModel}
+				virtualizeCosV2OptionsModel.IsReplace = core.BoolPtr(false)
+				virtualizeCosV2OptionsModel.Options = core.StringPtr("INCPARTS=true")
+				virtualizeCosV2OptionsModel.JwtAuthUserPayload = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Invoke operation with empty URL (negative test)
+				err := dataVirtualizationService.SetServiceURL("")
+				Expect(err).To(BeNil())
+				result, response, operationErr := dataVirtualizationService.VirtualizeCosV2(virtualizeCosV2OptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+				// Construct a second instance of the VirtualizeCosV2Options model with no property values
+				virtualizeCosV2OptionsModelNew := new(datavirtualizationv1.VirtualizeCosV2Options)
+				// Invoke operation with invalid model (negative test)
+				result, response, operationErr = dataVirtualizationService.VirtualizeCosV2(virtualizeCosV2OptionsModelNew)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke VirtualizeCosV2 successfully`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the VirtualizeCosV2RequestVirtualTableDefItem model
+				virtualizeCosV2RequestVirtualTableDefItemModel := new(datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem)
+				virtualizeCosV2RequestVirtualTableDefItemModel.ColumnName = core.StringPtr("Column_1")
+				virtualizeCosV2RequestVirtualTableDefItemModel.ColumnType = core.StringPtr("INTEGER")
+
+				// Construct an instance of the VirtualizeCosV2Options model
+				virtualizeCosV2OptionsModel := new(datavirtualizationv1.VirtualizeCosV2Options)
+				virtualizeCosV2OptionsModel.URL = core.StringPtr("s3a://testBucket/home/data.csv")
+				virtualizeCosV2OptionsModel.VirtualName = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.VirtualSchema = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.VirtualTableDef = []datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem{*virtualizeCosV2RequestVirtualTableDefItemModel}
+				virtualizeCosV2OptionsModel.IsReplace = core.BoolPtr(false)
+				virtualizeCosV2OptionsModel.Options = core.StringPtr("INCPARTS=true")
+				virtualizeCosV2OptionsModel.JwtAuthUserPayload = core.StringPtr("testString")
+				virtualizeCosV2OptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := dataVirtualizationService.VirtualizeCosV2(virtualizeCosV2OptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
 	Describe(`GetPrimaryCatalog(getPrimaryCatalogOptions *GetPrimaryCatalogOptions) - Operation response error`, func() {
 		getPrimaryCatalogPath := "/v2/catalog/primary"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
@@ -3010,6 +3526,618 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 			})
 		})
 	})
+	Describe(`GetCachesList(getCachesListOptions *GetCachesListOptions) - Operation response error`, func() {
+		getCachesListPath := "/v1/caching/caches"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(getCachesListPath))
+					Expect(req.Method).To(Equal("GET"))
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, `} this is not valid json {`)
+				}))
+			})
+			It(`Invoke GetCachesList with error: Operation response processing error`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the GetCachesListOptions model
+				getCachesListOptionsModel := new(datavirtualizationv1.GetCachesListOptions)
+				getCachesListOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Expect response parsing to fail since we are receiving a text/plain response
+				result, response, operationErr := dataVirtualizationService.GetCachesList(getCachesListOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+
+				// Enable retries and test again
+				dataVirtualizationService.EnableRetries(0, 0)
+				result, response, operationErr = dataVirtualizationService.GetCachesList(getCachesListOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`GetCachesList(getCachesListOptions *GetCachesListOptions)`, func() {
+		getCachesListPath := "/v1/caching/caches"
+		Context(`Using mock server endpoint with timeout`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(getCachesListPath))
+					Expect(req.Method).To(Equal("GET"))
+
+					// Sleep a short time to support a timeout test
+					time.Sleep(100 * time.Millisecond)
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"caches": [{"name": "Name", "id": "ID", "query": "Query", "owner_id": "OwnerID", "type": "Type", "created_timestamp": "CreatedTimestamp", "last_modified_timestamp": "LastModifiedTimestamp", "last_refresh_timestamp": "LastRefreshTimestamp", "last_used_timestamp": "LastUsedTimestamp", "state": "State", "size": 4, "cardinality": 11, "time_taken_for_refresh": 19, "refresh_count": 12, "hit_count": 8, "refresh_schedule": "RefreshSchedule", "refresh_schedule_desc": "RefreshScheduleDesc", "status_msg": "StatusMsg"}]}`)
+				}))
+			})
+			It(`Invoke GetCachesList successfully with retries`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+				dataVirtualizationService.EnableRetries(0, 0)
+
+				// Construct an instance of the GetCachesListOptions model
+				getCachesListOptionsModel := new(datavirtualizationv1.GetCachesListOptions)
+				getCachesListOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with a Context to test a timeout error
+				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc()
+				_, _, operationErr := dataVirtualizationService.GetCachesListWithContext(ctx, getCachesListOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+
+				// Disable retries and test again
+				dataVirtualizationService.DisableRetries()
+				result, response, operationErr := dataVirtualizationService.GetCachesList(getCachesListOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+				// Re-test the timeout error with retries disabled
+				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc2()
+				_, _, operationErr = dataVirtualizationService.GetCachesListWithContext(ctx, getCachesListOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(getCachesListPath))
+					Expect(req.Method).To(Equal("GET"))
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"caches": [{"name": "Name", "id": "ID", "query": "Query", "owner_id": "OwnerID", "type": "Type", "created_timestamp": "CreatedTimestamp", "last_modified_timestamp": "LastModifiedTimestamp", "last_refresh_timestamp": "LastRefreshTimestamp", "last_used_timestamp": "LastUsedTimestamp", "state": "State", "size": 4, "cardinality": 11, "time_taken_for_refresh": 19, "refresh_count": 12, "hit_count": 8, "refresh_schedule": "RefreshSchedule", "refresh_schedule_desc": "RefreshScheduleDesc", "status_msg": "StatusMsg"}]}`)
+				}))
+			})
+			It(`Invoke GetCachesList successfully`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Invoke operation with nil options model (negative test)
+				result, response, operationErr := dataVirtualizationService.GetCachesList(nil)
+				Expect(operationErr).NotTo(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+
+				// Construct an instance of the GetCachesListOptions model
+				getCachesListOptionsModel := new(datavirtualizationv1.GetCachesListOptions)
+				getCachesListOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with valid options model (positive test)
+				result, response, operationErr = dataVirtualizationService.GetCachesList(getCachesListOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+			})
+			It(`Invoke GetCachesList with error: Operation request error`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the GetCachesListOptions model
+				getCachesListOptionsModel := new(datavirtualizationv1.GetCachesListOptions)
+				getCachesListOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Invoke operation with empty URL (negative test)
+				err := dataVirtualizationService.SetServiceURL("")
+				Expect(err).To(BeNil())
+				result, response, operationErr := dataVirtualizationService.GetCachesList(getCachesListOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke GetCachesList successfully`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the GetCachesListOptions model
+				getCachesListOptionsModel := new(datavirtualizationv1.GetCachesListOptions)
+				getCachesListOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := dataVirtualizationService.GetCachesList(getCachesListOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`GetCache(getCacheOptions *GetCacheOptions) - Operation response error`, func() {
+		getCachePath := "/v1/caching/caches/DV20210810191252390327"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(getCachePath))
+					Expect(req.Method).To(Equal("GET"))
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, `} this is not valid json {`)
+				}))
+			})
+			It(`Invoke GetCache with error: Operation response processing error`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the GetCacheOptions model
+				getCacheOptionsModel := new(datavirtualizationv1.GetCacheOptions)
+				getCacheOptionsModel.ID = core.StringPtr("DV20210810191252390327")
+				getCacheOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Expect response parsing to fail since we are receiving a text/plain response
+				result, response, operationErr := dataVirtualizationService.GetCache(getCacheOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+
+				// Enable retries and test again
+				dataVirtualizationService.EnableRetries(0, 0)
+				result, response, operationErr = dataVirtualizationService.GetCache(getCacheOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`GetCache(getCacheOptions *GetCacheOptions)`, func() {
+		getCachePath := "/v1/caching/caches/DV20210810191252390327"
+		Context(`Using mock server endpoint with timeout`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(getCachePath))
+					Expect(req.Method).To(Equal("GET"))
+
+					// Sleep a short time to support a timeout test
+					time.Sleep(100 * time.Millisecond)
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"name": "Name", "id": "ID", "query": "Query", "owner_id": "OwnerID", "type": "Type", "created_timestamp": "CreatedTimestamp", "last_modified_timestamp": "LastModifiedTimestamp", "last_refresh_timestamp": "LastRefreshTimestamp", "last_used_timestamp": "LastUsedTimestamp", "state": "State", "size": 4, "cardinality": 11, "time_taken_for_refresh": 19, "refresh_count": 12, "hit_count": 8, "refresh_schedule": "RefreshSchedule", "refresh_schedule_desc": "RefreshScheduleDesc", "status_msg": "StatusMsg"}`)
+				}))
+			})
+			It(`Invoke GetCache successfully with retries`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+				dataVirtualizationService.EnableRetries(0, 0)
+
+				// Construct an instance of the GetCacheOptions model
+				getCacheOptionsModel := new(datavirtualizationv1.GetCacheOptions)
+				getCacheOptionsModel.ID = core.StringPtr("DV20210810191252390327")
+				getCacheOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with a Context to test a timeout error
+				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc()
+				_, _, operationErr := dataVirtualizationService.GetCacheWithContext(ctx, getCacheOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+
+				// Disable retries and test again
+				dataVirtualizationService.DisableRetries()
+				result, response, operationErr := dataVirtualizationService.GetCache(getCacheOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+				// Re-test the timeout error with retries disabled
+				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc2()
+				_, _, operationErr = dataVirtualizationService.GetCacheWithContext(ctx, getCacheOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(getCachePath))
+					Expect(req.Method).To(Equal("GET"))
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"name": "Name", "id": "ID", "query": "Query", "owner_id": "OwnerID", "type": "Type", "created_timestamp": "CreatedTimestamp", "last_modified_timestamp": "LastModifiedTimestamp", "last_refresh_timestamp": "LastRefreshTimestamp", "last_used_timestamp": "LastUsedTimestamp", "state": "State", "size": 4, "cardinality": 11, "time_taken_for_refresh": 19, "refresh_count": 12, "hit_count": 8, "refresh_schedule": "RefreshSchedule", "refresh_schedule_desc": "RefreshScheduleDesc", "status_msg": "StatusMsg"}`)
+				}))
+			})
+			It(`Invoke GetCache successfully`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Invoke operation with nil options model (negative test)
+				result, response, operationErr := dataVirtualizationService.GetCache(nil)
+				Expect(operationErr).NotTo(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+
+				// Construct an instance of the GetCacheOptions model
+				getCacheOptionsModel := new(datavirtualizationv1.GetCacheOptions)
+				getCacheOptionsModel.ID = core.StringPtr("DV20210810191252390327")
+				getCacheOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with valid options model (positive test)
+				result, response, operationErr = dataVirtualizationService.GetCache(getCacheOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+			})
+			It(`Invoke GetCache with error: Operation validation and request error`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the GetCacheOptions model
+				getCacheOptionsModel := new(datavirtualizationv1.GetCacheOptions)
+				getCacheOptionsModel.ID = core.StringPtr("DV20210810191252390327")
+				getCacheOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Invoke operation with empty URL (negative test)
+				err := dataVirtualizationService.SetServiceURL("")
+				Expect(err).To(BeNil())
+				result, response, operationErr := dataVirtualizationService.GetCache(getCacheOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+				// Construct a second instance of the GetCacheOptions model with no property values
+				getCacheOptionsModelNew := new(datavirtualizationv1.GetCacheOptions)
+				// Invoke operation with invalid model (negative test)
+				result, response, operationErr = dataVirtualizationService.GetCache(getCacheOptionsModelNew)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke GetCache successfully`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the GetCacheOptions model
+				getCacheOptionsModel := new(datavirtualizationv1.GetCacheOptions)
+				getCacheOptionsModel.ID = core.StringPtr("DV20210810191252390327")
+				getCacheOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := dataVirtualizationService.GetCache(getCacheOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`GetCacheStorageDetail(getCacheStorageDetailOptions *GetCacheStorageDetailOptions) - Operation response error`, func() {
+		getCacheStorageDetailPath := "/v1/caching/storage"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(getCacheStorageDetailPath))
+					Expect(req.Method).To(Equal("GET"))
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, `} this is not valid json {`)
+				}))
+			})
+			It(`Invoke GetCacheStorageDetail with error: Operation response processing error`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the GetCacheStorageDetailOptions model
+				getCacheStorageDetailOptionsModel := new(datavirtualizationv1.GetCacheStorageDetailOptions)
+				getCacheStorageDetailOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Expect response parsing to fail since we are receiving a text/plain response
+				result, response, operationErr := dataVirtualizationService.GetCacheStorageDetail(getCacheStorageDetailOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+
+				// Enable retries and test again
+				dataVirtualizationService.EnableRetries(0, 0)
+				result, response, operationErr = dataVirtualizationService.GetCacheStorageDetail(getCacheStorageDetailOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`GetCacheStorageDetail(getCacheStorageDetailOptions *GetCacheStorageDetailOptions)`, func() {
+		getCacheStorageDetailPath := "/v1/caching/storage"
+		Context(`Using mock server endpoint with timeout`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(getCacheStorageDetailPath))
+					Expect(req.Method).To(Equal("GET"))
+
+					// Sleep a short time to support a timeout test
+					time.Sleep(100 * time.Millisecond)
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"total_size": "TotalSize", "enabled": {"size": 4, "count": 5}, "disabled": {"size": 4, "count": 5}}`)
+				}))
+			})
+			It(`Invoke GetCacheStorageDetail successfully with retries`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+				dataVirtualizationService.EnableRetries(0, 0)
+
+				// Construct an instance of the GetCacheStorageDetailOptions model
+				getCacheStorageDetailOptionsModel := new(datavirtualizationv1.GetCacheStorageDetailOptions)
+				getCacheStorageDetailOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with a Context to test a timeout error
+				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc()
+				_, _, operationErr := dataVirtualizationService.GetCacheStorageDetailWithContext(ctx, getCacheStorageDetailOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+
+				// Disable retries and test again
+				dataVirtualizationService.DisableRetries()
+				result, response, operationErr := dataVirtualizationService.GetCacheStorageDetail(getCacheStorageDetailOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+				// Re-test the timeout error with retries disabled
+				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc2()
+				_, _, operationErr = dataVirtualizationService.GetCacheStorageDetailWithContext(ctx, getCacheStorageDetailOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(getCacheStorageDetailPath))
+					Expect(req.Method).To(Equal("GET"))
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"total_size": "TotalSize", "enabled": {"size": 4, "count": 5}, "disabled": {"size": 4, "count": 5}}`)
+				}))
+			})
+			It(`Invoke GetCacheStorageDetail successfully`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Invoke operation with nil options model (negative test)
+				result, response, operationErr := dataVirtualizationService.GetCacheStorageDetail(nil)
+				Expect(operationErr).NotTo(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+
+				// Construct an instance of the GetCacheStorageDetailOptions model
+				getCacheStorageDetailOptionsModel := new(datavirtualizationv1.GetCacheStorageDetailOptions)
+				getCacheStorageDetailOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with valid options model (positive test)
+				result, response, operationErr = dataVirtualizationService.GetCacheStorageDetail(getCacheStorageDetailOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+			})
+			It(`Invoke GetCacheStorageDetail with error: Operation request error`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the GetCacheStorageDetailOptions model
+				getCacheStorageDetailOptionsModel := new(datavirtualizationv1.GetCacheStorageDetailOptions)
+				getCacheStorageDetailOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Invoke operation with empty URL (negative test)
+				err := dataVirtualizationService.SetServiceURL("")
+				Expect(err).To(BeNil())
+				result, response, operationErr := dataVirtualizationService.GetCacheStorageDetail(getCacheStorageDetailOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke GetCacheStorageDetail successfully`, func() {
+				dataVirtualizationService, serviceErr := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(dataVirtualizationService).ToNot(BeNil())
+
+				// Construct an instance of the GetCacheStorageDetailOptions model
+				getCacheStorageDetailOptionsModel := new(datavirtualizationv1.GetCacheStorageDetailOptions)
+				getCacheStorageDetailOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := dataVirtualizationService.GetCacheStorageDetail(getCacheStorageDetailOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
 	Describe(`Model constructor tests`, func() {
 		Context(`Using a service client instance`, func() {
 			dataVirtualizationService, _ := datavirtualizationv1.NewDataVirtualizationV1(&datavirtualizationv1.DataVirtualizationV1Options{
@@ -3204,6 +4332,39 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				Expect(dvaasVirtualizeTableOptionsModel.Replace).To(Equal(core.BoolPtr(false)))
 				Expect(dvaasVirtualizeTableOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
+			It(`Invoke NewGetCacheOptions successfully`, func() {
+				// Construct an instance of the GetCacheOptions model
+				id := "DV20210810191252390327"
+				getCacheOptionsModel := dataVirtualizationService.NewGetCacheOptions(id)
+				getCacheOptionsModel.SetID("DV20210810191252390327")
+				getCacheOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(getCacheOptionsModel).ToNot(BeNil())
+				Expect(getCacheOptionsModel.ID).To(Equal(core.StringPtr("DV20210810191252390327")))
+				Expect(getCacheOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+			})
+			It(`Invoke NewGetCacheStorageDetailOptions successfully`, func() {
+				// Construct an instance of the GetCacheStorageDetailOptions model
+				getCacheStorageDetailOptionsModel := dataVirtualizationService.NewGetCacheStorageDetailOptions()
+				getCacheStorageDetailOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(getCacheStorageDetailOptionsModel).ToNot(BeNil())
+				Expect(getCacheStorageDetailOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+			})
+			It(`Invoke NewGetCachesListOptions successfully`, func() {
+				// Construct an instance of the GetCachesListOptions model
+				getCachesListOptionsModel := dataVirtualizationService.NewGetCachesListOptions()
+				getCachesListOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(getCachesListOptionsModel).ToNot(BeNil())
+				Expect(getCachesListOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+			})
+			It(`Invoke NewGetObjectStoreConnectionsV2Options successfully`, func() {
+				// Construct an instance of the GetObjectStoreConnectionsV2Options model
+				getObjectStoreConnectionsV2OptionsModel := dataVirtualizationService.NewGetObjectStoreConnectionsV2Options()
+				getObjectStoreConnectionsV2OptionsModel.SetJwtAuthUserPayload("testString")
+				getObjectStoreConnectionsV2OptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(getObjectStoreConnectionsV2OptionsModel).ToNot(BeNil())
+				Expect(getObjectStoreConnectionsV2OptionsModel.JwtAuthUserPayload).To(Equal(core.StringPtr("testString")))
+				Expect(getObjectStoreConnectionsV2OptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+			})
 			It(`Invoke NewGetPrimaryCatalogOptions successfully`, func() {
 				// Construct an instance of the GetPrimaryCatalogOptions model
 				getPrimaryCatalogOptionsModel := dataVirtualizationService.NewGetPrimaryCatalogOptions()
@@ -3325,6 +4486,46 @@ var _ = Describe(`DataVirtualizationV1`, func() {
 				Expect(turnOnPolicyV2OptionsModel).ToNot(BeNil())
 				Expect(turnOnPolicyV2OptionsModel.Status).To(Equal(core.StringPtr("enabled")))
 				Expect(turnOnPolicyV2OptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+			})
+			It(`Invoke NewVirtualizeCosV2Options successfully`, func() {
+				// Construct an instance of the VirtualizeCosV2RequestVirtualTableDefItem model
+				virtualizeCosV2RequestVirtualTableDefItemModel := new(datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem)
+				Expect(virtualizeCosV2RequestVirtualTableDefItemModel).ToNot(BeNil())
+				virtualizeCosV2RequestVirtualTableDefItemModel.ColumnName = core.StringPtr("Column_1")
+				virtualizeCosV2RequestVirtualTableDefItemModel.ColumnType = core.StringPtr("INTEGER")
+				Expect(virtualizeCosV2RequestVirtualTableDefItemModel.ColumnName).To(Equal(core.StringPtr("Column_1")))
+				Expect(virtualizeCosV2RequestVirtualTableDefItemModel.ColumnType).To(Equal(core.StringPtr("INTEGER")))
+
+				// Construct an instance of the VirtualizeCosV2Options model
+				virtualizeCosV2OptionsURL := "s3a://testBucket/home/data.csv"
+				virtualizeCosV2OptionsVirtualName := "testString"
+				virtualizeCosV2OptionsVirtualSchema := "testString"
+				virtualizeCosV2OptionsVirtualTableDef := []datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem{}
+				virtualizeCosV2OptionsModel := dataVirtualizationService.NewVirtualizeCosV2Options(virtualizeCosV2OptionsURL, virtualizeCosV2OptionsVirtualName, virtualizeCosV2OptionsVirtualSchema, virtualizeCosV2OptionsVirtualTableDef)
+				virtualizeCosV2OptionsModel.SetURL("s3a://testBucket/home/data.csv")
+				virtualizeCosV2OptionsModel.SetVirtualName("testString")
+				virtualizeCosV2OptionsModel.SetVirtualSchema("testString")
+				virtualizeCosV2OptionsModel.SetVirtualTableDef([]datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem{*virtualizeCosV2RequestVirtualTableDefItemModel})
+				virtualizeCosV2OptionsModel.SetIsReplace(false)
+				virtualizeCosV2OptionsModel.SetOptions("INCPARTS=true")
+				virtualizeCosV2OptionsModel.SetJwtAuthUserPayload("testString")
+				virtualizeCosV2OptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(virtualizeCosV2OptionsModel).ToNot(BeNil())
+				Expect(virtualizeCosV2OptionsModel.URL).To(Equal(core.StringPtr("s3a://testBucket/home/data.csv")))
+				Expect(virtualizeCosV2OptionsModel.VirtualName).To(Equal(core.StringPtr("testString")))
+				Expect(virtualizeCosV2OptionsModel.VirtualSchema).To(Equal(core.StringPtr("testString")))
+				Expect(virtualizeCosV2OptionsModel.VirtualTableDef).To(Equal([]datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem{*virtualizeCosV2RequestVirtualTableDefItemModel}))
+				Expect(virtualizeCosV2OptionsModel.IsReplace).To(Equal(core.BoolPtr(false)))
+				Expect(virtualizeCosV2OptionsModel.Options).To(Equal(core.StringPtr("INCPARTS=true")))
+				Expect(virtualizeCosV2OptionsModel.JwtAuthUserPayload).To(Equal(core.StringPtr("testString")))
+				Expect(virtualizeCosV2OptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+			})
+			It(`Invoke NewVirtualizeCosV2RequestVirtualTableDefItem successfully`, func() {
+				columnName := "Column_1"
+				columnType := "INTEGER"
+				_model, err := dataVirtualizationService.NewVirtualizeCosV2RequestVirtualTableDefItem(columnName, columnType)
+				Expect(_model).ToNot(BeNil())
+				Expect(err).To(BeNil())
 			})
 			It(`Invoke NewVirtualizeTableParameterSourceTableDefItem successfully`, func() {
 				columnName := "Column1"

@@ -20,7 +20,9 @@ package datavirtualizationv1_test
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"time"
 
 	"github.com/IBM/data-virtualization-on-cloud-go-sdk/datavirtualizationv1"
 	"github.com/IBM/go-sdk-core/v5/core"
@@ -86,6 +88,9 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(dataVirtualizationService).ToNot(BeNil())
 			Expect(dataVirtualizationService.Service.Options.URL).To(Equal(serviceURL))
+
+			core.SetLogger(core.NewLogger(core.LevelDebug, log.New(GinkgoWriter, "", log.LstdFlags), log.New(GinkgoWriter, "", log.LstdFlags)))
+			dataVirtualizationService.EnableRetries(4, 30*time.Second)
 		})
 	})
 
@@ -104,6 +109,14 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(datasourceConnectionsList).ToNot(BeNil())
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
 		})
 	})
 
@@ -114,36 +127,36 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 		It(`AddDatasourceConnection(addDatasourceConnectionOptions *AddDatasourceConnectionOptions)`, func() {
 
 			postDatasourceConnectionParametersPropertiesModel := &datavirtualizationv1.PostDatasourceConnectionParametersProperties{
-				AccessToken: core.StringPtr("testString"),
-				AccountName: core.StringPtr("testString"),
-				APIKey: core.StringPtr("testString"),
-				AuthType: core.StringPtr("testString"),
-				ClientID: core.StringPtr("testString"),
-				ClientSecret: core.StringPtr("testString"),
-				Collection: core.StringPtr("testString"),
-				Credentials: core.StringPtr("testString"),
+				AccessToken: core.StringPtr("ya29.Il-_"),
+				AccountName: core.StringPtr("ibmdatastage.us-east-1"),
+				APIKey: core.StringPtr("ApiKey-a31d60c5-0f7b-4995-a4ae-69bf09d3de50"),
+				AuthType: core.StringPtr("Bearer Token"),
+				ClientID: core.StringPtr("81571342315"),
+				ClientSecret: core.StringPtr("uIn8rVyIRsd"),
+				Collection: core.StringPtr("test_collection"),
+				Credentials: core.StringPtr("-----BEGIN PRIVATE KEY-----"),
 				Database: core.StringPtr("TPCDS"),
 				Host: core.StringPtr("192.168.0.1"),
-				HTTPPath: core.StringPtr("testString"),
-				JarUris: core.StringPtr("testString"),
-				JdbcDriver: core.StringPtr("testString"),
-				JdbcURL: core.StringPtr("testString"),
+				HTTPPath: core.StringPtr("cliservice"),
+				JarUris: core.StringPtr("/v2/asset_files/dbdrivers/ngdbc.jar"),
+				JdbcDriver: core.StringPtr("Snowflake"),
+				JdbcURL: core.StringPtr("/v2/asset_files/dbdrivers/ngdbc.jar"),
 				Password: core.StringPtr("password"),
 				Port: core.StringPtr("50000"),
-				ProjectID: core.StringPtr("testString"),
-				Properties: core.StringPtr("testString"),
-				RefreshToken: core.StringPtr("testString"),
-				Role: core.StringPtr("testString"),
-				SapGatewayURL: core.StringPtr("testString"),
-				Server: core.StringPtr("testString"),
-				ServiceName: core.StringPtr("testString"),
-				Sid: core.StringPtr("testString"),
+				ProjectID: core.StringPtr("housecanary-com"),
+				Properties: core.StringPtr("key=value"),
+				RefreshToken: core.StringPtr("1//06uwhP7_312g"),
+				Role: core.StringPtr("SYSADMIN"),
+				SapGatewayURL: core.StringPtr("https://sapes5.sapdevcenter.com"),
+				Server: core.StringPtr("ol_informix1410"),
+				ServiceName: core.StringPtr("pdborcl.fyre.ibm.com"),
+				Sid: core.StringPtr("orcl"),
 				Ssl: core.StringPtr("false"),
-				SslCertificate: core.StringPtr("testString"),
-				SslCertificateHost: core.StringPtr("testString"),
-				SslCertificateValidation: core.StringPtr("testString"),
+				SslCertificate: core.StringPtr("-----BEGIN CERTIFICATE-----"),
+				SslCertificateHost: core.StringPtr("test.com"),
+				SslCertificateValidation: core.StringPtr("false"),
 				Username: core.StringPtr("db2inst1"),
-				Warehouse: core.StringPtr("testString"),
+				Warehouse: core.StringPtr("wdpcondev"),
 			}
 
 			addDatasourceConnectionOptions := &datavirtualizationv1.AddDatasourceConnectionOptions{
@@ -151,7 +164,7 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 				Name: core.StringPtr("DB2"),
 				OriginCountry: core.StringPtr("us"),
 				Properties: postDatasourceConnectionParametersPropertiesModel,
-				AssetCategory: core.StringPtr("testString"),
+				AssetCategory: core.StringPtr("USER"),
 			}
 
 			postDatasourceConnection, response, err := dataVirtualizationService.AddDatasourceConnection(addDatasourceConnectionOptions)
@@ -160,6 +173,42 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(201))
 			Expect(postDatasourceConnection).ToNot(BeNil())
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 409
+			// 500
+			//
+		})
+	})
+
+	Describe(`GetObjectStoreConnectionsV2 - Gets object store connection details`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`GetObjectStoreConnectionsV2(getObjectStoreConnectionsV2Options *GetObjectStoreConnectionsV2Options)`, func() {
+
+			getObjectStoreConnectionsV2Options := &datavirtualizationv1.GetObjectStoreConnectionsV2Options{
+				JwtAuthUserPayload: core.StringPtr("testString"),
+			}
+
+			objStoreConnectionResponseV2, response, err := dataVirtualizationService.GetObjectStoreConnectionsV2(getObjectStoreConnectionsV2Options)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(objStoreConnectionResponseV2).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
 		})
 	})
 
@@ -180,6 +229,14 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(204))
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
 		})
 	})
 
@@ -200,6 +257,14 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(204))
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
 		})
 	})
 
@@ -219,10 +284,18 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(tablesForRoleResponse).ToNot(BeNil())
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
 		})
 	})
 
-	Describe(`TurnOnPolicyV2 - Turn on or off WKC policy enforcement status`, func() {
+	Describe(`TurnOnPolicyV2 - Turn policy enforcement status on or off`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
@@ -238,10 +311,17 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(turnOnPolicyV2Response).ToNot(BeNil())
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 401
+			// 500
+			//
 		})
 	})
 
-	Describe(`CheckPolicyStatusV2 - Get WKC policy enforcement status`, func() {
+	Describe(`CheckPolicyStatusV2 - Get policy enforcement status`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
@@ -256,6 +336,13 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(checkPolicyStatusV2Response).ToNot(BeNil())
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 401
+			// 500
+			//
 		})
 	})
 
@@ -292,6 +379,52 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(201))
 			Expect(virtualizeTableResponse).ToNot(BeNil())
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
+		})
+	})
+
+	Describe(`VirtualizeCosV2 - Create a remote table for the ORC or Parquet file on a cloud object store (COS)`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`VirtualizeCosV2(virtualizeCosV2Options *VirtualizeCosV2Options)`, func() {
+
+			virtualizeCosV2RequestVirtualTableDefItemModel := &datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem{
+				ColumnName: core.StringPtr("Column_1"),
+				ColumnType: core.StringPtr("INTEGER"),
+			}
+
+			virtualizeCosV2Options := &datavirtualizationv1.VirtualizeCosV2Options{
+				URL: core.StringPtr("s3a://testBucket/home/data.csv"),
+				VirtualName: core.StringPtr("testString"),
+				VirtualSchema: core.StringPtr("testString"),
+				VirtualTableDef: []datavirtualizationv1.VirtualizeCosV2RequestVirtualTableDefItem{*virtualizeCosV2RequestVirtualTableDefItemModel},
+				IsReplace: core.BoolPtr(false),
+				Options: core.StringPtr("INCPARTS=true"),
+				JwtAuthUserPayload: core.StringPtr("testString"),
+			}
+
+			successResponse, response, err := dataVirtualizationService.VirtualizeCosV2(virtualizeCosV2Options)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(successResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
 		})
 	})
 
@@ -310,6 +443,14 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(primaryCatalogInfo).ToNot(BeNil())
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
 		})
 	})
 
@@ -329,10 +470,18 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(201))
 			Expect(postPrimaryCatalog).ToNot(BeNil())
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
 		})
 	})
 
-	Describe(`PublishAssets - publish virtual table to WKC`, func() {
+	Describe(`PublishAssets - Publish virtual tables to a catalog`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
@@ -355,6 +504,93 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(catalogPublishResponse).ToNot(BeNil())
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
+		})
+	})
+
+	Describe(`GetCachesList - List caches`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`GetCachesList(getCachesListOptions *GetCachesListOptions)`, func() {
+
+			getCachesListOptions := &datavirtualizationv1.GetCachesListOptions{
+			}
+
+			cacheListResponse, response, err := dataVirtualizationService.GetCachesList(getCachesListOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(cacheListResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
+		})
+	})
+
+	Describe(`GetCache - List a cache`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`GetCache(getCacheOptions *GetCacheOptions)`, func() {
+
+			getCacheOptions := &datavirtualizationv1.GetCacheOptions{
+				ID: core.StringPtr("DV20210810191252390327"),
+			}
+
+			cacheResponse, response, err := dataVirtualizationService.GetCache(getCacheOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(cacheResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
+		})
+	})
+
+	Describe(`GetCacheStorageDetail - Fetch the cache storage`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`GetCacheStorageDetail(getCacheStorageDetailOptions *GetCacheStorageDetailOptions)`, func() {
+
+			getCacheStorageDetailOptions := &datavirtualizationv1.GetCacheStorageDetailOptions{
+			}
+
+			storageDetails, response, err := dataVirtualizationService.GetCacheStorageDetail(getCacheStorageDetailOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(storageDetails).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
 		})
 	})
 
@@ -375,6 +611,14 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(204))
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
 		})
 	})
 
@@ -395,6 +639,14 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(204))
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
 		})
 	})
 
@@ -414,6 +666,13 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(204))
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 500
+			//
 		})
 	})
 
@@ -432,6 +691,14 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(204))
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
 		})
 	})
 
@@ -451,6 +718,14 @@ var _ = Describe(`DataVirtualizationV1 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(204))
 
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 400
+			// 401
+			// 500
+			//
 		})
 	})
 })
